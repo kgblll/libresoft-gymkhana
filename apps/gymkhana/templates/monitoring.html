@@ -1,0 +1,444 @@
+{% extends "gymkhana.html" %}
+
+{% block content %}
+  <!-- Para poder hacer que con la libreria overlib de JavaScript, cuando 
+  el cursor se posicione sobre la foto, dicha imagen aparezca
+  en un popup a mayor tamanyo, desapareciendo cuando el cursor se retire -->
+  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1;"></div>
+
+  <h1>Standings - Location - Responses - Messages</h1>
+  <br></br>
+  <br></br>
+  <section id="overall_standings"></section>
+  <br></br>
+  <br></br>
+  <div id="map" style="width: 500px; height: 400px"></div>
+  <div></div>
+  <br></br>
+  <section id="responses"></section>
+  <section id="messages"></section>
+{% endblock %}
+
+
+{% block contentM %}
+  <!-- Para poder hacer que con la libreria overlib de JavaScript, cuando 
+  el cursor se posicione sobre la foto, dicha imagen aparezca
+  en un popup a mayor tamanyo, desapareciendo cuando el cursor se retire -->
+  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1;"></div>
+
+  <h1>Standings - Location - Responses - Messages</h1>
+  <br></br>
+  <br></br>
+  <section id="overall_standings"></section>
+  <br></br>
+  <br></br>
+  <div id="map" style="width: 500px; height: 400px"></div>
+  <div></div>
+  <br></br>
+  <section id="responses"></section>
+  <section id="messages"></section>
+{% endblock %}
+
+
+{% block java_script %}
+
+<!-- Para poder hacer que con la libreria overlib de JavaScript, cuando 
+el cursor se posicione sobre la foto, dicha imagen aparezca
+en un popup a mayor tamanyo, desapareciendo cuando el cursor se retire -->
+<script type="text/javascript" src="/gymkhana/templates/overlib.js"></script>
+
+<!-- Clave obtenida para poder hacer uso de GoogleMaps en localhost -->
+<!--<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=es&amp;key=ABQIAAAAyUSQZpdZRWS9ZFL07fTMTxQCULP4XOMyhPd8d_NrQQEO8sT8XBRuMrbqIotx8HnuF8mbGQL3nEncDA" type="text/javascript"></script>-->
+
+<!-- Clave para http://rest.libregeosocial.org/ -->
+<!--<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=es&amp;key=ABQIAAAAyUSQZpdZRWS9ZFL07fTMTxSRixKeL1ZKYZoBMaMjO4mgTzJ8xBQtv0WtMrqQUVFmKIpnNaS_taoueA" type="text/javascript"></script>-->
+
+<!-- Clave para http://gymkhana.libresoft.es/ -->
+<!--<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=es&amp;key=ABQIAAAAyUSQZpdZRWS9ZFL07fTMTxROmfUqBfarv8veyVnyhuozMnB6XxRJidWEz7Ju--S-8bQptenqs72-Tg" type="text/javascript"></script>-->
+
+<!-- Clave para http://192.168.1.128/ -->
+<!-- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=es&amp;key=AIzaSyDlQYjRYZ6zcrh4ZkRo1jNYLMCGr19_BfQ" type="text/javascript"></script> -->
+
+<!-- Clave para http://193.147.51.213:8080 -->
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=es&amp;key=AIzaSyAqdHjU2i3Q5MYDscOwXO1dErrz4bqUWnI" type="text/javascript"></script>
+
+<!-- Clave para http://127.0.0.1:8000/gymkhana/ -->
+<!--<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=es&amp;key=ABQIAAAAyUSQZpdZRWS9ZFL07fTMTxQDdUfxAvy2aF2Km6wNcBq6oQV9HhTJ3T1NfSrdOPCoJ67l3FADMSoAOA" type="text/javascript"></script>-->
+
+<!-- Clave para http://10.72.1.101:8000/ -->
+<!--<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;hl=es&amp;key=ABQIAAAAyUSQZpdZRWS9ZFL07fTMTxTAGyXNC6poN1k7ZMoSgPnaFJtvdRQq6ePMXoQkoNUz5dpOrc7ZOIIHzQ" type="text/javascript"></script>-->
+
+<script type="text/javascript">
+
+//<![CDATA[
+
+	var map = null;
+    	var http_request = false;
+	var num_responses = 0;
+	var num_messages = 0;
+
+	var TEXTUAL_CHALLENGE		= 1;
+	var PHOTO_CHALLENGE		= 2;
+	var GEOLOCATION_CHALLENGE	= 3;
+
+	function createXMLHttpRequest() {
+		// Obtencion del objeto XMLHttpRequest que nos permitira ejecutar
+		// peticiones HTTP asincronamente desde JavaScript:
+	  	var http_request = false;
+ 		if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+	 	  	http_request = new XMLHttpRequest();
+		}else if (window.ActiveXObject) { // IE
+		  	http_request = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		return http_request;
+	}
+
+	function getTeamList(){
+		//address = '/gymkhana/event/{{ event.id }}/team/list/?format=json&order_by=score';
+		address = '/gymkhana/event/{{ event.id }}/team/list/?format=json';
+		http_request.open('GET', address, false);
+		http_request.send(null);
+		http_request.onreadystatechange = alertContents();
+	}
+
+	function configurate() {
+		// Al cargar la pagina configuramos al cliente para que
+		// cada X segundos recargue la web por si hubiera nuevas respuestas 
+		// de los equipos.
+		// setTimeOut se ejecutaria una unica vez pasado el tiempo indicado:
+		createMap(0);
+		getMessages();
+		getTeamResponses();
+		setInterval('getTeamList();',17000,1);
+		setInterval('getTeamResponses();',20000);
+		setInterval('getMessages();',15000);
+	}
+
+	function createMap(init){
+		// Obtencion del objeto XMLHttpRequest que nos permitira ejecutar
+		// peticiones HTTP asincronamente desde JavaScript:
+		http_request = createXMLHttpRequest();
+	
+	        if (GBrowserIsCompatible()) {
+			if (init == 0){
+			       	// Creamos el mapa con el tamanyo especificado, su zoom, donde queremos
+			       	// que este centrado, etc.
+				var latitud = 40.282313;
+				var longitud = -3.819727;
+				/*var latitud = 40.3355;
+				var longitud = -3.8779;*/
+				var zoom = 5; // 16 es el valor bueno para ver bien el Campus de Fuenlabrada
+		    		
+				//Mapa Callejero - G_NORMAL_MAP
+				//Mapa Satélite - G_SATELLITE_MAP
+				//Mapa Híbrido - G_HYBRID_MAP
+				//Mapa mezcla de los tres anteriores - G_DEFAULT_MAP_TYPES
+		
+				//var map = new GMap2(document.getElementById("mapa"));
+				//map.setCenter(new GLatLng(40.655997,-4.700518), 15);
+				//map.setMapType(G_SATELLITE_MAP);
+
+				map = new GMap2(document.getElementById("map"),{ size:new GSize(685,500) } );
+				map.setMapType(G_SATELLITE_MAP);
+				/*map.addControl(new GSmallMapControl());*/
+				map.addControl(new GLargeMapControl());
+				map.addControl(new GMapTypeControl());
+			        map.addControl(new GScaleControl());
+			        map.addControl(new GOverviewMapControl());
+
+
+				map.setCenter(new GLatLng(latitud, longitud), zoom);
+			}
+		}
+
+		if(http_request){
+	                getTeamList(http_request);					
+			//var READY_STATE_UNINITIALIZED=0;
+			//var READY_STATE_LOADING=1;
+			//var READY_STATE_LOADED=2;
+			//var READY_STATE_INTERACTIVE=3;
+			//var READY_STATE_COMPLETE=4;		
+		}else{
+			alert("Su navegador no soporta AJAX");
+		}
+	}
+  
+	function alertContents() {
+		if (http_request.readyState == 4) {
+		      	if (http_request.status == 200) {
+				var info = eval( "(" + http_request.responseText + ")" );
+				var i=0;
+				var overall_standings = "<table><tr><th>Position</th><th>Team</th><th>Score</th><th>Correct/Incorrect Responses</th><!--<th>Latitude</th><th>Longitude</th>--></tr>";
+
+				map.clearOverlays();
+
+				/*while (info.teams[i]!=undefined){
+					if (info.teams[i].latitude != undefined && info.teams[i].longitude != undefined){
+						var point = new GLatLng(info.teams[i].latitude,info.teams[i].longitude);
+						var teamName = info.teams[i].team_name;
+						var popuphtml = "<h2>Team: " + teamName + "</h2><hr></hr>";
+						popuphtml = popuphtml + "<h4>Score: " + info.teams[i].score + " points</h4>";
+						popuphtml = popuphtml + "<h4>Correct Responses: " + info.teams[i].num_correct_responses + "</h4>";
+						popuphtml = popuphtml + "<h4>Incorrect Responses: " + info.teams[i].num_incorrect_responses + "</h4>";
+
+						overall_standings = overall_standings + "<tr><th>" + (i+1) + "</th><td><a href=\"/gymkhana/event/{{ event.id }}/team/" + info.teams[i].identifier + "/show/\" data-ajax=\"false\">" + info.teams[i].team_name + "</a></td><td>" + info.teams[i].score + " points</td><td>" + info.teams[i].num_correct_responses + " corrects / " + info.teams[i].num_incorrect_responses + " incorrects</td><!--<td>" + info.teams[i].latitude + "</td><td>" + info.teams[i].longitude + "</td>--></tr>";
+
+						//Add overlay to map
+						var marker = createMarker(point, popuphtml);
+						map.addOverlay(marker);
+					}
+					i++;
+				}*/
+				while (info.teams[i]!=undefined){
+					var j = 0;
+					while (info.teams[i].team_members[j]!=undefined){
+						if (info.teams[i].team_members[j].username_team_member != undefined &&
+							info.teams[i].team_members[j].latitude_team_member != undefined &&
+							info.teams[i].team_members[j].longitude_team_member != undefined){
+							var latitude = info.teams[i].team_members[j].latitude_team_member;
+							var longitude = info.teams[i].team_members[j].longitude_team_member;
+							var username = info.teams[i].team_members[j].username_team_member;
+							var point = new GLatLng(latitude, longitude);
+							var teamName = info.teams[i].team_name;
+							var popuphtml = "<h2><a href=\"/gymkhana/event/{{ event.id }}/team/" + info.teams[i].identifier + "/show/\" data-ajax=\"false\">" + teamName + "</a> - " + username + "</h2><hr></hr>";
+							popuphtml = popuphtml + "<h4>Score: " + info.teams[i].score + " points</h4>";
+							popuphtml = popuphtml + "<h4>Correct Responses: " + info.teams[i].num_correct_responses + "</h4>";
+							popuphtml = popuphtml + "<h4>Incorrect Responses: " + info.teams[i].num_incorrect_responses + "</h4>";
+							popuphtml = popuphtml + "<h4>Latitude: " + latitude + "</h4>";
+							popuphtml = popuphtml + "<h4>Longitude: " + longitude + "</h4>";
+							//Add overlay to map
+							var marker = createMarker(point, popuphtml);
+							map.addOverlay(marker);
+						}
+						j++;
+					}
+					overall_standings = overall_standings + "<tr><th>" + (i+1) + "</th><td><a href=\"/gymkhana/event/{{ event.id }}/team/" + info.teams[i].identifier + "/show/\" data-ajax=\"false\">" + info.teams[i].team_name + "</a></td><td>" + info.teams[i].score + " points</td><td>" + info.teams[i].num_correct_responses + " corrects / " + info.teams[i].num_incorrect_responses + " incorrects</td><!--<td>" + info.teams[i].latitude + "</td><td>" + info.teams[i].longitude + "</td>--></tr>";
+					i++;
+				}
+
+				overall_standings = overall_standings + "</table>";
+				document.getElementById('overall_standings').innerHTML = overall_standings;
+			}else {
+		      		alert('Se produjo un error con la petición AJAX.');
+			}
+		}
+	}
+	
+	function createMarker(point, popuphtml) {
+		var marker = new GMarker(point);
+		//alert(point);
+		//alert(popuphtml);
+		GEvent.addListener(marker, "click", function() {
+			marker.openInfoWindowHtml(popuphtml);
+		});
+		return marker;
+	}
+
+	function getTeamResponses(){
+		var done = 0;
+		http_request = createXMLHttpRequest();
+		http_request.open("GET", "/gymkhana/event/{{ event.id }}/response/list/?format=json",true);
+		http_request.onreadystatechange = function() {
+			if (http_request.readyState == 4) {
+				if (http_request.status == 200) {
+				if (done == 0){
+					var html_text = http_request.responseText;
+					var info = eval( "(" + http_request.responseText + ")" );
+					var i=0;
+					var popuphtml = "<div class=\"responses\"><fieldset><legend>Listing Challenges-Responses</legend>";
+					if (info.responses!=undefined){
+						while (info.responses[i]!=undefined){
+							var event_id = info.responses[i].event_id;
+							var event_title = info.responses[i].event_title;
+							var team_id = info.responses[i].team_id;
+							var team_name = info.responses[i].team_name;
+							var challenge_id = info.responses[i].challenge_id;
+							var challenge_number = info.responses[i].challenge_number;
+							var challenge_challenge = info.responses[i].challenge_challenge;
+							var challenge_is_stop = info.responses[i].challenge_is_stop;
+							var challenge_type = info.responses[i].challenge_type;
+							var latitude = info.responses[i].latitude;
+							var longitude = info.responses[i].longitude;
+							var altitude = info.responses[i].altitude;
+							var date = info.responses[i].date;
+							var team_response_id = info.responses[i].team_response_id;
+							var team_photo_response;
+							var team_response;
+							var distance_difference;
+							//var mark_place;
+							if (challenge_type == GEOLOCATION_CHALLENGE){
+								distance_difference = info.responses[i].distance_difference;
+								//mark_place = info.responses[i].mark_place;
+							}
+
+							if (challenge_type == PHOTO_CHALLENGE){ // Si es prueba fotografica
+								team_photo_response = info.responses[i].team_photo_response;
+							}else{
+								team_response = info.responses[i].team_response;
+							}
+							var team_response_is_correct = info.responses[i].team_response_is_correct;
+							var foto = "Cruz_roja.png";
+							if (team_response_is_correct == "True"){
+								foto = "TickMark.png";
+							}
+
+							popuphtml = popuphtml + "<h3><img id=\"correct\" src=\"/gymkhana/templates/images/" + foto + "\"/><b>Team: <a href=\"/gymkhana/event/" + event_id + "/team/" + team_id + "/show/\" data-ajax=\"false\">" + team_name + "(identifier: " + team_id + ")</a></b></h3><p><b>- Challenge " + challenge_number + "</b> (identifier: " + challenge_id + ")</p><p><b>- Challenge:</b> " + challenge_challenge + "</p>";
+
+							popuphtml = popuphtml + "<p><b>- Learning Objectives:</b></p><ul>";
+							if (info.responses[i].challenge_learning_objectives != undefined){
+								var j=0;
+								while(info.responses[i].challenge_learning_objectives[j] != undefined){
+									popuphtml = popuphtml + "<li>" + info.responses[i].challenge_learning_objectives[j].learning_objective + "</li>";
+									j++;
+								}
+							}
+							popuphtml = popuphtml + "</ul>";
+
+							if (challenge_type == TEXTUAL_CHALLENGE){ // Si es prueba textual
+								popuphtml = popuphtml + "<p><b>- Possible Solutions:</b></p><ul>";
+								if (info.responses[i].possible_solutions!=undefined){
+									var j=0;
+									while(info.responses[i].possible_solutions[j]!=undefined){
+										popuphtml = popuphtml + "<li>" + info.responses[i].possible_solutions[j].possible_solution + "</li>";
+										j++;
+									}
+								}
+								popuphtml = popuphtml + "</ul>";
+							}
+
+							popuphtml = popuphtml + "<p><b>- Response must be Correct to Continue:</b> " + challenge_is_stop + "</p>";
+							if (challenge_type == PHOTO_CHALLENGE){ // Si es una prueba fotografica
+								popuphtml = popuphtml + "<p><b>- Response: </b></p><p><a href=\"javascript:void(0);\" onmouseover=\"return overlib('<img src=&#34/gymkhana/img/" + team_photo_response + "&#34 width=600 /\>')\" onmouseout=\"nd();\"><img alt=\"\" class=\"photoResponse\" src=\"/gymkhana/img/" + team_photo_response + "\" /\></a></p>";
+							}else if (challenge_type == TEXTUAL_CHALLENGE){
+								popuphtml = popuphtml + "<p><b>- Response: " + team_response + "</b></p>";
+							}else if (challenge_type == GEOLOCATION_CHALLENGE){
+								popuphtml = popuphtml + "<p><b>- Distance Difference: " + distance_difference + " meter/s</b></p>";
+							}
+							popuphtml = popuphtml + "<p><b>- Is Correct: " + team_response_is_correct + "</b></p><p><b>- Geolocation: </b>latitude: " + latitude + "; longitude: " + longitude + "; altitude: " + altitude + "</p><p><b>- Date: </b>" + date + "</p><div><form action=\"/gymkhana/event/" + event_id + "/response/" + team_response_id + "/edit/\" method=\"get\" data-ajax=\"false\"><input type=\"hidden\" name=\"team_id\"value=\"" + team_id + "\"><input type=\"submit\" name=\"change_status\" value=\"Change to Correct/Incorrect\" data-inline=\"true\"></input></form><br><form action=\"/gymkhana/event/" + event_id + "/response/" + team_response_id + "/delete/\" method=\"get\" data-ajax=\"false\"><input type=\"hidden\" name=\"team_id\"value=\"" + team_id + "\"><input type=\"submit\" name=\"delete\" value=\"Delete Response\" data-inline=\"true\"></input></form></div><br></br>";
+
+							i++;
+						}
+						if (i>0) i--;
+						if ( i > 0 && i > num_responses){
+							alert("New responses have been received.");
+							num_responses = i;
+						}
+					}
+					popuphtml = popuphtml + "</fieldset></div>";
+					document.getElementById('responses').innerHTML = popuphtml;
+					$('input[type=submit]').css({'line-height':'2','font-size':'16px', 'border': '1px solid #999', 'border-radius':'20px', 'width':'50%', 'background-color':'#E9E9E9'});
+
+					done = 1;
+				}
+				}
+			}
+		}
+		http_request.send(null)
+		// setTimeOut se ejecutaria una unica vez pasado el tiempo indicado:
+		// setTimeout('loadMessages();',5000);
+		// Pero ya esta puesto en el configurate() el setInterval() que se ejecuta
+		// siempre cada periodo de tiempo, no solo una vez, por lo que no es
+		// necesario escribir aqui esta instruccion
+	}
+
+	function getMessages(){
+		// Pedimos al servidor que nos envie todos los mensajes que han sido publicados
+		// desde la ultima lectura que realizamos de los mismos:
+		var doneM = 0;
+		http_request = createXMLHttpRequest();
+		http_request.open("GET", "/gymkhana/event/{{ event.id }}/message/list/?format=json",true);
+		http_request.onreadystatechange = function() {
+			if (http_request.readyState == 4) {
+				if (http_request.status == 200) {
+				if ( doneM == 0){
+					var html_text = http_request.responseText;
+					var info = eval( "(" + http_request.responseText + ")" );
+					var i=0;
+					var popuphtml = "<div><fieldset><legend>Listing Messages</legend>";
+					if (info.messages!=undefined){
+						popuphtml = popuphtml + "<br></br><div><a href=\"/gymkhana/event/{{ event.id }}/message/list/delete/\" data-ajax=\"false\">Clear Messages</a></div><br></br>";
+						while (info.messages[i]!=undefined){
+							doneM = 1;
+							var from_manager = null;
+							var from_team = null;
+							var to_manager = null;
+							var to_teams = null;
+							var message_id = info.messages[i].identifier;
+							var date = info.messages[i].date;
+							var text = info.messages[i].text;
+							var latitude = info.messages[i].latitude;
+							var longitude = info.messages[i].longitude;
+							var altitude = info.messages[i].altitude;
+                                                        if (info.messages[i].from_manager != undefined){
+								from_manager = info.messages[i].from_manager[0].manager_name;
+							}
+                                                        if (info.messages[i].to_manager != undefined){
+								to_manager = info.messages[i].to_manager[0].manager_name;
+							}
+							if (info.messages[i].from_team != undefined){
+								from_team = info.messages[i].from_team;
+							}
+							if (info.messages[i].to_teams != undefined){
+								to_teams = info.messages[i].to_teams;
+							}
+							popuphtml = popuphtml + "<div><b>Message #" + (i+1) +":</b>";
+							popuphtml = popuphtml + "<ul><li>Date: " + date + "</li>";
+							if (latitude != "" && longitude != "" && altitude != ""){
+								popuphtml = popuphtml + "<li>Geolocation: latitude: " + latitude + "; longitude: " + longitude + "; altitude: " + altitude + "</li>";
+							}
+							if (from_manager != null){
+								popuphtml = popuphtml + "<li>From manager: " + from_manager + "</li>";
+							}
+							if (from_team != null){
+								popuphtml = popuphtml + "<li>From team: <a href=\"/gymkhana/event/{{ event.id }}/team/" + from_team[0].from_team_identifier + "/show/\" data-ajax=\"false\">" + from_team[0].from_team_name + "</a></li>";
+							}
+							if (to_manager != null){
+								popuphtml = popuphtml + "<li>To manager: " + to_manager + "</li>";
+							}
+							if (to_teams != null){
+								popuphtml = popuphtml + "<li>To teams: ";
+								if (to_teams!=undefined){
+									var j = 0;
+									while (to_teams[j]!=undefined){
+										if (j == 0)
+											popuphtml = popuphtml + "<a href=\"/gymkhana/event/{{ event.id }}/team/" + to_teams[j].to_team_identifier + "/show/\" data-ajax=\"false\">" + to_teams[j].to_team_name + "</a>";
+										else
+											popuphtml = popuphtml + ", " + "<a href=\"/gymkhana/event/{{ event.id }}/team/" + to_teams[j].to_team_identifier + "/show/\" data-ajax=\"false\">" + to_teams[j].to_team_name + "</a>";
+										j++;
+									}
+								}
+								popuphtml = popuphtml + "</li>";
+							}
+							popuphtml = popuphtml + "<li>Text: " + text + "</li></ul></div>";
+							popuphtml = popuphtml + "<a href=\"/gymkhana/event/{{ event.id }}/message/" + info.messages[i].identifier + "/reply/\" data-ajax=\"false\">Reply</a>";
+							popuphtml = popuphtml + " | <a href=\"/gymkhana/event/{{ event.id }}/message/" + info.messages[i].identifier + "/delete/\" data-ajax=\"false\">Delete</a><br></br><br></br>";
+
+							i++;
+						}
+						if (i>0)
+							i--;
+						if ( i > 0 && i > num_messages){
+							alert("New messages have been received.");
+							num_messages = i;
+						}
+					}
+					popuphtml = popuphtml + "</fieldset></div>";
+					document.getElementById('messages').innerHTML = popuphtml;
+//					doneM = 1;
+				}
+				}
+			}
+		}
+		http_request.send(null)
+		// setTimeOut se ejecutaria una unica vez pasado el tiempo indicado:
+		// setTimeout('loadMessages();',5000);
+		// Pero ya esta puesto en el configurate() el setInterval() que se ejecuta
+		// siempre cada periodo de tiempo, no solo una vez, por lo que no es
+		// necesario escribir aqui esta instruccion
+	}
+	
+//]]>
+</script>
+
+{% endblock %}
+

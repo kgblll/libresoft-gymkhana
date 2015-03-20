@@ -1,0 +1,12 @@
+{% extends "base.xml" %}
+
+{% block type %}user_privacy{% endblock %}
+{% block data %}
+       <user_privacy>
+         <code>{{ code }}</code>
+         {% with user_privacy as u %}
+         {% include "privacy/raw_user.xml" %}
+         {% endwith %}
+       </user_privacy>
+{% endblock %}
+

@@ -1,0 +1,15 @@
+
+         {% if n.title %}
+         <title>{{ n.title }}</title>
+         {% endif %}
+         {% if n.text %}
+			<text>{{ n.text }}</text>
+			{% endif %}
+			{% if n.uploader %}
+         <uploader>
+			{% with n.uploader as u %}
+			  {% include "user/raw.xml" %}
+			{% endwith %}
+			</uploader>
+			{% endif %}
+         {% include "node/raw.xml" %}

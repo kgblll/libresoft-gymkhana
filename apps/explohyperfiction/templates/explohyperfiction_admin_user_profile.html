@@ -1,0 +1,46 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+
+	<div class="verticalMenu">
+		<ul>
+			{%if p.is_superuser%}
+			{%else%}
+				{%if p.is_manager%}
+					<li> <a href="/explohyperfiction/admin/user/{{p.id}}/manager/quit/" onclick="if(!confirm('Are you sure quit the manager view?'))return false" > Quit manager view</a></li>
+				{%else%}
+					<li> <a href="/explohyperfiction/admin/user/{{p.id}}/manager/" onclick="if(!confirm('Are you sure to do manager?'))return false" > Become manager</a></li>
+				{%endif%}
+			<li> <a href="/explohyperfiction/admin/user/{{p.id}}/delete/" onclick="if(!confirm('Do you want to delete the user {{p.person.username}}?'))return false" > Delete </a></li>
+			{%endif%}			
+		</ul>
+	</div>
+{%endblock%}
+
+
+{%block main%}
+	<div class="content_person">
+		<div class="person_name">
+			{{p.person.username}}
+		</div>
+		<div class="person_data">
+			First name: {{p.person.first_name}}<br>
+			Last name: {{p.person.last_name}}
+		</div>
+		<div class="person_views">
+			{%if p.is_superuser%}
+				This user is superuser<br>
+			{%endif%}
+			{%if p.is_manager%}
+				This user is manager<br>
+			{%endif%}
+			{%if p.is_player%}
+				This user is player<br>
+			{%endif%}
+		</div>
+		<br><br>
+		<a href="/explohyperfiction/admin/users/" class="button normal green"> Come back to admin users</a>
+	</div>
+	
+	
+{%endblock%}

@@ -1,0 +1,10 @@
+{% extends "base.xml" %}
+
+{% block type %}similarity_words{% endblock %}
+{% block data %}
+<similarity_words>
+   <code> {{ code }} </code>
+   <value> {{ similarity }} </value>
+</similarity_words>
+{% endblock %}
+

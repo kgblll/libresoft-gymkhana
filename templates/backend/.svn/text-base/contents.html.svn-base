@@ -1,0 +1,82 @@
+{% extends "backend/base.html" %}
+
+
+<!-- Bloque heredado de "base.html": 
+{% block content %} 
+<div id="content">
+	<h3>Notes (text)</h3>
+	
+	<form action="/backend/content/note/create/" method="POST">
+		<table> 	
+        	<tr><th><label>Titulo</label>:</th><td><input type="text" name="title"/></td></tr> 
+	    	<tr><th><label>Texto</label>:</th><td><textarea name="text" cols="30"></textarea></td></tr> 
+	    	<tr><th><label>Latitude</label>:</th><td><input type="text" name="latitude"/></td></tr> 
+	    	<tr><th><label>Longitude</label>:</th><td><input type="text" name="longitude"/></td></tr> 
+	    	<tr><th>Upload to Layer</th><td>
+	    		<SELECT NAME="layer">                 
+	    			{% for layer in results %}
+	    				<OPTION VALUE="{{layer.id}}">{{layer.name}}</OPTION>
+	    			{% endfor %}
+	    		</SELECT> 
+	    	</td></tr>
+	    	
+	    	<tr><th><label>Fecha expiración to (HH:MM:SS-YYYY/MM/DD TZ)</label>:</th><td><input type="text" name="avaliable_to"/></td></tr> 
+	    	<tr><th><label>Fecha expiración from (HH:MM:SS-YYYY/MM/DD TZ)</label>:</th><td><input type="text" name="avaliable_from"/></td></tr> 
+	    </table> 
+	    <p><input type="submit" value="Upload Note" /></p>
+	</form>
+	
+	<br>
+	
+	<h3>Photos </h3>
+		
+	<form action="/backend/content/photo/create/" method="POST" enctype="multipart/form-data"> 
+        <table> 
+            <tr><th><label for="id_name">Image name:</label></th><td><input id="id_name" type="text" name="name" maxlength="30" /></td></tr> 
+<tr><th><label for="id_photo">Photo:</label></th><td><input type="file" name="photo" id="id_photo" /><br />Upload an image (max 500 kilobytes)</td></tr> 
+            <tr><th><label for="id_desc">Description</label>:</th><td><textarea cols="30" name="description"></textarea></td></tr> 
+            <tr><th><label for="id_lat">Latitude</label>:</th><td><input type="text" name="latitude" /></td></tr> 
+            <tr><th><label for="id_long">Longitude</label>:</th><td><input type="text" name="longitude" /></td></tr> 
+            
+            <tr><th>Upload to Layer</th><td>
+	    		<SELECT NAME="layer">                 
+	    			{% for layer in results %}
+	    				<OPTION VALUE="{{layer.id}}">{{layer.name}}</OPTION>
+	    			{% endfor %}
+	    		</SELECT> 
+	    	</td></tr>
+	    	
+            <tr><th<label>Fecha expiración to (HH:MM:SS-YYYY/MM/DD TZ)</label>:</th><td><input type="text" name="avaliable_to"/></td></tr>  
+            <tr><th<label>Fecha expiración from (HH:MM:SS-YYYY/MM/DD TZ)</label>:</th><td><input type="text" name="avaliable_from"/></td></tr> 
+        </table>  
+        <p><input type="submit" value="Upload Photo"></p> 
+    </form> 
+	
+	<h3>Sound</h3>
+	<form action="/backend/content/sound/create/" method="POST" enctype="multipart/form-data"> 
+        <table> 
+            <tr><th><label for="id_name">Sound file name:</label></th><td><input id="id_name" type="text" name="name" maxlength="30" /></td></tr> 
+<tr><th><label for="id_sound">Sound:</label></th><td><input type="file" name="sound" id="id_sound" /><br />Upload a sound file</td></tr> 
+            <tr><th><label for="id_desc">Description</label>:</th><td><textarea cols="30" name="description"></textarea></td></tr> 
+            <tr><th><label for="id_lat">Latitude</label>:</th><td><input type="text" name="latitude" /></td></tr> 
+            <tr><th><label for="id_long">Longitude</label>:</th><td><input type="text" name="longitude" /></td></tr> 
+            
+            <tr><th>Upload to Layer</th><td>
+	    		<SELECT NAME="layer">                 
+	    			{% for layer in results %}
+	    				<OPTION VALUE="{{layer.id}}">{{layer.name}}</OPTION>
+	    			{% endfor %}
+	    		</SELECT> 
+	    	</td></tr>
+	    	
+            <tr><th<label>Fecha expiración to (HH:MM:SS-YYYY/MM/DD TZ)</label>:</th><td><input type="text" name="avaliable_to"/></td></tr>  
+            <tr><th<label>Fecha expiración from (HH:MM:SS-YYYY/MM/DD TZ)</label>:</th><td><input type="text" name="avaliable_from"/></td></tr>
+        </table> 
+        <p><input type="submit" value="Upload Sound"></p> 
+    </form> 
+	
+	<b> {{ msg }} </b>
+	
+</div>
+
+{% endblock %}

@@ -1,0 +1,137 @@
+body {
+    overflow-x: hidden;
+}
+
+.ui-header #showMenu{
+	top:-2px;
+	left:-1px;
+}
+
+.ui-header #logo{
+	margin-left:114px;
+	width:870px;
+}
+
+mobile #wrapper {
+    position: relative;
+    z-index: 10;
+    top: 0px;
+    left: 0;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    /*
+    -moz-transform: scale(2);
+	-webkit-transform: scale(2);
+	-o-transform: scale(2);
+	-ms-transform : scale(2);
+	transform : scale(2);
+	*/
+	/*margin-top: 140px;*/
+	margin-left: 300px;
+	padding: 20px;
+	width:40%;
+}
+
+.ui-footer{	
+	bottom: 0;
+	width: 100%;
+}
+
+/********* Shw Menu **********************/
+
+nav {
+    position: fixed;
+    z-index: 60;
+    background-color: #3184a1;
+    overflow: hidden;
+    overflow-y: scroll;
+
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+nav a {
+    font-weight: 300;
+    color: #fff;
+}
+
+nav.slide-left {
+    top: 0;
+    width: 80%;
+    height: 100%;
+}
+nav.slide-left li {
+    display: block;
+    text-align: center;
+    border-bottom: solid 1px #3184a1;
+    border-top: solid 1px #3184a1;
+}
+
+nav.slide-left a {
+    display: block;
+    padding: 10px;
+    font-size: 48px;
+}
+nav.slide-left a.close-menu {
+    padding: 10px 30px;
+    background-color: #A4A4A4;
+    color: #fff;
+}
+nav{
+   left: -80%;
+}
+nav.show-menu{
+    left: 0;
+}
+
+/**************** BODY *************************/
+
+.photoResponse{
+	width : 50%;
+	height : 50%;
+}
+
+
+/************* show_gymkahna ***************************/
+
+
+#simple .ui-select{
+	width : 100%;
+}
+
+mobile #wrapper fieldset{
+        border-width:2px;
+        padding:0 30px 0 30px;
+        margin:0 0 40px 0;
+        border-radius:26px;
+        background: white;  /*#F5F5F5;*/
+
+}
+
+mobile #wrapper fieldset #simple{
+        border-width:0;
+        padding:0;
+        margin:0;
+        border-radius:10px;
+}
+
+
+mobile #wrapper fieldset li{
+        margin-bottom: 20px;
+        font-family:Arial, Helvetica, sans-serif;
+}
+
+mobile #wrapper fieldset legend{
+        font-size:20px;
+}
+

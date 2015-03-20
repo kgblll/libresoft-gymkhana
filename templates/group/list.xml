@@ -1,0 +1,16 @@
+{% extends "base.xml" %}
+
+{% block type %}group_list{% endblock %}
+{% block data %}
+<group_list>
+         <code>{{ code }}</code>
+         <groups>
+            {% for g in groups%}
+				<group>
+            {% include "group/raw.xml" %}
+				</group>
+            {% endfor %}
+         </groups>
+</group_list>
+{% endblock %}
+

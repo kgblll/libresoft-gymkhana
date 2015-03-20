@@ -1,0 +1,19 @@
+
+         <name>
+         {% with s.name as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </name>
+         <description>
+         {% with s.description as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </description>
+         <uploader>
+         {% with s.uploader as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </uploader>
+         {% with s as n%}
+         {% include "privacy/raw_node.xml" %}
+         {% endwith %}

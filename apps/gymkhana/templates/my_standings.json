@@ -1,0 +1,13 @@
+{
+"code": "{{ code }}",
+{% if user_standings %}
+"description": "{{ description|escape|escapejs }}",
+"username": "{{ user_standings.0 }}",
+"points": "{{ user_standings.1 }}",
+"num_events": "{{ user_standings.2 }}",
+"level": "{{ user_standings.3 }}",
+"position": "{{ position }}"
+{% else %}
+"description": "{{ description|escape|escapejs }}"
+{% endif %}
+}

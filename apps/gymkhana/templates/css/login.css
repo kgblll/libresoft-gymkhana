@@ -1,0 +1,75 @@
+.ui-body-c{
+	border:1px solid #aaa;		
+	color:#333;
+	text-shadow:0 1px 0 #fff;
+	background:#f9f9f9;		
+	background: url('images/logo.png') no-repeat center center fixed;
+	/*background-size: 100% 100%;*/
+	background-color : #ffff80;
+
+}
+
+.ui-btn-up-c{				
+	border:1px solid #ccc;
+	width:80%;
+	margin:0 0.5em;
+	background:white;
+	font-weight:700;
+	color:#222;			
+	text-shadow:0 1px 0 #fff;
+}
+
+.ui-btn-hover-c{
+	width:80%;
+	margin:0 0.5em;
+}
+
+
+#label{
+	color:black;
+	font-size: 1em;
+	font-weight:bold;
+	text-shadow:0 1px 0 white;
+    display: block;
+    width: 15em;
+
+}
+
+/*.ui-body-c,.ui-body-c input,.ui-body-c select,.ui-body-c textarea,.ui-body-c button{font-weight:bold}*/
+
+div.ui-input-text input.ui-input-text,div.ui-input-text textarea.ui-input-text,.ui-input-search input.ui-input-text{
+	border:0;
+	width:100%;
+	padding:.4em 0;	
+	margin:0;	
+	display:inline;
+	background-color:white;
+	outline:0!important
+}
+
+
+.ui-field-contain,fieldset.ui-field-contain{padding:.8em 0;margin:0;border-width:0 0 0px;overflow:visible}
+
+
+.ui-input-search,div.ui-input-text{margin:0 0em;background:white;position:relative; width:80%}	
+
+
+
+
+	
+.ui-footer{
+	color:black;
+	text-shadow:0 1px 0 #fff;
+	text-align:center;
+	background-image:-webkit-linear-gradient(#BDBDBD,#D8D8D8,#BDBDBD);
+	background-image:-moz-linear-gradient(#BDBDBD,#D8D8D8,#BDBDBD);
+	background-image:-ms-linear-gradient(#BDBDBD,#D8D8D8,#BDBDBD);
+	background-image:-o-linear-gradient(#BDBDBD,#D8D8D8,#BDBDBD);
+	background-image:linear-gradient(#BDBDBD,#D8D8D8,#BDBDBD)
+
+}	
+
+#content{
+	width:70%;
+}
+

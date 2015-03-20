@@ -1,0 +1,11 @@
+{% extends "base.xml" %}
+
+{% block type %}ok{% endblock %}
+{% block data %}
+<ok>
+  <code>{{ code }}</code>
+  <description>{{ description }}</description>
+  {% if id %}<id>{{ id }}</id>{% endif %}
+</ok>
+{% endblock %}
+

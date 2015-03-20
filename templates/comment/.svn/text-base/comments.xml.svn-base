@@ -1,0 +1,13 @@
+<comments>
+{% for c in comments %}
+<comment>
+   <id>{{ c.id }}</id>
+   <text>{{ c.comment }}</text>
+   <date>{{ c.date }}</date>
+   <author>
+      <username>{{c.author.username }}</username>
+      <id>{{ c.author.id }}</id>
+   </author>
+</comment>
+{% endfor %}
+</comments>

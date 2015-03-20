@@ -1,0 +1,15 @@
+{% extends "base.xml" %}
+
+{% block type %}categories{% endblock %}
+{% block data %}
+<categories>
+	{% for category in results%}
+		<category>
+			{% with category as c  %}
+				{% include "category/raw.xml" %}
+			{% endwith %}
+		</category>
+	{% endfor %}
+</categories>
+{% endblock %}
+

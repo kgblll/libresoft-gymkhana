@@ -1,0 +1,46 @@
+
+         <name>
+         {% with u.name as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </name>
+         <first_name>
+         {% with u.first_name as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </first_name>
+         <last_name>
+         {% with u.last_name as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </last_name>
+         <username>
+         {% with u.username as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </username>
+         <birthday>
+         {% with u.birthday as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </birthday>
+         <status>
+         	<message>
+         	{% with u.status.message as field %}
+            {% include "privacy/field.xml" %}
+            {% endwith %}
+         	</message>
+				<since>
+				{% with u.status.since as field %}
+            {% include "privacy/field.xml" %}
+            {% endwith %}
+				</since>
+			</status>
+         <email>
+         {% with u.email as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </email>
+         {% with u as n %}
+         {% include "privacy/raw_node.xml" %}
+         {% endwith %}

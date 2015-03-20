@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    	<title>
+    	{%block title%} 
+    	{%endblock%}	
+    	</title>
+    	<link href="/explohyperfiction/css/Styles.css" rel="stylesheet" type="text/css" />
+    	
+    	{%block scripts%}
+    	<script>
+    		function draw(limx,limy){
+    			var canvas = document.getElementById('map');
+    			if (canvas.getContext){
+    				var ctx=canvas.getContext('2d');
+    				var width=parseInt(limx);
+    				var height=parseInt(limy);
+    				var x_center=width/2;
+    				var questions=[{%for question in questions %}
+    								{"Id":"{{question.id}}", "level":"{{question.level}}", "position":[0,0]},
+    								{%endfor%}
+    								];
+    				var answers=[{%for answer in answers %}
+    								{"Id":"{{answer.id}}", "question":"{{answer.question.id}}","next":"{{answer.next}}"},
+    								{%endfor%}
+    								];
+    				var max_level= parseInt("{{max_level}}");		
+    				for (var level=0;level<max_level;level++){
+    					if (level==0){
+    						ctx.fillStyle='#ACFA58';
+    						ctx.fillRect(x_center-25, 10, 50,20);
+    						ctx.fillStyle='#070719';
+    						ctx.font="13px Verdana"
+    						ctx.fillText("BEGIN", x_center-22, 25);
+    					} else{
+    						var number_of_questions=0;
+    						for (var i=0; i<questions.length;i++){
+    							if (parseInt(questions[i].level)==level){
+    								number_of_questions++;
+    							}
+    						}
+    						var x=x_center-number_of_questions*100;
+    						var y=40+(level-1)*80+(level-1)*7*answers.length;
+    						for (var i=0; i<questions.length;i++){
+    							if (parseInt(questions[i].level)==level){
+    								ctx.fillStyle='#F7F2E0';
+    								ctx.fillRect(x, y, 200,60);
+    								ctx.fillStyle='#F5A9A9';
+    								ctx.fillRect(x+75,y+10,50,15);
+    								ctx.fillStyle='#070719';
+    								ctx.font="8px Verdana";
+    								ctx.fillText("Question " + questions[i].Id, x+77, y+12);
+    								questions[i].position=[x+100,y+10]
+    								var number_of_answers=0;
+    								for (var j=0;j<answers.length;j++){
+    									if (parseInt(answers[j].question)==parseInt(questions[i].Id)){
+    										number_of_answers++;
+    									}
+    								}
+    									var x_ans=x+100 - number_of_answers*20;
+    									var y_ans=y+40;
+    									
+    								for (var j=0;j<answers.length;j++){
+    									if (parseInt(answers[j].question)==parseInt(questions[i].Id)){
+    										ctx.fillStyle='#F5A9A9';
+    										ctx.fillRect(x_ans+10,y_ans,20,15);
+    										ctx.fillStyle='#070719';
+    										ctx.font="7px Verdana";
+    										ctx.fillText(answers[j].Id, x_ans+14, y_ans+7);
+    										ctx.fillStyle='#070719';
+    										ctx.beginPath();
+    										ctx.moveTo(x+100,y+25);
+    										ctx.lineTo(x_ans+20,y_ans);
+    										ctx.stroke()
+    										x_ans=x_ans+40
+    									}	
+    								}		
+    								x=x+200;
+    								
+    							}
+    						}	
+    					}
+    					ctx.fillStyle='#ACFA58';
+    					ctx.fillRect(x_center-25, height-30, 50,20);
+    					ctx.fillStyle='#070719';
+    					ctx.textBaseline="top"
+    					ctx.font="13px Verdana"
+    					ctx.fillText("END", x_center-20, height-28);
+    				}
+    				
+    				for (var level=0;level<max_level;level++){
+    					var number_of_questions=0;
+    					for (var i=0; i<questions.length;i++){
+    						if (parseInt(questions[i].level)==level){
+    							number_of_questions++;
+    						}
+    					}
+    					if (level==1){
+    						var x=x_center-number_of_questions*100;
+    						var y=40+(level-1)*60;
+    						for (var i=0; i<questions.length;i++){
+    							if (parseInt(questions[i].level)==level){
+    								ctx.fillStyle='#070719';
+    								ctx.beginPath();
+    								ctx.moveTo(x+100,y+10);
+    								ctx.lineTo(x_center,30);
+    								ctx.stroke()
+    							}
+    							x=x+200;
+    						}
+    					}
+						var x=x_center-number_of_questions*100;
+						var y=40+(level-1)*80+(level-1)*7*answers.length;
+						for (var i=0; i<questions.length;i++){
+							var number_of_answers=0;
+							if (parseInt(questions[i].level)==level){
+								for (var j=0;j<answers.length;j++){
+									if (parseInt(answers[j].question)==parseInt(questions[i].Id)){
+										number_of_answers++;
+									}
+								}
+								var x_ans=x+100 - number_of_answers*20;
+								var y_ans=y+40;	
+								for (var j=0;j<answers.length;j++){
+									if (parseInt(answers[j].question)==parseInt(questions[i].Id)){
+										for (var k=0;k<questions.length;k++){
+											if (parseInt(questions[k].Id)==parseInt(answers[j].next)){
+												if (parseInt(questions[k].level)==(level+1)){
+													ctx.fillStyle='#070719';
+													ctx.beginPath();
+		    										ctx.moveTo(x_ans+20,y_ans+15);
+													ctx.lineTo(questions[k].position[0],questions[k].position[1]);
+													ctx.stroke();
+												} else {
+													ctx.fillStyle='#F7F2E0';
+													ctx.beginPath();
+													ctx.moveTo(x_ans+20,y_ans+15);
+													ctx.lineTo(x_ans+20,y_ans+20);
+													if (x_ans>x_center){
+														ctx.lineTo(x_ans+20,y_ans+6*(j+1));
+														ctx.lineTo(width-(j+1)*7,y_ans+6*(j+1));
+														if(questions[k].position[1]>y_ans){
+															ctx.lineTo(width-(j+1)*7,questions[k].position[1]+10);
+															ctx.lineTo(questions[k].position[0],questions[k].position[1]+10);
+															ctx.lineTo(questions[k].position[0],questions[k].position[1]);
+														} else {
+															ctx.lineTo(width-(j+1)*7,questions[k].position[1]+10);
+															ctx.lineTo(questions[k].position[0],questions[k].position[1]-10);
+															ctx.lineTo(questions[k].position[0],questions[k].position[1]);
+														}
+													} else {
+														ctx.lineTo(x_ans+20,y_ans+6*(j+1));
+														ctx.lineTo((j+1)*7,y_ans+6*(j+1));
+														if(questions[k].position[1]>y_ans){
+															ctx.lineTo((j+1)*7,questions[k].position[1]+10);
+															ctx.lineTo(questions[k].position[0],questions[k].position[1]+10);
+															ctx.lineTo(questions[k].position[0],questions[k].position[1]);
+														} else {
+															ctx.lineTo((j+1)*7,questions[k].position[1]-10);
+															ctx.lineTo(questions[k].position[0],questions[k].position[1]-10);
+															ctx.lineTo(questions[k].position[0],questions[k].position[1]);
+														}
+													}
+													ctx.stroke();
+													
+												}
+											}
+										}
+										if ((answers[j].next=="None")){
+											if (level==(max_level-1)){
+												ctx.fillStyle='#070719';
+												ctx.beginPath();
+	    										ctx.moveTo(x_ans+20,y_ans+15);
+												ctx.lineTo(x_center,height-30);
+												ctx.stroke();
+											} else {
+												ctx.fillStyle='#F7F2E0';
+												ctx.beginPath();
+												ctx.moveTo(x_ans+20,y_ans+15);
+												ctx.lineTo(x_ans+20,y_ans+20);
+												if (x_ans>x_center){
+													ctx.lineTo(x_ans+20,y_ans+6*(j+1));
+													ctx.lineTo(width-(j+1)*7,y_ans+6*(j+1));
+													ctx.lineTo(width-(j+1)*7,height-40);
+													ctx.lineTo(x_center,height-40);
+													ctx.lineTo(x_center,height-30);
+												} else {
+													ctx.lineTo(x_ans+20,y_ans+6*(j+1));
+													ctx.lineTo((j+1)*7,y_ans+6*(j+1));
+													ctx.lineTo((j+1)*7,height-40);
+													ctx.lineTo(x_center,height-40);
+													ctx.lineTo(x_center,height-30);
+												}
+											}
+													ctx.stroke();
+										}		
+										x_ans=x_ans+40
+									}	
+								}		
+							x=x+200;	
+    						}	
+    					}
+    				}	
+    				
+    			} else {
+    				document.write("Su navegador no admite Canvas");
+    			}
+    		}
+    	</script>
+    	{%endblock%}
+	</head>
+
+	<body onload="draw({{width}},{{height}})">
+		<canvas id="map" width="{{width}}" height="{{height}}"></canvas>
+		
+	</body>
+
+</html>

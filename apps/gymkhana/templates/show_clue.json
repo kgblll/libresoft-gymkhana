@@ -1,0 +1,16 @@
+{
+"code": "{{ code }}",
+{% if clue %}
+"description": "{{ description|escape|escapejs }}",
+"clue":
+{
+"identifier": "{{ clue.id|escape|escapejs }}",
+"challenge_id": "{{ clue.challenge.id|escape|escapejs }}",
+"number": "{{ clue.number|escape|escapejs }}",
+"help": "{{ clue.help|escape|escapejs }}",
+"cost": "{{ clue.cost|escape|escapejs }}"
+}
+{% else %}
+"description": "{{ description|escape|escapejs }}"
+{% endif %}
+}

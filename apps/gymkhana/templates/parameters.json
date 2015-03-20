@@ -1,0 +1,6 @@
+{
+"code": "{{ code }}",
+"description": "{{ description|escapejs }}",
+"date": "{{ date|escape|escapejs }}",
+"length": "{{ length|escape|escapejs }}"
+}

@@ -1,0 +1,265 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block scripts%}
+<script>
+	function empty_field(q) {
+		if (q.length == 0) {
+			return false
+		}
+		return true
+	}
+
+	function validate(formulario) {
+		if (empty_field(formulario.text.value)== false) {
+			alert("The field question can't be empty")
+			return false
+		}
+		if ((empty_field(formulario.text1.value)==false) && (empty_field(formulario.text2.value)==false) && (empty_field(formulario.text3.value)==false) && (empty_field(formulario.text4.value)==false) && (empty_field(formulario.text5.value)==false)) {
+			alert("The question needs at leas one answer")
+			return false
+		}
+		if ((empty_field(formulario.text1.value)==true) && (empty_field(formulario.message1.value)==false)){
+			alert("The answer 1 needs feedback")
+			return false
+		}
+		if ((empty_field(formulario.text2.value)==true) && (empty_field(formulario.message2.value)==false)){
+			alert("The answer 2 needs feedback")
+			return false
+		}
+		if ((empty_field(formulario.text3.value)==true) && (empty_field(formulario.message3.value)==false)){
+			alert("The answer 3 needs feedback")
+			return false
+		}
+		if ((empty_field(formulario.text4.value)==true) && (empty_field(formulario.message4.value)==false)){
+			alert("The answer 4 needs feedback")
+			return false
+		}
+		if ((empty_field(formulario.text5.value)==true) && (empty_field(formulario.message5.value)==false)){
+			alert("The answer 5 needs feedback")
+			return false
+		}
+		if (fromulario.before.value==""){
+			alert("The before field must be an answer")
+			return false
+		}
+		return true
+	}
+
+</script>
+{%endblock%}
+
+{%block left%}
+{%endblock%}
+
+{%block main%}
+	<div>
+		<fieldset>
+			{%if edit%}
+			<legend> Explohyperfiction - Edit question </legend>
+			{%else%}
+			<legend> Explohyperfiction - New question </legend>
+			{%endif%}
+			<div id="fieldset_content">
+				{%if edit%}
+				<form action="/explohyperfiction/questions/manager/edit/{{question.id}}/" method="post" enctype="multtipart/form-data" onsubmit="return validate(this);"> {%csrf_token%}
+				{%else%}
+				<form action="/explohyperfiction/events/manager/{{event.id}}/questions/add/" method="post" enctype="multtipart/form-data" onsubmit="return validate(this);"> {%csrf_token%}
+				{%endif%}
+					<div>
+						{%if not edit%}
+						<label for="question" class="required"> Before:</label>
+						<select name="before" style="width: 300px">
+							<option value="0" selected>Start</option>
+							{%for q in questions%}
+								<optgroup label="{{q.text}}">
+								{%for answer in answers%}
+									{%ifequal answer.question.id q.id%}
+										{%ifequal answer.id before_answer%}
+											<option value="{{answer.id}}" selected>        {{answer.text}}</option>
+										{%else%}
+											<option value="{{answer.id}}">         {{answer.text}}</option>
+										{%endifequal%}
+									{%endifequal%}
+								{%endfor%}
+								</optgroup>
+							{%endfor%}
+						</select>
+						{%endif%}
+					</div><br>
+					<div>
+						<label for="text" class="required"> Text:</label>
+						<textarea rows="5" cols="40" name="text">{{question.text}}</textarea>
+					</div>
+					<div>
+						<label for="qr" class="required">QR question</label>
+						{%if question.qr%}
+						<input type="checkbox" id="qr" name="qr" value"True" checked/>
+						{%else%}
+						<input type="checkbox" id="qr" name="qr" value"True"/>
+						{%endif%}
+					</div>
+					
+					<fieldset>
+						<legend> Answer 1</legend>
+						<input type="hidden" name="answer1" value="{{answer1.id}}">
+					<div>
+						<label for="text" class="required"> Answer 1:</label>
+						<textarea rows="3" cols="40" name="text1">{{answer1.text}}</textarea>
+          </div>          
+					<div>
+						<label for="text" class="required"> Feedback 1:</label>
+						<textarea rows="3" cols="40" name="message1">{{answer1.message}}</textarea>
+					</div>
+          {%if edit%}
+            <div>          
+            <label for="next" class="required"> Next:</label>
+            <select name="next1" style="width: 300px">
+            {%if answer1.next%}
+            <option value="0">End</option>
+            {%else%}
+            <option value="0" selected>End</option>
+            {%endif%}
+            {%for q in questions%}
+              {%ifequal answer1.next q.id%}
+              <option value="{{q.id}}" selected>{{q.text}}</option>
+              {%else%}
+              <option value="{{q.id}}">{{q.text}}</option>
+              {%endifequal%}
+            {%endfor%}
+            </select>
+            </div>
+          {%endif%}
+					</fieldset>
+					<fieldset>
+						<legend> Answer 2</legend>
+					<div>
+						<input type="hidden" name="answer2" value="{{answer2.id}}">
+						<label for="text" class="required"> Answer 2:</label>
+						<textarea rows="3" cols="40" name="text2">{{answer2.text}}</textarea>
+					</div>
+					<div>
+						<label for="text" class="required"> Feedback 2:</label>
+						<textarea rows="3" cols="40" name="message2">{{answer2.message}}</textarea>
+					</div>
+            {%if edit%}
+            <div>          
+            <label for="next" class="required"> Next:</label>
+            <select name="next2" style="width: 300px">
+            {%if answer2.next%}
+            <option value="0">End</option>
+            {%else%}
+            <option value="0" selected>End</option>
+            {%endif%}
+            {%for q in questions%}
+              {%ifequal answer2.next q.id%}
+              <option value="{{q.id}}" selected>{{q.text}}</option>
+              {%else%}
+              <option value="{{q.id}}">{{q.text}}</option>
+              {%endifequal%}
+            {%endfor%}
+            </select>
+            </div>
+            {%endif%}
+					</fieldset>
+					<fieldset>
+						<legend> Answer 3</legend>
+					<div>
+						<input type="hidden" name="answer3" value="{{answer3.id}}">
+						<label for="text" class="required"> Answer 3:</label>
+						<textarea rows="3" cols="40" name="text3">{{answer3.text}}</textarea>
+					</div>
+					<div>
+						<label for="text" class="required"> Feedback 3:</label>
+						<textarea rows="3" cols="40" name="message3">{{answer3.message}}</textarea>
+					</div>
+          {%if edit%}
+            <div>          
+            <label for="next" class="required"> Next:</label>
+            <select name="next3" style="width: 300px">
+            <{%if answer3.next%}
+            <option value="0">End</option>
+            {%else%}
+            <option value="0" selected>End</option>
+            {%endif%}
+            {%for q in questions%}
+              {%ifequal answer3.next q.id%}
+              <option value="{{q.id}}" selected>{{q.text}}</option>
+              {%else%}
+              <option value="{{q.id}}" >{{q.text}}</option>
+              {%endifequal%}
+            {%endfor%}
+            </select>
+            </div>
+            {%endif%}
+					</fieldset>
+					<fieldset>
+						<legend> Answer 4</legend>
+					<div>
+						<input type="hidden" name="answer4" value="{{answer4.id}}">
+						<label for="text" class="required"> Answer 4:</label>
+						<textarea rows="3" cols="40" name="text4">{{answer4.text}}</textarea>
+					</div>
+					<div>
+						<label for="text" class="required"> Feedback 4:</label>
+						<textarea rows="3" cols="40" name="message4">{{answer4.message}}</textarea>
+					</div>
+          {%if edit%}
+            <div>          
+            <label for="next" class="required"> Next:</label>
+            <select name="next4" style="width: 300px">
+            {%if answer4.next%}
+            <option value="0">End</option>
+            {%else%}
+            <option value="0" selected>End</option>
+            {%endif%}
+            {%for q in questions%}
+              {%ifequal answer4.next q.id%}
+              <option value="{{q.id}}" selected>{{q.text}}</option>
+              {%else%}
+              <option value="{{q.id}}" >{{q.text}}</option>
+              {%endifequal%}
+            {%endfor%}
+            </select>
+            </div>
+          {%endif%}
+					</fieldset>
+					<fieldset>
+						<legend> Answer 5</legend>
+					<div>
+						<input type="hidden" name="answer5" value="{{answer5.id}}">
+						<label for="text" class="required"> Answer 5:</label>
+						<textarea rows="3" cols="40" name="text5">{{answer5.text}}</textarea>
+					</div>
+					<div>
+						<label for="text" class="required"> Feedback 5:</label>
+						<textarea rows="3" cols="40" name="message5">{{answer5.message}}</textarea>
+					</div>
+          {%if edit%}
+            <div>          
+            <label for="next" class="required"> Next:</label>
+            <select name="next5" style="width: 300px">
+            {%if answer5.next%}
+            <option value="0">End</option>
+            {%else%}
+            <option value="0" selected>End</option>
+            {%endif%}
+            {%for q in questions%}
+              {%ifequal answer5.next q.id%}
+              <option value="{{q.id}}" selected>{{q.text}}</option>
+              {%else%}
+              <option value="{{q.id}}">{{q.text}}</option>
+              {%endifequal%}
+            {%endfor%}
+            </select>
+            </div>
+            {%endif%}
+					</fieldset>
+                		<br>
+					<div>
+						<input type="submit" value="Send" class="button normal green">
+					</div>
+				</form>			
+			</div>
+		</fieldset>
+	</div>
+{%endblock%}

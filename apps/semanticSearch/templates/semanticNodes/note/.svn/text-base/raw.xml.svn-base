@@ -1,0 +1,9 @@
+
+
+ {% with n.data as n%}
+	 {% include "note/raw.xml" %}
+ {% endwith %}
+ 
+ {% with n as node%}
+ 	{% include "semanticNodes/semanticInfo.xml" %}
+ {% endwith %}

@@ -1,0 +1,8 @@
+
+{
+"code": "{{ code }}",
+"layer_id": "{{ layer_id }}",
+"photo_id": "{{ photo_id }}",
+"matched": "{{ matched }}",
+"goodness": "{{ goodness }}",
+}

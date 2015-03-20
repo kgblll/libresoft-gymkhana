@@ -1,0 +1,13 @@
+{% extends "base_list.json" %}
+
+{% block data %}
+"results":{
+	"photo": [
+	      {% for p in photos%}{
+	      {% include "photo/raw.json" %}
+	      }, {% endfor %}
+	]
+}
+{% endblock %}
+
+

@@ -1,0 +1,20 @@
+{% ifnotequal u.name None %}"name": "{{ u.name|escapejs }}",{% endifnotequal %}
+{% ifnotequal u.first_name None %}"first_name": "{{ u.first_name|escapejs }}",{% endifnotequal %}
+{% ifnotequal u.last_name None %}"last_name": "{{ u.last_name|escapejs }}",{% endifnotequal %}
+{% ifnotequal u.username None %}"username": "{{ u.username|escapejs }}",{% endifnotequal %}
+{% ifnotequal u.birthday None %}"birthday": "{{ u.birthday|escapejs }}",{% endifnotequal %}
+{% if u.status %}"status":
+{
+	{% ifnotequal u.status.message None %}"message": "{{ u.status.message|escapejs }}",{% endifnotequal %}
+	{% ifnotequal u.status.since None %}"since": "{{ u.status.since|escapejs }}",{% endifnotequal %}
+},
+{% endif %}
+{% ifnotequal u.email None %}"email": "{{ u.email|escapejs }}",{% endifnotequal %}
+{% ifnotequal u.avatar None %}"avatar": {
+	"photo_id": {{ u.avatar.id|escapejs }},
+	"photo_url": "{{ u.avatar.url|escapejs }}",
+},
+{% endifnotequal %}
+{% with u as n %}
+{% include "node/raw.json" %}
+{% endwith %}

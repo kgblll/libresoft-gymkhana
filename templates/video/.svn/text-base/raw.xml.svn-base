@@ -1,0 +1,42 @@
+
+{% if v.name %}
+         <name>{{ v.name }}</name>
+{% endif %}
+{% if v.description %}
+         <description>{{ v.description }}</description>
+{% endif %}
+{% if v.uploader %}
+         <uploader>
+           {% with v.uploader as u %}
+           {% include "user/raw.xml" %}
+			  {% endwith %}
+         </uploader>
+{% endif %}
+
+{% ifequal v.id None %}
+	<external_info>
+{% else %}
+    <extra_info>
+{% endifequal %}
+
+	  {% if v.info_url %}
+	  	<info_url> {{v.info_url}} </info_url>
+	  {% endif %}
+	  
+	  {% if v.video_url %}
+	  	<video_url> {{v.video_url}} </video_url>
+	  {% endif %}
+
+	  
+	  {% if v.vido_thumb_url %}
+	  	<video_thumb_url> {{v.video_thumb_url}} </video_thumb_url>
+	  {% endif %}
+	  
+{% ifequal v.id None %}
+	</external_info>
+{% else %}
+    </extra_info>
+{% endifequal %}
+			{% with v as n%}
+         {% include "node/raw.xml" %}
+			{% endwith %}

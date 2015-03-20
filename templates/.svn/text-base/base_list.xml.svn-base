@@ -1,0 +1,16 @@
+{% extends "base.xml" %}
+
+{% block type%}{{type}}{% endblock %}
+{% block data %}
+
+         {% ifnotequal page None %}
+			<page>{{ page }}</page>
+			{% endifnotequal %}
+			{% ifnotequal elems None %}
+			<elems>{{ elems }}</elems>
+			{% endifnotequal %}
+         <code>{{ code }}</code>
+         {% block list %}
+         {% endblock %}
+
+{% endblock %}

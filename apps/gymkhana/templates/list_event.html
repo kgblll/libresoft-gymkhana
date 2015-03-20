@@ -1,0 +1,67 @@
+{% extends "gymkhana.html" %}
+
+{% block content %}
+
+<h1>Listing Events</h1>
+
+{% if events %}
+
+                <ul data-role="listview"  data-inset="true">
+	    {% for event in events %}
+		    <li><a href="/gymkhana/event/{{ event.id }}/show/" data-ajax="false">
+			<h3>Title: {{ event.title }} - ({% if event.is_closed %}Closed{% else %}Opened{% endif %})</h3>
+			<p>Difficulty: <img src="/gymkhana/templates/images/{{ event.difficulty }}.png" /></p>
+			<p>Max. Score: {{ event.score }} points</p>
+			<p>Unique Identifier: {{ event.id }}</p>
+                {% if isAdmin %}
+			{% if event.is_closed %}
+			<a href="/gymkhana/event/{{ event.id }}/set_status/" data-role="button" data-inline="true" data-ajax="false" class="smallB">Open</a>    <a href="/gymkhana/event/{{ event.id }}/delete/" data-role="button"  data-inline="true" data-ajax="false" class="smallB">Delete</a>
+			{% else %}
+			<a href="/gymkhana/event/{{ event.id }}/set_status/" data-role="button"  data-inline="true" data-ajax="false" class="smallB">Close</a>    <a href="/gymkhana/event/{{ event.id }}/delete/" data-role="button"  data-inline="true" data-ajax="false" class="smallB">Delete</a>
+			{% endif %}
+		<br></br>
+		{% else %}
+		<br></br>
+		{% endif %}
+		    <a id="none"></a></a></li>
+	    {% endfor %}
+		</ul>
+
+{% else %}
+	<h2>There are no events.</h2>
+{% endif %}
+
+{% endblock %}
+
+{% block contentM %}
+
+<h1>Listing Events</h1>
+
+{% if events %}
+
+                <ul data-role="listview"  data-inset="true">
+	    {% for event in events %}
+		    <li><a href="/gymkhana/event/{{ event.id }}/show/" data-ajax="false">
+			<h3>Title: {{ event.title }} - ({% if event.is_closed %}Closed{% else %}Opened{% endif %})</h3>
+			<p>Difficulty: <img src="/gymkhana/templates/images/{{ event.difficulty }}.png" /></p>
+			<p>Max. Score: {{ event.score }} points</p>
+</p>    		<p>Unique Identifier: {{ event.id }}
+                {% if isAdmin %}
+			{% if event.is_closed %}
+			<a href="/gymkhana/event/{{ event.id }}/set_status/" data-role="button" data-inline="true" data-ajax="false" class="smallB">Open</a>    <a href="/gymkhana/event/{{ event.id }}/delete/" data-role="button"  data-inline="true" data-ajax="false" class="smallB">Delete</a>
+			{% else %}
+			<a href="/gymkhana/event/{{ event.id }}/set_status/" data-role="button"  data-inline="true" data-ajax="false" class="smallB">Close</a>    <a href="/gymkhana/event/{{ event.id }}/delete/" data-role="button"  data-inline="true" data-ajax="false" class="smallB">Delete</a>
+			{% endif %}
+		<br></br>
+		{% else %}
+		<br></br>
+		{% endif %}
+		    <a id="none"></a></a></li>
+	    {% endfor %}
+		</ul>
+
+{% else %}
+	<h2>There are no events.</h2>
+{% endif %}
+
+{% endblock %}

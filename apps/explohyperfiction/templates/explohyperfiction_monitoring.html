@@ -1,0 +1,17 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+<ul>
+	{%for event in events%}
+	<li> <a href="/explohyperfiction/monitoring/{{event.id}}/">{{event.name}}</a></li>
+	{%endfor%}
+</ul>
+{%endblock%}
+
+{%block main%}
+	{%if events%}
+	<h1> Select a event to view</h1>
+	{%else%}
+	<h1> There are not active events</h1>
+	{%endif%}
+{%endblock%}

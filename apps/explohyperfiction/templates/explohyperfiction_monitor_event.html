@@ -1,0 +1,245 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+<ul>
+	<li> <a href="/explohyperfiction/monitoring/{{event.id}}/">All challenges</a></li>
+	{%for challenge in challenges%}
+	<li> <a href="/explohyperfiction/monitoring/{{event.id}}/{{challenge.id}}/">{{challenge.user.person.username}}</a></li>
+	{%endfor%}
+</ul>
+{%endblock%}
+
+{%block main%}
+	<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1;"></div>
+	{%if challenges%}
+
+		<div id="map" style="width: 500px; height:400px;" >
+			
+		</div>
+		<div id="responses">
+			
+		</div>
+	{%else%}
+	<h1> There are not challenges</h1>
+	{%endif%}
+{%endblock%}
+
+{%block scripts%}
+<script type="text/javascript"
+    src="https://maps.google.com/maps/api/js?sensor=false">
+</script>
+<script type="text/javascript">
+	var markerArray = [];
+	var latitud= null;
+	var longitd=null;
+	var map=null;
+	
+	
+	function createXMLHttpRequest() {
+		// Obtencion del objeto XMLHttpRequest que nos permitira ejecutar
+		// peticiones HTTP asincronamente desde JavaScript:
+	  	var http_request = false;
+ 		if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+	 	  	http_request = new XMLHttpRequest();
+		}else if (window.ActiveXObject) { // IE
+		  	http_request = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		return http_request;
+	}
+	
+	function getPositionPlayer(){
+		address = '/explohyperfiction/api/maps/position/player/{{challenge_player.user.id}}/';
+		http_request.open('GET', address, false);
+		http_request.send(null);
+		http_request.onreadystatechange = alertContentsPlayer();
+		
+	}
+	
+	function getPositionEvents(){
+		address = '/explohyperfiction/api/maps/position/events/{{event.id}}/';
+		http_request.open('GET', address, false);
+		http_request.send(null);
+		http_request.onreadystatechange = alertContentsEvents();
+		
+	}
+	function clearOverlays(){
+		for (var i=0;i<markerArray.length;i++){
+			markerArray[i].setMap(null);
+		}
+	}
+	function alertContentsEvents(){
+		if (http_request.readyState == 4) {
+		      	if (http_request.status == 200) {
+				var info = eval( "(" + http_request.responseText + ")" );
+				var i=0;
+				clearOverlays();
+				while (info.positions[i]!=undefined){
+					if (info.positions[i].latitude!=undefined && info.positions[i].longitude != undefined){
+						var latitude = info.positions[i].latitude
+						var longitude = info.positions[i].longitude
+						var latlng2 = new google.maps.LatLng(longitude,latitude);
+						var marker =new google.maps.Marker({
+	    					position:latlng2,
+	    					map:map,
+	    					title:info.positions[i].name
+	   					}); 
+	   					markerArray.push(marker);
+						}
+					i++;
+					}
+				
+				}
+			}else {
+		      		alert('Se produjo un error con la petición AJAX.');
+			}
+	}
+	function alertContentsPlayer() {
+		if (http_request.readyState == 4) {
+				clearOverlays();
+		      	if (http_request.status == 200) {
+				var info = eval( "(" + http_request.responseText + ")" );
+				if (info.latitude!=undefined && info.longitude != undefined){
+					var latitude = info.latitude
+					var longitude = info.longitude
+					var latlng2 = new google.maps.LatLng(longitude,latitude);
+					var marker =new google.maps.Marker({
+	    				position:latlng2,
+	    				map:map,
+	    				title:"Jugador"
+	   				}); 
+	   				markerArray.push(marker);
+				}
+				
+			}else {
+		      		alert('Se produjo un error con la petición AJAX.');
+			}
+		}
+	}
+
+	function initialize() {
+		http_request = createXMLHttpRequest();
+		var type={{type}};
+	  	longitud= {{longitude}};
+	  	latitud={{latitude}}
+	  	
+	    var latlng = new google.maps.LatLng(latitud, longitud);
+	    var myOptions = {
+	      zoom: 10,
+	      center: latlng,
+	      mapTypeId: google.maps.MapTypeId.ROADMAP,
+	      panControl: false,
+	      zoomControl: true,
+	      scaleControl: true,
+	
+	    };
+	    map = new google.maps.Map(document.getElementById("map"),
+	        myOptions);
+	    if (type==0){
+		    var marker=new google.maps.Marker({
+		    	position:latlng,
+	    		map:map,
+	    		title:"Jugador"
+	    	});
+	    	markerArray.push(marker);
+	    	getPlayerResponses()
+	    	setInterval('getPlayerResponses();',20000,1);
+	    	setInterval('getPositionPlayer();',17000,1);
+	    }
+	    if (type==1){
+	    	getPositionEvents();
+	    	getEventResponses();
+	    	setInterval('getPositionEvents();',17000,1);
+	    	setInterval('getEventResponses();',20000,1);
+	    }
+	    
+	    if(http_request){	
+		}else{
+			alert("Su navegador no soporta AJAX");
+		}
+  }
+  
+  function getPlayerResponses(){
+		http_request = createXMLHttpRequest();
+		http_request.open("GET", "/explohyperfiction/api/event/{{challenge_player.id}}/results/{{challenge_player.user.id}}/",false);
+		http_request.onreadystatechange = function() {
+			if (http_request.readyState == 4) {
+				if (http_request.status == 200) {
+					var html_text = http_request.responseText;
+					var info = eval( "(" + http_request.responseText + ")" );
+					var i=0;
+					var popuphtml = "<div class='content_question'><h3> Last responses of users</h3>";
+					if (info.exists!=undefined){
+						popuphtml = popuphtml + "<h2> There are not answers to show </h2>"	
+					} else{
+						if (info.username!=undefined){
+							popuphtml = popuphtml + "<h3>" + info.username +  "</h3>";
+						}
+						while (info.responses[i]!=undefined){
+							var question_id = info.responses[i].question_id;
+							var question_text = info.responses[i].question_text;
+							var username = info.responses[i].username;
+							var answer_text=info.responses[i].answer_text;
+							var next_question=info.responses[i].next_question_text;
+						    var next_question_id=info.responses[i].next_question_id;
+							var date=info.responses[i].date;
+							i++;
+							popuphtml = popuphtml + "<div class='content_answer'>";
+							popuphtml = popuphtml + "<div class='date'>";
+							popuphtml = popuphtml + date;
+							popuphtml = popuphtml + "</div>";
+							popuphtml = popuphtml + "<h2> Question: " +question_text + "("+question_id+")" +"</h2>";
+							popuphtml = popuphtml + "<h5> The answer was: " + answer_text+"</h5>";
+							popuphtml= popuphtml + "</div>";
+						}
+					
+					}
+					popuphtml = popuphtml + "</div>";
+					document.getElementById('responses').innerHTML = popuphtml;
+				}
+			}
+		}
+		http_request.send(null)
+	}
+  function getEventResponses(){
+		http_request = createXMLHttpRequest();
+		http_request.open("GET", "/explohyperfiction/api/event/{{ event.id }}/results/",false);
+		http_request.onreadystatechange = function() {
+			if (http_request.readyState == 4) {
+				if (http_request.status == 200) {
+					var html_text = http_request.responseText;
+					var info = eval( "(" + http_request.responseText + ")" );
+					var i=0;
+					var popuphtml = "<div class='content_question'><h3> Last responses of users</h3>";
+					if (info.exists!=undefined){
+						popuphtml = popuphtml + "<h2> There are not answers to show </h2>"	
+					} else{
+						while (info.responses[i]!=undefined){
+							var question_id = info.responses[i].question_id;
+							var question_text = info.responses[i].question_text;
+							var username = info.responses[i].username;
+							var answer_text=info.responses[i].answer_text;
+							var next_question=info.responses[i].next_question_text;
+						    var next_question_id=info.responses[i].next_question_id;
+							var date=info.responses[i].date;
+							i++;
+							popuphtml = popuphtml + "<div class='content_answer'>";
+							popuphtml = popuphtml + "<h3>" + username +  "</h3>"
+							popuphtml = popuphtml + "<div class='date'>";
+							popuphtml = popuphtml + date;
+							popuphtml = popuphtml + "</div>";
+							popuphtml = popuphtml + "<h2> Last question: " +question_text + "("+question_id+")" +"</h2>";
+							popuphtml = popuphtml + "<h5> The answer was: " + answer_text+"</h5>";
+							popuphtml = popuphtml + "<p> The next question is: "+ next_question + "("+next_question_id+")"  + "</p>";
+							popuphtml= popuphtml + "</div>";
+						}
+					
+					}
+					popuphtml = popuphtml + "</div>";
+					document.getElementById('responses').innerHTML = popuphtml;
+				}
+			}
+		}
+		http_request.send(null)
+	}
+</script>
+{%endblock%}

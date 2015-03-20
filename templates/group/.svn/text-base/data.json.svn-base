@@ -1,0 +1,11 @@
+{% load rest_tags %}
+{
+"code": "{{ code }}",
+"group": {
+   {% with group as g %}
+   {% include "group/raw.json" %}
+   {% endwith %}
+   },
+{% comments group.id "json" %}
+}
+

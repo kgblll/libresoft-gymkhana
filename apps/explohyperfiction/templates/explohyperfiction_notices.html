@@ -1,0 +1,21 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+{%endblock%}
+
+{%block main%}
+	{%if notices%}
+		{%for n in notices%}
+			<div class="content_petition">
+				<div class=date>
+					{{n.date}}
+				</div>
+				{{n.message}}<br><br>
+				<a class="button normal red" href="/explohyperfiction/notices/{{n.id}}/delete/"> Delete</a>
+				
+			</div>
+		{%endfor%}
+	{%else%}
+		<h1> No notices </h1>
+	{%endif%}
+{%endblock%}

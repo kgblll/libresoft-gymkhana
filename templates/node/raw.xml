@@ -1,0 +1,43 @@
+
+         {% if n.id %}
+         <id>{{ n.id }}</id>
+         {% endif %}
+         {% if n.position %}
+         <position>
+            {% if n.position.latitude %}
+            <latitude>{{ n.position.latitude }}</latitude>
+            {% endif %}
+            {% if n.position.longitude %}
+            <longitude>{{ n.position.longitude }}</longitude>
+            {% endif %}
+            {% if n.position.radius %}
+			<radius>{{ n.position.radius }}</radius>
+			{% endif %}
+			{% if n.position.since %}
+            <since>{{ n.position.since }}</since>
+            {% endif %}
+			{% if n.position.distance %}
+			<distance>{{ n.position.distance }}</distance>
+			{% endif %}
+            {% if n.position.country %}
+            <country>{{ n.position.country }}</country>
+            {% endif %}
+            {% if n.position.post_code %}
+            <post_code>{{ n.position.post_code }}</post_code>
+            {% endif %}
+            {% ifnotequal n.position.altitude None %}
+            <altitude>{{ n.position.altitude }}</altitude>
+            {% endifnotequal %}
+         </position>
+         {% endif %}
+         {% if n.since %}
+         <since>{{ n.since }}</since>
+         {% endif %}
+         {% if n.tags %}
+         <tags>
+            {%for t in n.tags %}<tag>{{ t }}</tag>{% endfor %}
+         </tags>
+         {% endif %}
+
+         <type>{{ n.type }}</type>
+

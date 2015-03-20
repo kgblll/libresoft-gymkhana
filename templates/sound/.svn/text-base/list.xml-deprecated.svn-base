@@ -1,0 +1,13 @@
+{% extends "base_list.xml" %}
+
+{% block list %}
+         <sounds>
+            {% for s in sounds %}
+            <sound>
+            {% include "sound/raw.xml" %}
+            </sound>
+            {% endfor %}
+         </sounds>
+{% endblock %}
+
+

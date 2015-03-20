@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/Relations/Items
+END
+GenericItem.py
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/Relations/Items/GenericItem.py
+END
+SemanticWordItem.py
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/Relations/Items/SemanticWordItem.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/Relations/Items/__init__.py
+END

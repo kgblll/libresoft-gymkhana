@@ -1,0 +1,49 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+	
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<script src='../jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<script src='../jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<link rel='stylesheet' href='../jquery.mobile/jquery.mobile-1.3.2.min.css' /"+">"));	
+		}
+	</script>
+	
+	<link href="/gymkhana/templates/dialogs/dialogs.css" rel="StyleSheet" />
+
+	
+</head> 
+<body> 
+
+<div data-role="dialog">
+	
+	<div data-role="header" data-theme="c">
+		<h1>Pista comprada</h1>
+	</div>
+
+	<div data-role="content" data-theme="d">
+		
+            {% if correct %}
+                <p id="bold">Pista {{clue.number}} ({{clue.cost}} puntos):</p>
+                <p>{{clue.help}}</p>
+	    {% else %}
+		<h2>No hay más pistas.<h2>
+	    {% endif %}	
+		<a data-role="button" data-theme="b" onclick="history.go(-2);">Volver</a>
+
+	</div>
+</div>
+
+
+</body>
+</html>

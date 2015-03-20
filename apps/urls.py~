@@ -1,0 +1,129 @@
+# -*- coding: UTF-8 -*-
+from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls.defaults import *
+
+# Django settings for server project.
+import sys
+from os.path import abspath, dirname, join
+from os import path
+
+
+BASEDIR = path.dirname(path.abspath(__file__))
+MODIFIED = path.join(BASEDIR,'templates')
+
+from apps.election.rest import views
+
+
+urlpatterns = patterns('',
+    url(r'^home/$','apps.election.rest.views.home',),
+    url(r'^$', 'apps.election.rest.views.home',), 
+    
+    #Para crear el primer usuario
+    url(r'^admin/create/supermanager/$', 'apps.election.rest.views.create_super_manager',), 
+    url(r'^admin/create/supermanager/confirm/$', 'apps.election.rest.views.create_super_manager_confirm',),
+    
+    #Elementos de gestion del superusuarios
+    url(r'admin/delete/supermanager/ask/$','apps.election.rest.views.delete_super_ask',),
+    url(r'admin/delete/supermanager/confirm/$','apps.election.rest.views.delete_super_confirm',),
+
+    #Elementos para darse de baja como manager y usuario
+    url(r'^admin/delete/manager/ask/$', 'apps.election.rest.views.delete_manager_ask',),
+    url(r'^admin/delete/manager/confirm/$', 'apps.election.rest.views.delete_manager_confirm',),
+    url(r'^admin/delete/user/ask/$','apps.election.rest.views.delete_user_ask',),
+    url(r'^admin/delete/user/confirm/$', 'apps.election.rest.views.delete_user_confirm',),
+    
+    #Para la selección de la vista
+    url(r'^admin/active/super/$','apps.election.rest.views.active_super',),
+    url(r'^admin/active/manager/$','apps.election.rest.views.active_manager',),
+    url(r'^admin/active/player/$','apps.election.rest.views.active_player',),
+    url(r'^admin/change/$', 'apps.election.rest.views.change_view',),
+    
+    #Para la creación del resto de usuarios
+    url(r'^user/create/$', 'apps.election.rest.views.create_user',),
+    
+    # Para gestion de sesiones
+    url(r'^user/login/$', 'apps.election.rest.views.login_user',),
+    url(r'^user/logout/$','apps.election.rest.views.logout_user'),
+    
+    # Para inscribirse en Election
+    url(r'^user/inscription/$','apps.election.rest.views.user_inscription',),
+    
+    # Para tools
+    url(r'^tools/$', 'apps.election.rest.views.tools_main',),
+    url(r'^tools/super/players/$','apps.election.rest.views.tools_super_players',),
+    url(r'^tools/super/users/$', 'apps.election.rest.views.tools_super_users',),
+    url(r'^tools/super/petitions/$', 'apps.election.rest.views.tools_super_petitions',),
+    #eliminar usuarios de LGS, solo en TEST
+    url(r'^tools/super/users/delete/(\d+)/$','apps.election.rest.views.tools_super_users_delete',),
+    url(r'^tools/super/users/delete/(\d+)/confirm/$','apps.election.rest.views.tools_super_users_delete_confirm',),
+    
+    #Para realizar las peticiones
+    url(r'^admin/ask/manager/$','apps.election.rest.views.petition_for_manager',),
+    url(r'^admin/ask/super/$', 'apps.election.rest.views.petition_for_super',),
+    url(r'^admin/ask/super/confirm/$', 'apps.election.rest.views.petition_for_super_confirm',),
+    url(r'^admin/ask/manager/confirm/$', 'apps.election.rest.views.petition_for_manager_confirm',),
+    url(r'^admin/ask/super/delete/$', 'apps.election.rest.views.petition_for_super_delete',),
+    url(r'^admin/ask/manager/delete/$', 'apps.election.rest.views.petition_for_manager_delete',),
+
+    #Para gestionar las peticiones
+    url(r'^tools/super/petitions/super/$', 'apps.election.rest.views.tools_super_petitions_super',),
+    url(r'^tools/super/petitions/manager/$', 'apps.election.rest.views.tools_super_petitions_manager',),
+    url(r'^tools/super/petitions/manager/(\d)/accept/$', 'apps.election.rest.views.tools_super_petitions_manager_accept',),
+    url(r'^tools/super/petitions/manager/(\d)/reject/$', 'apps.election.rest.views.tools_super_petitions_manager_reject',),
+    url(r'^tools/super/petitions/super/(\d)/accept/$', 'apps.election.rest.views.tools_super_petitions_super_accept',),
+    url(r'^tools/super/petitions/super/(\d)/accept/$', 'apps.election.rest.views.tools_super_petitions_super_accept',),
+    
+    #Pra eliminar usarios de election
+    url(r'^tools/super/players/delete/(\d+)/$','apps.election.rest.views.tools_super_players_delete',),
+    url(r'^tools/super/players/delete/(\d+)/confirm/$','apps.election.rest.views.tools_super_players_delete_confirm',),
+    
+    #PAra usuarios de election
+    url(r'^tools/super/players/profile/(\d+)/$','apps.election.rest.views.tools_super_players_profile',),
+    
+    
+    #Perfil
+    url(r'^profile/$','apps.election.rest.views.profile',),
+    
+    #Grupos
+    url(r'^groups/$','apps.election.rest.views.groups',),
+    url(r'^groups/view/$','apps.election.rest.views.groups_view',),
+    url(r'^groups/all/$', 'apps.election.rest.views.groups_all',),
+    url(r'^groups/create/$','apps.election.rest.views.group_create',),
+    url(r'^groups/join/(\d+)/$','apps.election.rest.views.group_join'),
+    url(r'^groups/join/(\d+)/confirm/$','apps.election.rest.views.group_join_confirm',),
+    url(r'^groups/join/(\d+)/quit/$','apps.election.rest.views.group_join_quit',),
+    url(r'^groups/join/petition/(\d+)/delete/$','apps.election.rest.views.group_join_petition_delete',),
+    
+    #Para la gestión de los grupos
+    url(r'^groups/view/(\d+)/$','apps.election.rest.views.group_view',),
+    url(r'^groups/view/(\d+)/edit/$','apps.election.rest.views.group_edit',),
+    url(r'^groups/view/(\d+)/petitions/$','apps.election.rest.views.group_petitions',),
+    url(r'^groups/view/(\d+)/petitions/(\d+)/accept/$','apps.election.rest.views.group_petitions_accept',),
+    url(r'^groups/view/(\d+)/petitions/(\d+)/reject/$','apps.election.rest.views.group_petitions_reject',),
+    url(r'^groups/view/(\d+)/delete/$','apps.election.rest.views.group_delete',),
+    url(r'^groups/view/(\d+)/delete/confirm/$','apps.election.rest.views.group_delete_confirm',),
+    url(r'^groups/view/(\d+)/add/(\d+)/$','apps.election.rest.views.group_add_manager',),
+    url(r'^groups/view/(\d+)/add/(\d+)/confirm/$','apps.election.rest.views.group_add_manager_confirm',),
+    
+    #Para quitar a usuarios de un grupo
+    url(r'^groups/view/(\d+)/user/quit/(\d+)/$', 'apps.election.rest.views.group_delete_user',),
+    
+    #Gestion de grupos
+    url(r'^admin/delete/group/(\d+)/$','apps.election.rest.views.admin_group_delete',),
+    url(r'^admin/delete/group/(\d+)/confirm/$','apps.election.rest.views.admin_group_delete_confirm',),
+    
+    url(r'^events/$','apps.election.rest.views.events',),
+    url(r'^events/create/$','apps.election.rest.views.event_create',),
+    url(r'^events/view/$','apps.election.rest.views.events_view',),
+    url(r'^events/view/(\d+)/$','apps.election.rest.views.event_view',),
+    url(r'^events/view/(\d+)/edit/$','apps.election.rest.views.event_edit',),
+    url(r'^events/view/(\d+)/delete/$','apps.election.rest.views.event_delete',),
+    url(r'^events/view/(\d+)/delete/confirm/$','apps.election.rest.views.event_delete_confirm',),
+    
+    url(r'^events/all/$','apps.election.rest.views.events_all',),
+    
+    url(r'^admin/delete/event/(\d+)/$','apps.election.rest.views.admin_delete_event',),
+    url(r'^admin/delete/event/(\d+)/confirm/$','apps.election.rest.views.admin_delete_event_confirm',),
+    #Para servir el css
+    url(r'^css/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'apps/election/css'}),
+)

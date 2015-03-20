@@ -1,0 +1,15 @@
+{% extends "base.xml" %}
+
+{% block type %}node_dist{% endblock %}
+{% block data %}
+<node_dist>
+         <code>{{ code }}</code>
+			<nodes>
+				{% for n in nodes%}
+				<node>
+            {% include "node/raw.xml" %}
+				</node>
+			   {% endfor %}
+			</nodes>
+</node_dist>
+{% endblock %}

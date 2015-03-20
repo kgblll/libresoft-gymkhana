@@ -1,0 +1,22 @@
+{% extends "base.xml" %}
+{% load semanticTemplateTags %}
+
+{% block type %}compare_nodes{% endblock %}
+{% block data %}
+<compare_nodes>
+   <code> {{ code }} </code>
+   {% for node in distances %}
+   <distance>
+       <node1>
+       	<id> {{ node.node1.id}} </id>
+       	<type> {{ node.node1.type }} </type>
+       </node1>
+       <node2>
+       	<id> {{ node.node2.id}} </id>
+       	<type> {{ node.node2.type }} </type>
+       </node2>
+	   <distanceValue> {{ node.distance }}	   </distanceValue>
+   </distance>
+   {% endfor %}
+</compare_nodes>
+{% endblock %}

@@ -1,0 +1,27 @@
+"name": {
+{% with u.name as field %}{% include "privacy/field.json" %}{% endwith %}
+},
+"first_name": {
+{% with u.first_name as field %}{% include "privacy/field.json" %}{% endwith %}
+}, 
+"last_name": {
+{% with u.last_name as field %}{% include "privacy/field.json" %}{% endwith %}
+},
+"username": {
+{% with u.username as field %}{% include "privacy/field.json" %}{% endwith %}
+},
+"birthday": {
+{% with u.birthday as field %}{% include "privacy/field.json" %}{% endwith %}
+},
+"status": {
+   "message": {
+   {% with u.status.message as field %}{% include "privacy/field.json" %}{% endwith %}
+   },
+   "since": {
+   {% with u.status.since as field %}{% include "privacy/field.json" %}{% endwith %}
+   }
+},
+"email": {
+{% with u.email as field %}{% include "privacy/field.json" %}{% endwith %}
+},
+{% with u as n %}{% include "privacy/raw_node.json" %}{% endwith %}

@@ -1,0 +1,14 @@
+{% extends "base.xml" %}
+
+{% block type %}roles{% endblock %}
+{% block data %}
+<roles>
+  <code>{{ code }}</code>
+  <roles>
+  {% for role in roles %}
+  <role>{{ role }}</role>
+  {% endfor %}
+  </roles>
+</roles>
+{% endblock %}
+

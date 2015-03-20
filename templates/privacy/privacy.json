@@ -1,0 +1,30 @@
+{
+	"code": "{{ code }}",
+	"{{ privacy.type }}": {
+		{% ifequal privacy.type "person" %}
+		{% with privacy as u %}
+		{% include "privacy/raw_user.json" %}
+		{% endwith %}
+		{% endifequal %}
+		{% ifequal privacy.type "photo" %}
+		{% with privacy as p %}
+		{% include "privacy/raw_photo.json" %}
+		{% endwith %}
+		{% endifequal %}
+		{% ifequal privacy.type "note" %}
+		{% with privacy as n %}
+		{% include "privacy/raw_note.json" %}
+		{% endwith %}
+		{% endifequal %}
+		{% ifequal privacy.type "sound" %}
+		{% with privacy as s %}
+		{% include "privacy/raw_sound.json" %}
+		{% endwith %}
+		{% endifequal %}
+		{% ifequal privacy.type "layer" %}
+		{% with privacy as l %}
+		{% include "privacy/raw_layer.json" %}
+		{% endwith %}
+		{% endifequal %}
+	}
+}

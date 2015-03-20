@@ -1,0 +1,6 @@
+
+         <groupname>{{ g.groupname }}</groupname>
+         {% if g.groupifier %}<groupifier>{{ g.groupifier }}</groupifier>{% endif %}
+			{% with g as n %}
+			{% include "node/raw.xml" %}
+         {% endwith %}

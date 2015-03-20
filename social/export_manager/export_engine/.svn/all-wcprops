@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/export_manager/export_engine
+END
+utils.py
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/export_manager/export_engine/utils.py
+END
+xml.py
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/export_manager/export_engine/xml.py
+END
+generic_export_engine.py
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/export_manager/export_engine/generic_export_engine.py
+END
+json.py
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/export_manager/export_engine/json.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/export_manager/export_engine/__init__.py
+END

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/rest/custom_exceptions
+END
+rest_interface_exceptions.py
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/rest/custom_exceptions/rest_interface_exceptions.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/rest/custom_exceptions/__init__.py
+END

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/GIC/libLGS
+END
+PhotosManager.py
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/GIC/libLGS/PhotosManager.py
+END
+Privacy.py
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/GIC/libLGS/Privacy.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/GIC/libLGS/__init__.py
+END
+SearchManager.py
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/GIC/libLGS/SearchManager.py
+END
+Auth.py
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/GIC/libLGS/Auth.py
+END
+MultiPart.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/GIC/libLGS/MultiPart.py
+END
+NotesManager.py
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/GIC/libLGS/NotesManager.py
+END

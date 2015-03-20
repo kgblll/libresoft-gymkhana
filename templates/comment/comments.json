@@ -1,0 +1,13 @@
+"comments" : [
+{% for c in comments %}
+{
+"id" : {{ c.id }},
+"comment" : "{{ c.comment|escapejs }}",
+"date" : "{{ c.date|escapejs }}",
+"author": {
+      "username": "{{c.author.username|escapejs }}",
+      "id" : {{ c.author.id }},
+         },
+},
+{% endfor %}
+]

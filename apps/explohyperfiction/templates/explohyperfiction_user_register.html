@@ -1,0 +1,110 @@
+{%extends 'explohyperfiction_base.html'%}
+
+	{%block scripts%}
+<script>
+	function empty_field(q) {
+		if (q.length == 0) {
+			return false
+		}
+		return true
+	}
+	function has_space(q) {
+		for (i = 0; i< q.length; i++) {
+			if (q.charAt(i) == " ") {
+				return false
+			}
+		}
+		return true
+	}
+	function validate_password(p1, p2){
+		if (p1 != p2){
+			return false
+		}
+		return true
+	} 
+	function validate(formulario) {
+		if (empty_field(formulario.username.value)== false) {
+			alert("El campo de nombre de usuario no puede estar vacío")
+			return false
+		}
+		if (has_space(formulario.username.value)== false) {
+			alert("El campo de nombre de usuario no puede contener espacios")
+			return false
+		}
+		if (empty_field(formulario.password.value)== false) {
+			alert("El campo de la contraseña no puede estar vacío")
+			return false
+		}
+		if (empty_field(formulario.password2.value)== false) {
+			alert("El confirmar contraseña no puede estar vacío")
+			return false
+		}
+		if (validate_password(formulario.password.value, formulario.password2.value) == false){
+			alert("Las contraseñas no coinciden")
+			return false
+		}
+		if (empty_field(formulario.first_name.value)== false) {
+			alert("El campo de nombre no puede estar vacío")
+			return false
+		}
+		if (empty_field(formulario.last_name.value)== false) {
+			alert("El campo de apellidos no puede estar vacío")
+			return false
+		}
+		return true
+	}
+
+</script>
+{%endblock%}
+
+
+{%block main%}
+{%if confirm%}
+	<h1>User created</h1><br><br>
+	<a href="/explohyperfiction/user/login/" class="button big green"> Login</a>
+{%else%}
+	<div>
+		<fieldset>
+			<legend> LibreGeoSocial - New User </legend>
+			<div id="fieldset_content">
+				<form action="/explohyperfiction/user/register/" method="post" enctype="multtipart/form-data" onsubmit="return validate(this);"> {%csrf_token%}
+					<div>
+						<label for="username" class="required"> Username:</label>
+						<input type="text" id="username" name="username" size="30" maxlength="30"/>
+					</div>
+					{%if user_exists%}
+						<p>
+						The user already exists.
+						</p>
+					{%else%}
+						<br>
+					{%endif%}
+					<div>
+						<label for="password" class="required">Password:</label>
+						<input type="password" id="password" name="password" size="30" maxlength="30"/>
+					</div>
+						<br>
+					<div>
+						<label for="password2" class="required">Confirm Password:</label>
+						<input type="password" id="password2" name="password2" size="30" maxlength="30"/>
+					</div>
+                		<br>
+					<div>
+						<label for="first_name" class="required">Firs name: </label>
+						<input type="text" id="first_name" name="first_name" size="30" maxlength="30"/>
+					</div>
+                		<br>
+					<div>
+						<label for="last_name" class="required">Last name: </label>
+						<input type="text" id="last_name" name="last_name" size="30" maxlength="30"/>
+					</div>
+                		<br>
+					<div>
+						<input type="submit" value="Crear usuario" class="button big green">
+					</div>
+				</form>			
+			</div>
+		</fieldset>
+	</div>
+{%endif%}
+{%endblock%}

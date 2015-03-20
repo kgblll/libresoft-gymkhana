@@ -1,0 +1,13 @@
+{% extends "base_list.xml" %}
+
+{% block list %}
+         <videos>
+            {% for v in videos%}
+            <video>
+            {% include "video/raw.xml" %}
+            </video>
+            {% endfor %}
+         </videos>
+{% endblock %}
+
+

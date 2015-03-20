@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/groupifier
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/groupifier/__init__.py
+END
+utils.py
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/groupifier/utils.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/groupifier/models.py
+END

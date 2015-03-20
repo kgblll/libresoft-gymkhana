@@ -1,0 +1,49 @@
+{% extends "base_list.xml" %}
+
+{% block type %}node_list{% endblock %}
+{% block list %}
+<node_list>
+        
+{% for node in results%}
+			<{{node.type}}>
+					{% ifequal node.type "person" %}
+						{% with node as p  %}
+		      				{% include "user/raw.json" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "group" %}
+						{% with node as n  %}
+		      				{% include "group/raw.xml" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "note" %}
+						{% with node as n  %}
+		      				{% include "note/raw.xml" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "photo" %}
+						{% with node as p  %}
+		      				{% include "photo/raw.xml" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "sound" %}
+						{% with node as s  %}
+		      				{% include "sound/raw.xml" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "video" %}
+						{% with node as v  %}
+		      				{% include "video/raw.xml" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		</{{node.type}}>
+{% endfor %}
+</node_list>
+{% endblock %}
+

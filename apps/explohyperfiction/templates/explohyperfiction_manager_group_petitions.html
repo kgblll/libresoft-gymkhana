@@ -1,0 +1,18 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block main%}
+	{%if petitions%}
+		{%for p in petitions%}
+			<div class="content_petition">
+				<div class=date>
+					{{p.date}}
+				</div>
+				The user {{p.player.person.username}} want to join to the group {{p.group.name}}<br><br>
+				<a class="button normal green" href="/explohyperfiction/groups/manager/petition/{{p.id}}/accept/" onclick="if(!confirm('Are you sure to accept this petition?'))return false"> Accept</a>
+				<a class="button normal red" href="/explohyperfiction/groups/manager/petition/{{p.id}}/reject/" onclick="if(!confirm('Are you sure to reject this petition?'))return false"> Reject</a>	
+			</div>
+		{%endfor%}
+	{%else%}
+		<h1> No petitions </h1>
+	{%endif%}
+{%endblock%}

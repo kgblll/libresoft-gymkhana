@@ -1,0 +1,43 @@
+
+
+{% ifnotequal l.name None %}
+"name": "{{ l.name }}",
+{% endifnotequal %}
+
+{% ifnotequal l.description None %}
+"description": "{{ l.description}}",
+{% endifnotequal %}
+
+{% ifnotequal l.writeable None %}
+"writeable": "{{ l.writeable}}",
+{% endifnotequal %}
+
+{% ifnotequal l.free None %}
+"free": "{{ l.free}}",
+{% endifnotequal %}
+
+
+{% ifnotequal l.layer_type None %}
+"layer_type": "{{ l.layer_type}}",
+{% endifnotequal %}
+
+
+{% ifnotequal l.categories None %}
+"categories" : [
+				{% for category in l.categories%}
+			    {
+				 {% with category as c %}{% include "category/raw.json" %}{% endwith %}
+  			    }, {% endfor %}
+  			   ]
+{% endifnotequal %}
+
+{% if l.uploader %}
+"uploader" :{
+{% with l.uploader as u %}{% include "user/raw.json" %}{% endwith %}
+},
+{% endif %}
+
+{% with l as n %}
+ {% include "node/raw.json" %}
+{% endwith %}
+ 

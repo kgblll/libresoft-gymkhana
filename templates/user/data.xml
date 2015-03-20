@@ -1,0 +1,12 @@
+{% extends "base.xml" %}
+{% load rest_tags %}
+{% block type %}user{% endblock %}
+{% block data %}
+       <user>
+         {% with user as u %}
+         {% include "user/raw.xml" %}
+         {% endwith %}
+       </user>
+       {% comments user.id "xml" %}
+{% endblock %}
+

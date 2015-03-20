@@ -1,0 +1,8 @@
+
+ {% with n.data as n%}
+	 {% include "note/raw.json" %}
+ {% endwith %}
+ 
+ {% with n as node%}
+ 	{% include "semanticNodes/semanticInfo.json" %}
+ {% endwith %}

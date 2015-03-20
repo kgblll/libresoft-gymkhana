@@ -1,0 +1,60 @@
+
+<!DOCTYPE html> 
+<html>
+<head>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	
+	
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+	
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<script src='../jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<script src='../jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<link rel='stylesheet' href='../jquery.mobile/jquery.mobile-1.3.2.min.css' /"+">"));	
+		}
+	</script>
+
+	
+</head> 
+<body> 
+
+<div data-role="dialog">
+	
+	<div data-role="header" data-theme="d">
+		<h1>Reintentar retos</h1>
+	</div>
+
+	<div data-role="content" data-theme="c">
+
+	{% if skipped_challenges %}
+
+		<h2>¿Qué reto desea volver a realizar?</h2>
+		<ul data-role="listview"  data-inset="true">
+
+		{% for challenge in skipped_challenges %}
+		    {% if challenge.challenge.id != challenge_id|add:0 %}
+			<li><a href="/gymkhana/event/{{ event.id }}/team/{{ team_id }}/challenge/{{challenge.challenge.id}}/event_show/" data-ajax="false"> Reto {{challenge.challenge.number}} ({{challenge.challenge.max_score}} puntos)</a></li>
+		    {% endif %}
+		{% endfor %}
+
+		</ul>
+		<p></p>
+
+        {% else %}
+                <h2>No hay retos por reintentar.</h2>
+        {% endif %}
+
+
+		<a href="dialog/index.html" data-role="button" data-rel="back" data-theme="c">Cancelar</a>    
+	</div>
+</div>
+
+
+</body>
+</html>

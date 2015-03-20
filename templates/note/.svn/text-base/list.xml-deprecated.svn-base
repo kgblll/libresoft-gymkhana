@@ -1,0 +1,12 @@
+{% extends "base_list.xml" %}
+
+{% block list %}
+         <notes>
+            {% for n in notes%}
+            <note>
+            {% include "note/raw.xml" %}
+            </note>
+            {% endfor %}
+         </notes>
+{% endblock %}
+

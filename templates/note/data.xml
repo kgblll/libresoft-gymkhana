@@ -1,0 +1,13 @@
+{% extends "base.xml" %}
+{% load rest_tags %}
+{% block type %}note{% endblock %}
+{% block data %}
+       <note>
+         <code>{{ code }}</code>
+         {% with note as n %}
+         {% include "note/raw.xml" %}
+         {% endwith %}
+       </note>
+       {% comments note.id "xml" %}
+{% endblock %}
+

@@ -1,0 +1,79 @@
+{% extends "gymkhana.html" %}
+
+{% block content %}
+<h1>Replying Message</h1>
+
+<fieldset>
+	<legend>Message Details</legend>
+	<form name="form" action="/gymkhana/event/{{ event.id }}/message/create/" method="post" enctype="multipart/form-data" data-ajax="false">
+		<input type="hidden" name="from_manager_id" value="{{ manager.id }}">
+
+		<label for="title" class="required">To:</label>
+
+                <fieldset class="ui-grid-a" id="simple">
+	                <div class="ui-block-a">
+        	 	       <label for="receiver">
+                               <input type="radio" name="receiver" value="all" checked onclick="editTo()">All Teams</input></label>
+                        </div>
+                        <div class="ui-block-b">
+            	        	<label for="receiver">
+                            	<input type="radio" name="receiver" value="a_team" onclick="editTo()">Only A Team</input></label>
+                        </div>
+               </fieldset>
+
+		<div name="select_team" id="select_team">
+			<input type="hidden" name="to" value="all">
+		</div>
+
+		<br></br>
+		<div>
+			<label for="text" class="required">Text:</label>
+			<textarea id="text" name="text" rows="5" cols="55">My message...</textarea>
+		</div>
+		<div>
+			<input type="submit" value="Create"/>
+		</div>
+	<form>
+</fieldset>
+
+{% endblock %}
+
+
+{% block contentM %}
+<h1>Replying Message</h1>
+
+<fieldset>
+	<legend>Message Details</legend>
+	<form name="form" action="/gymkhana/event/{{ event.id }}/message/create/" method="post" enctype="multipart/form-data" data-ajax="false">
+		<input type="hidden" name="from_manager_id" value="{{ manager.id }}">
+
+		<label for="title" class="required">To:</label>
+
+                <fieldset class="ui-grid-a" id="simple">
+	                <div class="ui-block-a">
+        	 	       <label for="receiver">
+                               <input type="radio" name="receiver" value="all" checked onclick="editTo()">All Teams</input></label>
+                        </div>
+                        <div class="ui-block-b">
+            	        	<label for="receiver">
+                            	<input type="radio" name="receiver" value="a_team" onclick="editTo()">Only A Team</input></label>
+                        </div>
+               </fieldset>
+
+		<div name="select_team" id="select_team">
+			<input type="hidden" name="to" value="all">
+		</div>
+
+		<br></br>
+		<div>
+			<label for="text" class="required">Text:</label>
+			<textarea id="text" name="text" rows="5" cols="55">My message...</textarea>
+		</div>
+		<div>
+			<input type="submit" value="Create"/>
+		</div>
+	<form>
+</fieldset>
+
+{% endblock %}
+

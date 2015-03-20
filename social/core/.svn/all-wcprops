@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core
+END
+utils.py
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/utils.py
+END
+api_sound.py
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/api_sound.py
+END
+api_photo.py
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/api_photo.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/models.py
+END
+config.py
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/config.py
+END
+api_layer.py
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/api_layer.py
+END
+api_group.py
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/api_group.py
+END
+api_user.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/api_user.py
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/admin.py
+END
+api.py
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/api.py
+END
+api_note.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/api_note.py
+END
+api_node.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/api_node.py
+END
+api_video.py
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/api_video.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social/core/__init__.py
+END

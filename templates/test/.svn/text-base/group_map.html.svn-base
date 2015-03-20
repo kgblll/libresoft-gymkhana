@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Group map</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAiJnupQQxmybJ8zIJtVG3EhQ1pLdxAbzTyexL2bnPqDdi3UWRuxSy5_UZSZO_HgeDnUNaTioWGyk9uQ"
+            type="text/javascript"></script>
+    <script type="text/javascript">
+
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map_canvas"));
+        map.addControl(new GLargeMapControl())
+        map.enableScrollWheelZoom()
+        center=new GLatLng({{ group.position.latitude }}, {{ group.position.longitude }})
+        map.setCenter(center, 3);
+        var tinyIcon = new GIcon();
+        tinyIcon.image = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
+         tinyIcon.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+         tinyIcon.iconSize = new GSize(12, 20);
+         tinyIcon.shadowSize = new GSize(22, 20);
+         tinyIcon.iconAnchor = new GPoint(6, 20);
+         tinyIcon.infoWindowAnchor = new GPoint(5, 1);
+
+         // Set up our GMarkerOptions object literal
+         markerOptions = { icon:tinyIcon };
+
+        map.addOverlay(new GMarker(center, markerOptions));
+        points=[{% for pos in positions %}new GLatLng({{ pos.latitude }}, {{ pos.longitude }}), {% endfor %}]
+
+        // Add markers to the map
+        for (var i = 0; i < points.length; i++) {
+          map.addOverlay(new GMarker(points[i]));
+        }
+        
+      }
+    }
+
+    </script>
+  </head>
+
+  <body onload="initialize()" onunload="GUnload()">
+    <h2> Group: {{ group.groupname }}</h2>
+    <div id="map_canvas" style="height: 600px"></div>
+    Center: ({{ group.position.latitude }}, {{ group.position.longitude }})<br />
+    Showing elements at:
+    <ul>
+    {% for pos in positions %}
+    <li>({{ pos.latitude }}, {{ pos.longitude }})</li>
+    {% endfor %}
+    </ul>
+  </body>
+</html>

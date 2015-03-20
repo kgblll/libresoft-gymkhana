@@ -1,0 +1,10 @@
+{% extends "base.xml" %}
+
+{% block type %}error{% endblock %}
+{% block data %}
+<error>
+  <code>{{ code }}</code>
+  <description>{{ description }}</description>
+</error>
+{% endblock %}
+

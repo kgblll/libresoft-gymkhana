@@ -1,0 +1,184 @@
+{% extends "gymkhana.html" %}
+
+{% block content %}
+  <h1>Overall Standings</h1>
+  <br></br>
+  <ranking>
+	  <table data-role="table" data-mode="reflow" class="ui-responsive table-stroke">
+	      <thead>
+	      	<th>Status</th>
+	      	<th>Score</th>
+	      	<th>Awards</th>
+	      </thead>
+	      <tbody>
+	      	<tr>
+	      		<td>Begginer</td>
+		      	<td>0 - 10.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Beginner.png" height="15"/></td>
+		    </tr>
+	      	<tr>
+	      		<td>Amateur</td>
+		      	<td>10.001 - 25.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Amateur.png" height="15"/></td>
+		    </tr>
+		    <tr>
+	      		<td>Advanced</td>
+		      	<td>25.001 - 50.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Advanced.png" height="15"/></td>
+		    </tr>
+		    <tr>
+	      		<td>Professional</td>
+		      	<td>50.001 - 100.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Professional.png" height="15"/></td>
+		    </tr>
+		    <tr>
+	      		<td>Boss</td>
+		      	<td>100.001 - 500.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Boss.png" height="15"/></td>
+		    </tr>
+		    <tr>
+	      		<td>Major</td>
+		      	<td>500.001 - 1.000.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Major.png" height="15"/></td>
+		    </tr>
+		    <tr>
+	      		<td>Master</td>
+		      	<td>+1.000.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Master.png" height="15"/></td>
+		    </tr>		    
+	      </tbody>
+	  </table>
+  </ranking>
+  <br></br>
+  <br></br>
+  <div id="overall_standings"></div>
+  <br></br>
+  <br></br>
+{% endblock %}
+
+
+{% block contentM %}
+  <h1>Overall Standings</h1>
+  <br></br>
+  <ranking>
+	  <table data-role="table" data-mode="reflow" class="ui-responsive table-stroke">
+	      <thead>
+	      	<th>Status</th>
+	      	<th>Score</th>
+	      	<th>Awards</th>
+	      </thead>
+	      <tbody>
+	      	<tr>
+	      		<td>Begginer</td>
+		      	<td>0 - 10.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Beginner.png" height="15"/></td>
+		    </tr>
+	      	<tr>
+	      		<td>Amateur</td>
+		      	<td>10.001 - 25.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Amateur.png" height="15"/></td>
+		    </tr>
+		    <tr>
+	      		<td>Advanced</td>
+		      	<td>25.001 - 50.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Advanced.png" height="15"/></td>
+		    </tr>
+		    <tr>
+	      		<td>Professional</td>
+		      	<td>50.001 - 100.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Professional.png" height="15"/></td>
+		    </tr>
+		    <tr>
+	      		<td>Boss</td>
+		      	<td>100.001 - 500.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Boss.png" height="15"/></td>
+		    </tr>
+		    <tr>
+	      		<td>Major</td>
+		      	<td>500.001 - 1.000.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Major.png" height="15"/></td>
+		    </tr>
+		    <tr>
+	      		<td>Master</td>
+		      	<td>+1.000.000 points</td>
+		      	<td><img src="/gymkhana/templates/images/Master.png" height="15"/></td>
+		    </tr>		    
+	      </tbody>
+	  </table>
+  </ranking>
+  <br></br>
+  <br></br>
+  <div id="overall_standings"></div>
+  <br></br>
+  <br></br>
+{% endblock %}
+
+
+
+
+{% block java_script %}
+
+<script type="text/javascript">
+
+//<![CDATA[
+
+    	var http_request = false;
+
+	function createXMLHttpRequest() {
+		// Obtencion del objeto XMLHttpRequest que nos permitira ejecutar
+		// peticiones HTTP asincronamente desde JavaScript:
+	  	var http_request = false;
+ 		if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+	 	  	http_request = new XMLHttpRequest();
+		}else if (window.ActiveXObject) { // IE
+		  	http_request = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		return http_request;
+	}
+
+	function getOverallStandings(){
+		address = '/gymkhana/overall_standings/show/?format=json&many=all';
+		http_request.open('GET', address, false);
+		http_request.send(null);
+		http_request.onreadystatechange = alertContents();
+	}
+
+	function configurate() {
+		// Al cargar la pagina configuramos al cliente para que
+		// cada X segundos recargue la web por si hubiera nuevas respuestas 
+		// de los equipos.
+		// setTimeOut se ejecutaria una unica vez pasado el tiempo indicado:
+		http_request = createXMLHttpRequest();
+		getOverallStandings();
+		setInterval('getOverallStandings();',20000,1);
+	}
+  
+	function alertContents() {
+		if (http_request.readyState == 4) {
+		      	if (http_request.status == 200) {
+				var info = eval( "(" + http_request.responseText + ")" );
+				var i=0;
+				var overall_standings = "<table><tr><th>Ranking</th><th>Level</th><th>Username</th><th>Score</th><th>Events</th></tr>";
+
+				while (info.users[i]!=undefined){
+					var username = info.users[i].username;
+					var points = info.users[i].points;
+					var num_events = info.users[i].num_events;
+					var level = info.users[i].level;
+
+					overall_standings = overall_standings + "<tr><th>" + (i+1) + "</th><td><img src=\"/gymkhana/templates/images/" + level + ".png\" height=\"15\"></img></td><td>" + username + "</td><td>" + points + " points</td><td>" + num_events + "</td></tr>";
+					i++;
+				}
+
+				overall_standings = overall_standings + "</table>";
+				document.getElementById('overall_standings').innerHTML = overall_standings;
+			}else {
+		      		alert('Se produjo un error con la petición AJAX.');
+			}
+		}
+	}
+	
+//]]>
+</script>
+
+{% endblock %}

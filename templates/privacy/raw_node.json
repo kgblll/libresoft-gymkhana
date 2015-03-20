@@ -1,0 +1,35 @@
+"id": {
+{% with n.id as field %}{% include "privacy/field.json" %}{% endwith %}
+},
+"position": {
+   "latitude": {
+{% with n.position.latitude as field %}{% include "privacy/field.json" %}{% endwith %}
+   },
+   "longitude": {
+{% with n.position.longitude as field %}{% include "privacy/field.json" %}{% endwith %}
+   },
+   "radius": {
+{% with n.position.radius as field %}{% include "privacy/field.json" %}{% endwith %}
+   },
+   "since": {
+{% with n.position.since as field %}{% include "privacy/field.json" %}{% endwith %}
+   }, {% ifnotequal n.position.distance None%}
+     "distance": {
+{% with n.position.distance as field %}{% include "privacy/field.json" %}{% endwith %}
+     }, 
+{% endifnotequal %}{% ifnotequal n.position.country None%}
+     "country": {
+{% with n.position.country as field %}{% include "privacy/field.json" %}{% endwith %}
+     }, 
+{% endifnotequal %}{% ifnotequal n.position.post_code None %}
+     "post_code": {
+{% with n.position.post_code as field %}{% include "privacy/field.json" %}{% endwith %}
+     }, 
+{% endifnotequal %}
+},
+"since": {
+{% with n.since as field %}{% include "privacy/field.json" %}{% endwith %}
+}, 
+"type": "{{ n.type }}",
+"allowed_all": [{% for r in n.allowed_all %}"{{ r }}", {% endfor %}],
+"forbidden_all": [{% for r in n.forbidden_all %}"{{ r }}", {% endfor %}],

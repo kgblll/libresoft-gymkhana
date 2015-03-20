@@ -1,0 +1,69 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+	{%if player.active_superuser%}
+		<li> <a href="/explohyperfiction/admin/users/">Users</a></li>
+		<li> <a href="/explohyperfiction/admin/groups/">Groups</a></li>
+	{%endif%}
+{%endblock%}
+
+{%block main%}
+	{%if player.active_player%}
+	{%if not all%}
+	{%for g in groups%}
+		<div class="content_group">
+			<h2>{{g.name}}</h2>
+			<p> {{g.description}}</p>
+			<a href="/explohyperfiction/groups/user/profile/{{g.id}}/" class="button normal green">View profile</a>
+			{%ifnotequal g.name "Free Group"%}
+			<br><br>
+			<a href="/explohyperfiction/groups/user/delete/{{g.id}}/" class= "button normal red" onclick="if(!confirm('Do you want to unenroll the group {{g.name}}?'))return false">Unenroll this group</a> 
+			{%endifnotequal%}	
+		</div>
+	{%endfor%}
+	{%else%}	
+		{%for g in groups%}
+			<div class="content_group">
+				<h2>{{g.name}}</h2>
+				<p> {{g.description}}</p>
+				<a href="/explohyperfiction/groups/user/profile/{{g.id}}/" class="button normal green">View profile</a>
+			{%if not g in my_groups%}
+				{%if g.private %}
+					{%if petitions%}
+					{%for petition in petitions%}
+						{%ifequal g.id petition.group.id%}
+							<br><br><a  onclick="if(!confirm('Do you want to cancel the request the group {{g.name}}?'))return false" href="/explohyperfiction/groups/user/request/{{g.id}}/cancel/" class="button normal red">Cancel request</a>
+						{%endifequal%}
+					{%endfor%}
+					{%else%}
+							<br><br><a onclick="if(!confirm('Do you want to send a request to the group {{g.name}}?'))return false" href="/explohyperfiction/groups/user/request/{{g.id}}/" class="button normal green">Send request</a>
+					{%endif%}
+				{%else%}
+				<br><br><a onclick="if(!confirm('Do you want to enroll the group {{g.name}}?'))return false" href="/explohyperfiction/groups/user/join/{{g.id}}/" class="button normal green">Join</a>
+				{%endif%}
+			{%else%}
+				{%ifnotequal g.name "Free Group"%}
+				<br><br>
+				<a href="/explohyperfiction/groups/user/delete/{{g.id}}/" class= "button normal red" onclick="if(!confirm('Do you want to delete the group {{g.name}}?'))return false">Unenroll this group</a> 
+				{%endifnotequal%}
+			
+			{%endif%}		
+		</div>
+	{%endfor%}
+	{%endif%}
+	{%endif%}
+		
+	{%if player.active_super%}
+	{%for g in groups%}
+		<div class="content_group">
+			<h2>{{g.name}}</h2>
+			<p> {{g.description}}</p>
+			<a href="/explohyperfiction/admin/groups/profile/{{g.id}}/" class="button normal green">View profile</a>
+			{%ifnotequal g.name "Free Group"%}
+			<br><br>
+			<a href="/explohyperfiction/admin/groups/delete/{{g.id}}/" class= "button normal red" onclick="if(!confirm('Do you want to delete the group {{g.name}}?'))return false">Delete</a> 
+			{%endifnotequal%}	
+		</div>
+	{%endfor%}
+	{%endif%}
+{%endblock%}

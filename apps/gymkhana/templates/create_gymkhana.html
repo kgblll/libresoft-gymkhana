@@ -1,0 +1,315 @@
+{% extends "gymkhana.html" %}
+
+{% block content %}
+<h1>Create Event</h1>
+
+		<form name="form" action="/gymkhana/event/create/" method="post" enctype="multipart/form-data" onsubmit="return checkRequiredForm(this)" data-ajax="false">
+			<label for="title" class="required">Title:</label>
+			<input type="text" id="title" name="title" size="30" maxlength="255" required/>
+
+			<label for="place" class="required">Place:</label>
+			<input type="text" id="place" name="place" size="30" maxlength="255" required/>
+		
+			<label for="celebration" class="required">Celebration:</label>
+			<input type="text" id="celebration" name="celebration" size="30" maxlength="10" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}" required/>
+		<br>
+			<label for="photo" class="required">Promotional Image:</label>
+			<input type="file" id="photo" name="photo" value="photo" accept="image/*"/>
+
+		</br>
+		
+			<label for="language" class="required">Language:</label>
+			<input type="text" id="language" name="language" size="30" maxlength="10" required/>
+		
+		</br>
+			<p>Do you want to configure the teams?</p>
+
+			<label for="configurate_teams" class="required">
+
+			<input type="radio" name="configurate_teams" value="yes" checked>Yes</input></label>
+			<label for="configurate_teams" class="required">
+
+			<input type="radio" name="configurate_teams" value="no">No</input></label>
+		
+		<br></br>
+		
+			<label for="difficulty" class="required">Difficulty:</label>
+			<select name="difficulty" id="difficulty">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+		
+		<br></br>
+		
+			<label for="select" class="required">Number Learning Objectives:</label>
+			<select name="select_num_learning_objectives" id="select_num_learning_objectives" onchange="alertSelected1()">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+		
+		<br></br>
+		<div name="div_learning_objectives" id="div_learning_objectives">
+			<label for="learning_objective_1" class="required">Learning Objective:</label>
+			<input type="text" id="learning_objective_1" name="learning_objective_1" size="30" maxlength="255" required/>
+		</div>
+		<br></br>
+		
+			<label for="welcome_text" class="required">Welcome Text:</label>
+			<textarea id="welcome_text" name="welcome_text" rows="5" cols="39">Welcome to...</textarea>
+		
+		<br></br>
+		
+			<label for="goodbye_text" class="required">Goodbye Text:</label>
+			<textarea id="goodbye_text" name="goodbye_text" rows="5" cols="39">Congratulations...</textarea>
+		<br><br>
+			<input type="submit" value="Create"></input>
+		
+		</form>
+<br><br>
+{% endblock %}
+
+
+{% block contentM %}
+<h1>Create Event</h1>
+
+		<form name="form" action="/gymkhana/event/create/" method="post" enctype="multipart/form-data" onsubmit="return checkRequiredForm(this)" data-ajax="false">
+			<label for="title" class="required">Title:</label>
+			<input type="text" id="title" name="title" size="30" maxlength="255" required/>
+
+			<label for="place" class="required">Place:</label>
+			<input type="text" id="place" name="place" size="30" maxlength="255" required/>
+		
+			<label for="celebration" class="required">Celebration:</label>
+			<input type="text" id="celebration" name="celebration" size="30" maxlength="10" value="YYYY-MM-DD" required/>
+		<br>
+			<label for="photo" class="required">Promotional Image:</label>
+			<input type="file" id="photo" name="photo" value="photo" accept="image/*"/>
+
+		</br>
+		
+			<label for="language" class="required">Language:</label>
+			<input type="text" id="language" name="language" size="30" maxlength="10" required/>
+		
+		</br>
+			<p>Do you want to configure the teams?</p>
+
+			<label for="configurate_teams" class="required">
+
+			<input type="radio" name="configurate_teams" value="yes" checked>Yes</input></label>
+			<label for="configurate_teams" class="required">
+
+			<input type="radio" name="configurate_teams" value="no">No</input></label>
+		
+		<br></br>
+		
+			<label for="difficulty" class="required">Difficulty:</label>
+			<select name="difficulty" id="difficulty">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+		
+		<br></br>
+		
+			<label for="select" class="required">Number Learning Objectives:</label>
+			<select name="select_num_learning_objectives" id="select_num_learning_objectives" onchange="alertSelected1()">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+		
+		<br></br>
+		<div name="div_learning_objectives" id="div_learning_objectives">
+			<label for="learning_objective_1" class="required">Learning Objective:</label>
+			<input type="text" id="learning_objective_1" name="learning_objective_1" size="30" maxlength="255" required/>
+		</div>
+		<br></br>
+		
+			<label for="welcome_text" class="required">Welcome Text:</label>
+			<textarea id="welcome_text" name="welcome_text" rows="5" cols="39">Welcome to...</textarea>
+		
+		<br></br>
+		
+			<label for="goodbye_text" class="required">Goodbye Text:</label>
+			<textarea id="goodbye_text" name="goodbye_text" rows="5" cols="39">Congratulations...</textarea>
+		<br><br>
+			<input type="submit" value="Create"></input>
+		
+		</form>
+<br><br>
+{% endblock %}
+
+
+
+{% block java_script %}
+<script type="text/javascript">
+	//<![CDATA[
+	
+	function checkRequiredForm(which){
+		if (document.images){
+			for (i=0;i<which.length;i++){
+				var tempobj=which.elements[i]
+				if (tempobj.name.substring(0,5)=="title"){
+					if (tempobj.type=="text"&&tempobj.value==''){
+						alert("Title Field is Empty.");
+						return false;
+					}else{
+						// Controlamos que el nick solo tenga caracteres de la A-Z, a-z y 0-9, pues caracteres
+						// acentuados, enye, cedilla, etc., pueden traer problemas en el tratamiento de URL's:
+						var title=tempobj.value;
+						for(var q=0;q<title.length;q++){
+							if ( (title[q].charCodeAt(0) >= 65 && title[q].charCodeAt(0) <= 90) ||
+									(title[q].charCodeAt(0) >= 97 && title[q].charCodeAt(0) <= 122) ||
+									(title[q].charCodeAt(0) >= 48 && title[q].charCodeAt(0) <= 57)  ||
+									title[q] == '-' || title[q] == ' '){
+									}
+							else{
+								alert("Title field contains unsupported character/s (only 0-9, A-Z, a-z and space).");
+								return false;
+							}
+						}
+					}
+				
+				}
+				else if (tempobj.name.substring(0,5)=="place"){
+					if (tempobj.type=="text"&&tempobj.value==''){
+						alert("Place Field is Empty.");
+						return false;
+					}else{
+						// Controlamos que el nick solo tenga caracteres de la A-Z, a-z y 0-9, pues caracteres
+						// acentuados, enye, cedilla, etc., pueden traer problemas en el tratamiento de URL's:
+						var place=tempobj.value;
+						for(var q=0;q<place.length;q++){
+							if ( (place[q].charCodeAt(0) >= 65 && place[q].charCodeAt(0) <= 90) ||
+									(place[q].charCodeAt(0) >= 97 && place[q].charCodeAt(0) <= 122) ||
+									(place[q].charCodeAt(0) >= 48 && place[q].charCodeAt(0) <= 57)  || 
+									title[q] == '-' || place[q] == ' '){
+									}
+							else{
+								alert("Place field contains unsupported character/s (only 0-9, A-Z, a-z and space).");
+								return false;
+							}
+						}
+					}
+				}
+	    	  	}
+
+			var welcome_text = document.form.welcome_text.value;
+			if (welcome_text==''){
+				alert("Welcome Text Field is Empty.");
+				return false;
+			}
+
+			var goodbye_text = document.form.goodbye_text.value;
+			if (goodbye_text==''){
+				alert("Goodbye Text Field is Empty.");
+				return false;
+			}
+			
+			var date = document.form.celebration.value;
+			var ar = date.split("-");
+			if(!isNumber(ar[0])||!isNumber(ar[1])||!isNumber(ar[2])){
+				alert("Incorrect Format for Date (YYYY-MM-DD)");
+				return false;
+			}
+
+			if(ar[1] < 0 || ar[1] > 12){
+				alert("Incorrect Month.");
+				return false;
+			}
+
+			switch(ar[1]){
+				case "01":
+				case "03":
+				case "05":
+				case "07":
+				case "08":
+				case "10":
+				case "12": // meses con 31
+					if (ar[2] < 0 || ar[2] > 31){
+						alert("Incorrect Day for This Month.");
+						return false;
+					}
+					break;
+				case "04":
+				case "06":
+				case "09":
+				case "11": // meses con 30
+					if (ar[2] < 0 || ar[2] > 30){
+						alert("Incorrect Day for This Month.");
+						return false;
+					}
+					break;
+				case "02":
+					var leap_year = false;
+					if ((( ar[0] % 4 == 0 ) && ( ar[0] % 100 != 0 )) || ( ar[0] % 400 == 0 )){
+						leap_year = true;
+					}
+        				if (leap_year == true){
+						if (ar[2] < 0 || ar[2] > 29){
+							alert("Incorrect Day for This Month (and Leap Year).");
+							return false;
+						}
+					}else{
+						if (ar[2] < 0 || ar[2] > 28){
+							alert("Incorrect Day for This Month (No Leap Year).");
+							return false;
+						}
+					}
+					break;
+			}
+
+			// Chequeamos si hay fichero:
+			if (document.form.photo.value == ""){
+				alert('A Promotional Picture Must Be Submitted.');
+				return false;
+			}
+
+    		}
+		return true;
+	}
+
+	function isNumber(str){
+		if(str.length==0)
+			return false;
+		var numdecs = 0;
+		for (i = 0; i < str.length; i++){
+			var mychar = str.charAt(i);
+			if ((mychar >= "0" && mychar <= "9") || mychar == "." ){
+				if (mychar == ".")
+					numdecs++;
+			}else return false;
+		}
+		return true;
+	}
+		
+	//Function alerts the index of the selected option within form
+	function alertSelected1(){
+		if (document.getElementById('select_num_learning_objectives').value != ""){
+			var num_possible_solutions = document.getElementById('select_num_learning_objectives').value;
+			var new_text = "";
+			for (x = 1; x <= num_possible_solutions; x++){
+				new_text = new_text + "</br><div><label for=\"learning_objective_" + x + "\" class=\"required\">Learning Objective #" + x + ":</label><input type=\"text\" id=\"learning_objective_" + x + "\" name=\"learning_objective_" + x + "\" size=\"30\" maxlength=\"255\"/\></div><br>";
+			}
+			var div = $('#div_learning_objectives');
+			div.html(new_text);
+			
+			for (x = 1; x <= num_possible_solutions; x++){
+				$('#learning_objective_' + x).css('line-height','2').css( 'font-size', '16px').css('border', '1px solid #999').css('border-radius', '10px').css('width', '100%');
+			}
+		}
+	}
+
+	//]]>
+</script>
+{% endblock %}

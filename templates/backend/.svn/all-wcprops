@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/templates/backend
+END
+home.html
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/templates/backend/home.html
+END
+base.html
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/templates/backend/base.html
+END
+contents.html
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/templates/backend/contents.html
+END
+layers.html
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/templates/backend/layers.html
+END
+node_list.html
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/templates/backend/node_list.html
+END

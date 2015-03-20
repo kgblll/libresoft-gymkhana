@@ -1,0 +1,65 @@
+
+         <id>
+         {% with n.id as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </id>
+         <position>
+            <latitude>
+            {% with n.position.latitude as field %}
+            {% include "privacy/field.xml" %}
+            {% endwith %}
+            </latitude>
+            <longitude>
+            {% with n.position.longitude as field %}
+            {% include "privacy/field.xml" %}
+            {% endwith %}
+            </longitude>
+				<radius>
+				{% with n.position.radius as field %}
+            {% include "privacy/field.xml" %}
+            {% endwith %}
+				</radius>
+            <since>
+            {% with n.position.since as field %}
+            {% include "privacy/field.xml" %}
+            {% endwith %}
+            </since>
+				{% if n.position.distance %}
+				  <distance>
+				  {% with n.position.distance as field %}
+              {% include "privacy/field.xml" %}
+              {% endwith %}
+				  </distance>
+				{% endif %}
+				{% if n.position.country %}
+              <country>
+              {% with n.position.country as field %}
+              {% include "privacy/field.xml" %}
+              {% endwith %}
+              </country>
+            {% endif %}
+            {% if n.position.post_code %}
+              <post_code>
+              {% with n.position.post_code as field %}
+              {% include "privacy/field.xml" %}
+              {% endwith %}
+              </post_code>
+            {% endif %}
+         </position>
+         <since>
+         {% with n.since as field %}
+         {% include "privacy/field.xml" %}
+         {% endwith %}
+         </since>
+         <type>{{ n.type }}</type>
+         <allowed_all>
+            {% for r in n.allowed_all %}
+             <allowed>{{ r }}</allowed>
+            {% endfor %}
+         </allowed_all>
+         <forbidden_all>
+            {% for r in n.forbidden_all %}
+             <forbidden>{{ r }}</forbidden>
+            {% endfor %}
+         </forbidden_all>

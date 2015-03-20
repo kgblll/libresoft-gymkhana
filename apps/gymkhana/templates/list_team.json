@@ -1,0 +1,55 @@
+{
+"code": "{{ code }}",
+{% if teams %}
+"description": "{{ description|escape|escapejs }}",
+"teams": [
+{% for scoreboard in scoreboards %}
+{% for team in teams %}
+{% for first_challenge in first_challenges %}
+{% ifequal scoreboard.team team %}
+{% ifequal first_challenge.team team %}
+{ "identifier": "{{ team.id }}",
+"team_name": "{{ team.group.name|escape|escapejs }}",
+"group_id": "{{ team.group.id }}",
+"id_first_challenge": "{{ first_challenge.first_challenge.id }}",
+
+{% for finished in finished_s %}
+{% ifequal finished.team team %}
+"is_finished": "{{ finished.is_finished|escape|escapejs }}",
+{% endifequal %}
+{% endfor %}
+
+"team_members": [
+{% for team_member in team.teammember_set.all %}
+{% ifequal team_member.event event %}
+{ "id_team_member": "{{ team_member.id }}",
+"id_user_team_member": "{{ team_member.user.id }}",
+"username_team_member": "{{ team_member.user.username|escape|escapejs }}",
+"latitude_team_member": "{{ team_member.user.position.y }}",
+"longitude_team_member": "{{ team_member.user.position.x }}",
+"altitude_team_member": "{{ team_member.user.altitude }}"
+},
+{% endifequal %}
+{% endfor %}
+],
+
+"num_correct_responses": "{{ scoreboard.num_correct_responses|escape|escapejs }}",
+"num_incorrect_responses": "{{ scoreboard.num_incorrect_responses|escape|escapejs }}",
+"score": "{{ scoreboard.score }}",
+
+"latitude": "{{ team.group.position.y }}",
+"longitude": "{{ team.group.position.x }}",
+"altitude": "{{ team.group.altitude }}",
+"radius": "{{ team.group.radius }}",
+"since": "{{ team.group.since|escape|escapejs }}"
+},
+{% endifequal %}
+{% endifequal %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
+]
+{% else %}
+"description": "{{ description|escape|escapejs }}"
+{% endif %}
+}

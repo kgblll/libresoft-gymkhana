@@ -1,0 +1,6 @@
+{
+"code": "{{ code }}",
+"roles": [{% for role in roles %}"{{ role|escapejs }}", {% endfor %}]
+}
+
+

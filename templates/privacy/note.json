@@ -1,0 +1,7 @@
+{
+"code": "{{ code }}",
+"note": {
+{% with note_privacy as n %}{% include "privacy/raw_note.json" %}{% endwith %}
+   }
+}
+

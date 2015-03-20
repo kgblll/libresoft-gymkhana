@@ -1,0 +1,64 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block scripts%}
+<script>
+	function empty_field(q) {
+		if (q.length == 0) {
+			return false
+		}
+		return true
+	}
+	function has_space(q) {
+		for (i = 0; i< q.length; i++) {
+			if (q.charAt(i) == " ") {
+				return false
+			}
+		}
+		return true
+	}
+	function validate(formulario) {
+		if (empty_field(formulario.username.value)== false) {
+			alert("El campo de nombre de usuario no puede estar vacío")
+			return false
+		}
+		if (has_space(formulario.username.value)== false) {
+			alert("El campo de nombre de usuario no puede contener espacios")
+			return false
+		}
+		if (empty_field(formulario.password.value)== false) {
+			alert("El campo de la contraseña no puede estar vacío")
+			return false
+		}
+		return true
+	}
+
+</script>
+{%endblock%}
+
+
+{%block main%}
+<div>
+	<fieldset>
+		<legend> LibreGeoSocial - Login </legend>
+		<div id="fieldset_content">
+			{%if alert%}
+				<p> Usuario o contraseña incorrectos</p>
+			{%endif%}
+			<form action="/explohyperfiction/user/login/" method="post" enctype="multtipart/form-data" onsubmit="return validate(this);"> {%csrf_token%}
+				<div>
+					<label for="username" class="required"> Nombre de usuario:</label>
+					<input type="text" id="username" name="username" size="30" maxlength="30"/>
+				</div>
+				<div>
+					<label for="password" class="required">Password:</label>
+					<input type="password" id="password" name="password" size="30" maxlength="30"/>
+				</div>
+                	<br>
+				<div>
+					<input type="submit" value="Login" class="button normal green">
+				</div>
+			</form>			
+		</div>
+	</fieldset>
+</div>
+{%endblock%}

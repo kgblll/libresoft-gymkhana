@@ -1,0 +1,45 @@
+
+#condecoraciones{
+	margin: 0 30px 0 0;
+}
+
+#beginner{
+	margin: 0 33px 0 52px;
+}
+
+#amateur{
+	margin: 0 27px 0 45px;
+}
+
+#advanced{
+	margin: 0 17px 0 49px;
+}
+
+#professional{
+	margin: 0 10px 0 60px;
+}
+
+#boss{
+	margin: 0 6px 0 0;
+}
+
+#major{
+	margin: 0 38px 0 38px;
+}
+
+#master{
+	margin: 0 30px 0 40px;
+}
+
+#star{
+	margin: 0 5px 0 0;
+}
+
+#top10{
+	margin: 0 0 0 20px;
+}
+
+#top10>p{
+	text-align:left;
+	margin: 10px 0 10px 25px;
+}

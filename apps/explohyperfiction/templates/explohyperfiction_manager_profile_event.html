@@ -1,0 +1,36 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+	{%if player.active_manager%}
+	<ul>
+		{%if event.active%}
+		<li><a href="/explohyperfiction/events/manager/active/{{event.id}}/" > Deactive</a></li>
+		{%else%}
+		<li><a href="/explohyperfiction/events/manager/active/{{event.id}}/" > Active</a></li>
+		{%endif%}
+		{%if event.qr%}
+		<li><a href="/explohyperfiction/events/manager/print/{{event.id}}/"> Print QR codes </a></li>
+		{%endif%}
+		<li><a href="/explohyperfiction/events/manager/{{event.id}}/questions/"> View questions</a></li>
+		<li><a href="/explohyperfiction/events/manager/{{event.id}}/questions/add/"> Add question</a></li>
+		<li><a href="/explohyperfiction/events/manager/{{event.id}}/map/"> View map</a></li>
+		<li><a href="/explohyperfiction/events/manager/results/{{event.id}}/" > Results</a></li>
+		<li><a href="/explohyperfiction/events/manager/edit/{{event.id}}/" > Edit</a></li>
+		<li><a href="/explohyperfiction/events/manager/delete/{{event.id}}/"  onclick="if(!confirm('Do you want to delete the event {{event.name}}?'))return false">Delete</a> </li>
+	</ul>	
+	{%endif%}
+{%endblock%}
+
+{%block main%}
+	<div class="content_group">
+		<h3> {{event.name}}</h3>
+		<h4>Description</h4>
+		<p> {{event.description}}</p>
+		<h4>Groups</h4>
+		{%for g in groups%}
+			<p>{{g.name}}</p>
+		{%endfor%}
+	</div>
+	<br>
+	<a class="button super green" href="/explohyperfiction/events/manager/view/"> Go to my events</a>
+{%endblock%}

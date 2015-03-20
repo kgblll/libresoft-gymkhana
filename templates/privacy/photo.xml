@@ -1,0 +1,12 @@
+{% extends "base.xml" %}
+
+{% block type %}photo_privacy{% endblock %}
+{% block data %}
+       <photo_privacy>
+         <code>{{ code }}</code>
+         {% with photo_privacy as p %}
+         {% include "privacy/raw_photo.xml" %}
+         {% endwith %}
+       </photo_privacy>
+{% endblock %}
+

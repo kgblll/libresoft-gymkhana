@@ -1,0 +1,12 @@
+{% load rest_tags %}
+
+{
+"code": "{{ code }}",
+"note" : {
+      {% with note as n %}
+      {% include "note/raw.json" %}
+      {% endwith %}
+ },
+{% comments note.id "json" %}
+}
+

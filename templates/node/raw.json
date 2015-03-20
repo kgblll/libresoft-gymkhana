@@ -1,0 +1,38 @@
+{% ifnotequal n.id None %}
+"id": {{ n.id }},
+{% endifnotequal %}
+{% if n.position %}
+"position": {
+   {% ifnotequal n.position.latitude None %}
+   "latitude": {{ n.position.latitude }},
+   {% endifnotequal %}
+   {% ifnotequal n.position.longitude None %}
+   "longitude": {{ n.position.longitude }},
+   {% endifnotequal %}
+   {% ifnotequal n.position.radius None %}
+   "radius": {{ n.position.radius }},
+   {% endifnotequal %}
+   {% ifnotequal n.position.since None %}
+   "since": "{{ n.position.since }}",
+   {% endifnotequal %}
+   {% ifnotequal n.position.distance None %}
+   "distance": {{ n.position.distance }},
+   {% endifnotequal %}
+   {% ifnotequal n.position.country None %}
+   "country": "{{ n.position.country|escapejs }}",
+   {% endifnotequal %}
+   {% ifnotequal n.position.post_code None %}
+   "post_code": {{ n.position.post_code|escapejs }},
+   {% endifnotequal %}
+   {% ifnotequal n.position.altitude None %}
+   "altitude": {{ n.position.altitude }},
+   {% endifnotequal %}
+},{% endif %}
+{% ifnotequal n.since None %}
+"since": "{{ n.since }}",
+{% endifnotequal %}
+{% ifnotequal n.tags None %}
+"tags": [ {%for t in n.tags %}"{{ t|escapejs }}", {% endfor %} ],
+{% endifnotequal %}
+
+"type": "{{ n.type|escapejs }}",

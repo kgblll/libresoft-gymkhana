@@ -1,0 +1,54 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+
+	<div class="verticalMenu">
+		<ul>
+			{%if player.is_superuser%}
+				<li> <a href="/explohyperfiction/profile/quit/superuser/" onclick="if(!confirm('Are you sure?'))return false" > Cesing to be superuser</a></li>
+			{%else%}
+				{%if player.is_manager%}
+					{%if petition_superuser%}
+						<li> <a href="/explohyperfiction/profile/petitions/delete/superuser/" onclick="if(!confirm('Are you sure to delete the request?'))return false" > Delete request for superuser</a></li>
+					{%else%}
+						<li> <a href="/explohyperfiction/profile/petitions/superuser/" onclick="if(!confirm('Are you sure to send the request for superuser?'))return false" > Request for superuser</a></li>
+					{%endif%}
+					<li> <a href="/explohyperfiction/profile/quit/manager/" onclick="if(!confirm('Are you sure?'))return false" > Cesing to be manager</a></li>
+				{%else%}
+					{%if petition_manager%}
+						<li> <a href="/explohyperfiction/profile/petitions/delete/manager/" onclick="if(!confirm('Are you sure to delete the request?'))return false" > Delete request for manager</a></li>
+					{%else%}
+					<li> <a href="/explohyperfiction/profile/petitions/manager/" onclick="if(!confirm('Are you sure to send the request for manager?'))return false" > Request for manager</a></li>
+					{%endif%}
+				{%endif%}
+			<li> <a href="/explohyperfiction/user/unenroll/" onclick="if(!confirm('Are you sure to unenroll ExploHyperfiction?'))return false"> Unenroll ExploHyperfiction</a></li>
+			{%endif%}			
+		</ul>
+	</div>
+{%endblock%}
+
+
+{%block main%}
+	<div class="content_person">
+		<div class="person_name">
+			{{player.person.username}}
+		</div>
+		<div class="person_data">
+			First name: {{player.person.first_name}}<br>
+			Last name: {{player.person.last_name}}
+		</div>
+		<div class="person_views">
+			{%if player.is_superuser%}
+				This user is superuser<br>
+			{%endif%}
+			{%if player.is_manager%}
+				This user is manager<br>
+			{%endif%}
+			{%if player.is_player%}
+				This user is player<br>
+			{%endif%}
+		</div>
+	</div>
+	
+	
+{%endblock%}

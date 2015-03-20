@@ -1,0 +1,42 @@
+
+
+{% ifnotequal l.name None %}
+<name> {{ l.name }} </name>
+{% endifnotequal %}
+
+{% ifnotequal l.description None %}
+<description> {{ l.description}} </description>
+{% endifnotequal %}
+
+{% ifnotequal l.writeable None %}
+<writeable> {{ l.writeable}} </writeable>
+{% endifnotequal %}
+
+{% ifnotequal l.free None %}
+<free> {{ l.free}} </free>
+{% endifnotequal %}
+
+
+{% ifnotequal l.layer_type None %}
+<layer_type> {{ l.layer_type}} </layer_type>
+{% endifnotequal %}
+
+
+{% ifnotequal l.categories None %}
+<categories>
+				{% for category in l.categories%}
+			    <category>
+				 {% with category as c %}{% include "category/raw.xml" %}{% endwith %}
+  			    </category> {% endfor %}
+</categories>
+{% endifnotequal %}
+
+{% if l.uploader %}
+<uploader>
+{% with l.uploader as u %}{% include "user/raw.xml" %}{% endwith %}
+</uploader>
+{% endif %}
+
+{% with l as n %}
+ {% include "node/raw.xml" %}
+{% endwith %}

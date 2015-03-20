@@ -1,0 +1,3 @@
+"value": "{{ field.value|escapejs }}",
+"allowed": [{% for f in field.allowed %}"{{ f|escapejs }}", {% endfor %}],
+"forbidden": [{% for f in field.forbidden %}"{{ f|escapejs }}", {% endfor %}],

@@ -1,0 +1,22 @@
+{
+"code": "{{ code }}",
+{% if acquired_clues %}
+{% if challenge %}
+"description": "{{ description|escape|escapejs }}",
+"clues": [
+{% for acquired_clue in acquired_clues %}
+{% ifequal acquired_clue.clue.challenge challenge %}
+{ "identifier": "{{ acquired_clue.clue.id }}",
+"challenge_id": "{{ acquired_clue.clue.challenge.id }}",
+"number": "{{ acquired_clue.clue.number|escape|escapejs }}",
+"help": "{{ acquired_clue.clue.help|escape|escapejs }}",
+"cost": "{{ acquired_clue.clue.cost|escape|escapejs }}"
+},
+{% endifequal %}
+{% endfor %}
+]
+{% endif %}
+{% else %}
+"description": "{{ description|escape|escapejs }}"
+{% endif %}
+}

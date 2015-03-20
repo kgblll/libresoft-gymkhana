@@ -1,0 +1,21 @@
+{
+"code": "{{ code }}",
+"description": "{{ description|escape|escapejs }}",
+"identifier": "{{ team.id }}",
+"team_name": "{{ team.group.name|escape|escapejs }}",
+"group_id": "{{ team.group.id }}",
+{% if scoreboard %}
+"score": "{{ scoreboard.score|escape|escapejs }}",
+"num_correct_responses": "{{ scoreboard.num_correct_responses|escape|escapejs }}",
+"num_incorrect_responses": "{{ scoreboard.num_incorrect_responses|escape|escapejs }}",
+{% else %}
+"score": "0",
+"num_correct_responses": "0",
+"num_incorrect_responses": "0",
+{% endif %}
+"longitude": "{{ team.group.position.x }}",
+"latitude": "{{ team.group.position.y }}",
+"altitude": "{{ team.group.altitude }}",
+"radius": "{{ team.group.radius }}",
+"since": "{{ team.group.since|escape|escapejs }}"
+}

@@ -1,0 +1,9 @@
+{% extends "base.xml" %}
+
+{% block type %}compare_nodes{% endblock %}
+{% block data %}
+<compare_nodes>
+   <matched> {{ matched }} </matched>
+   <goodness> {{ goodness }} </goodness>
+</compare_nodes>
+{% endblock %}

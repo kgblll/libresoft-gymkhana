@@ -1,0 +1,9 @@
+{% extends "base_list.json" %}
+
+{% block data %}
+"users": [
+      {% for u in users%}{
+         {% include "user/raw.json" %}
+      }, {% endfor %}
+   ]
+{% endblock %}

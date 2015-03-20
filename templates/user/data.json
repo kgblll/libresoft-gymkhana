@@ -1,0 +1,11 @@
+{% load rest_tags %}
+{
+"code": "{{ code }}",
+"results": [ {
+   {% with user as u %}
+   {% include "user/raw.json" %}
+   {% endwith %}
+   },]
+{% comments user.id "json" %}
+}
+

@@ -1,0 +1,47 @@
+
+{% if p.name %}
+         <name>{{ p.name }}</name>
+{% endif %}
+{% if p.description %}
+         <description>{{ p.description }}</description>
+{% endif %}
+{% if p.uploader %}
+         <uploader>
+           {% with p.uploader as u %}
+           {% include "user/raw.xml" %}
+			  {% endwith %}
+         </uploader>
+{% endif %}
+
+{% ifequal p.id None %}
+	<external_info>
+{% else %}
+    <extra_info>
+{% endifequal %}
+
+	  {% if p.info_url %}
+	  	<info_url> {{p.info_url}} </info_url>
+	  {% endif %}
+	  
+	  {% if p.photo_url %}
+	  	<photo_url> {{p.photo_url}} </photo_url>
+	  {% endif %}
+	  
+	  {% if p.photo_medium %}
+	  	<photo_medium> {{p.photo_medium}} </photo_medium>
+	  {% endif %}
+	  
+	  {% if p.photo_thumb_url %}
+	  	<photo_thumb> {{p.photo_thumb_url}} </photo_thumb>
+	  {% endif %}
+{% ifequal p.id None %}
+	</external_info>
+{% else %}
+    </extra_info>
+{% endifequal %}
+
+
+
+			{% with p as n%}
+         {% include "node/raw.xml" %}
+			{% endwith %}

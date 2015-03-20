@@ -1,0 +1,12 @@
+         <value>{{ field.value }}</value>
+         <allowed_roles>
+         {% for f in field.allowed %}
+            <allowed>{{ f }}</allowed>
+         {% endfor %}
+         </allowed_roles>
+         <forbidden_roles>
+         {% for f in field.forbidden %}
+            <forbidden>{{ f }}</forbidden>
+         {% endfor %}
+         </forbidden_roles>
+         

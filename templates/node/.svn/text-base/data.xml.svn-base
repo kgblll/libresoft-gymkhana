@@ -1,0 +1,12 @@
+{% extends "base.xml" %}
+
+{% block type %}node{% endblock %}
+{% block data %}
+       <node>
+         <code>{{ code }}</code>
+			{% with node as n %}
+         {% include "node/raw.xml" %}
+			{% endwith %}
+       </node>
+{% endblock %}
+       

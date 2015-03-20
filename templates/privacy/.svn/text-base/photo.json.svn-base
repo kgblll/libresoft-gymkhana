@@ -1,0 +1,7 @@
+{
+"code": "{{ code }}",
+"": {
+{% with photo_privacy as p %}{% include "privacy/raw_photo.json" %}{% endwith %}
+   }
+}
+

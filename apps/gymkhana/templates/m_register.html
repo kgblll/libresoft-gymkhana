@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gymkhana Register</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	
+	
+	
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+	
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<script src='jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<script src='jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<link rel='stylesheet' href='jquery.mobile/jquery.mobile-1.3.2.min.css' /"+">"));	
+		}
+	</script>
+
+	<script src="/gymkhana/templates/js/register.js"></script>
+	<link rel="stylesheet" href="/gymkhana/templates/css/register.css"/>
+	
+</head>
+<body>
+
+
+	<div data-role="page">
+		
+		<div data-role="header"  data-position="fixed">
+			<h1>Registro</h1>
+		</div>
+	
+		<div data-role="content" id="content">
+		
+			<br><p></p>
+			<form  action="/gymkhana/new_user/" method="post" enctype="multipart/form-data" data-ajax="false">
+				<label id="label" for="first_name">Nombre</label>
+				<input type="text"  id="first_name" name="first_name" value="" autofocus required/>
+				<label id="label" for="last_name">Primer apellido</label>
+                                <input type="text"  id="last_name" name="last_name" value=""  required/>
+
+<!--				<label id="label" for="name">Email</label>
+				<input type="email"  id="email" value=""  />
+-->
+				<label id="label" for="username">Usuario</label>
+				<input type="text"  id="username" name="username" value="" required/>
+				<label id="label" for="password">Contraseña</label>
+				<input type="password"  id="password" name="password" value="" required />
+				<label id="label" for="passwordC">Confirmar contraseña</label>
+				<input type="password"  id="passwordC" value=""  required/><br><br><br>
+				
+
+				<input type="submit" value="Enviar"/><br><br><br>
+
+			</form>
+
+
+		</div>
+		
+		
+		<div data-role="footer" data-position="fixed">
+			<img src="/gymkhana/templates/css/images/powered_by_lgs_claro.png">
+		</div>
+		
+
+	</div>
+
+<script src="/gymkhana/templates/jq/jq_register.js"></script>
+</body>
+</html>

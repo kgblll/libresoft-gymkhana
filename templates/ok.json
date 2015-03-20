@@ -1,0 +1,8 @@
+{
+"code": "{{ code }}",
+"description": "{{ description|escapejs }}",
+{% if id %}
+"id": {{ id|escapejs }}
+{% endif %}
+}
+

@@ -1,0 +1,89 @@
+10
+
+dir
+1909
+https://svn.forge.morfeo-project.org/libregeosocial/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/social
+https://svn.forge.morfeo-project.org/libregeosocial
+
+
+
+2010-11-18T15:35:26.124898Z
+1529
+jgato
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6e707b92-ee9b-4962-8539-c8da1f405544
+
+__init__.py
+file
+
+
+
+
+2012-09-09T18:24:00.146801Z
+d41d8cd98f00b204e9800998ecf8427e
+2009-02-05T10:09:13.677923Z
+9
+jcaden
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+0
+
+core
+dir
+
+import
+dir
+
+export_manager
+dir
+
+groupifier
+dir
+
+privacy
+dir
+
+rest
+dir
+
+layers
+dir
+
+privacy2
+dir
+
+site_media
+dir
+

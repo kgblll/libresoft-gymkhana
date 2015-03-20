@@ -1,0 +1,7 @@
+{% load rest_tags %}
+{
+"code": "{{ code }}",
+"elements": {
+{% display_search elements "json" %}
+}
+}

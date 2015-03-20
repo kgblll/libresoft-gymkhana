@@ -1,0 +1,66 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+	
+
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<scri"+"pt src='jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<scri"+"pt src='jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<link rel='stylesheet' href='jquery.mobile/jquery.mobile-1.3.2.min.css' />"));
+		}
+	</script>
+
+
+	<!--<script src="jquery.mobile/jquery-1.9.1.min.js"></script>-->
+	<!--<script src="jquery.mobile/jquery.mobile-1.3.2.min.js"></script>-->
+	<!--<link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.3.2.min.css" />-->
+	
+	<link href="dialogs.css" rel="StyleSheet" />
+	<script src="getClue.js"></script>
+
+	
+</head> 
+<body> 
+
+<div data-role="dialog">
+	
+	<div data-role="header" data-theme="c">
+		<h1>Obtener Pistas</h1>
+	</div>
+
+	<div data-role="content" data-theme="d">
+		<h1 id="title">¿Desea obtener una pista?</h1>
+		<p id="text">Este reto cuenta con las siguientes pistas:</p>
+		
+		<p id="none">El manager ha considerado que este reto se pude superar sin pistas.</p>
+		
+		<div id="list">
+		</div>
+		
+		<div id="hide">
+			<a href="" id="getClue" data-role="button" data-rel="dialog" rel="external" data-theme="b">Obtener pista</a>    
+		</div>   
+		<a data-role="button" data-rel="back" data-theme="c">Cancelar</a>    
+		
+		
+		<div id="hideB">
+			<input type="button" name="submit" value="Ninguna" id="ninguna"/>
+			<input type="button" name="submit" value="Varias" id="varias"/>
+		</div>
+		
+	</div>
+</div>
+
+
+</body>
+</html>

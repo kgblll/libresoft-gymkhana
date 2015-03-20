@@ -1,0 +1,12 @@
+{% extends "base_list.xml" %}
+
+{% block list %}
+         <users>
+            {% for u in users%}
+				<user>
+            {% include "user/raw.xml" %}
+				</user>
+            {% endfor %}
+         </users>
+{% endblock %}
+

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gymkhana Menú</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+	
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<script src='jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<script src='jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<link rel='stylesheet' href='jquery.mobile/jquery.mobile-1.3.2.min.css' /"+">"));	
+		}
+	</script>
+
+	<link href="/gymkhana/templates/css/menu.css" rel="StyleSheet" />
+	
+
+	
+</head>
+<body>
+	
+	<div data-role="page" id="pmenu">
+	
+		<div data-role="fieldcontain" id="menu">
+				<a href="/gymkhana/mobile/gymkhanas/" data-role="button" rel="external">Jugar</a>
+				<a href="/gymkhana/rankings/" data-role="button" rel="external">Rankings</a>
+				<a href="/gymkhana/logout/" data-role="button" rel="external">Exit</a>
+		</div>
+		
+		
+		<div data-role="footer" data-position="fixed">
+			<img src="/gymkhana/templates/css/images/powered_by_lgs_claro.png">
+		</div>
+
+	</div>
+<script src="/gymkhana/templates/jq/jq_menu.js"></script>
+</body>
+</html>

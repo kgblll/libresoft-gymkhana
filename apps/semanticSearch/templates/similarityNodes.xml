@@ -1,0 +1,11 @@
+{% extends "base.xml" %}
+{% load  rest_tags %}
+
+{% block type %}similar_nodes_list{% endblock %}
+{% block data %}
+<similar_nodes_list>
+   <code> {{ code }} </code>
+       {% display_search results "xml" "semanticNodes" %}
+</similar_nodes_list>
+{% endblock %}
+

@@ -1,0 +1,283 @@
+<script type="text/javascript">
+    function redirect_user(user){
+        location.href='/social/user/'+user+'/data/'
+    }
+    
+    function redirect_group(group){
+      location.href='/social/group/'+group+'/data/'
+   }
+</script>
+
+
+
+{% url user_create as url_user_create %}
+<form action="{{ url_user_create }}" method="POST">
+    Crear usuario:<br>
+    <label>Username</label>*:<input type="text" name="username"/><br>
+    <label>Password</label>*:<input type="password" name="password"/><br>
+    
+    <input type="submit" value="Enviar" />
+</form>
+
+
+{% url user_login as url_user_login %}
+<form action="{{ url_user_login }}" method="POST">
+   Login:<br>
+   <label>Nombre</label>*:<input type="text" name="username"/><br>
+    <label>Password</label>*:<input type="password" name="password"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url user_set_status as url_user_set_status %}
+<form action="{{ url_user_set_status }}" method="POST">
+   Estado:<br>
+   <label>Estado</label>:<input type="text" name="status"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url user_pos as url_user_pos %}
+<form action="{{ url_user_pos }}" method="POST">
+    Establecer posición:<br>
+    <label>Longitude</label>:<input type="text" name="longitude"/><br>
+    <label>Latitude</label>:<input type="text" name="latitude"/><br>
+    <input type="submit" value="Enviar" />
+</form>
+
+<form name="userData" action='javascript:redirect_user(document.userData.userid.value);'>
+   Datos usuario:<br>
+   <label>Id</label>:<input type="text" name="userid"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url user_delete as url_user_delete %}
+<form action="{{ url_user_delete }}" method="POST">
+   Borrar usuario:<br>
+   <label>Id</label>:<input type="text" name="userid"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url user_relation as url_user_relation %}
+<form action="{{ url_user_relation }}" method="POST">
+   Amistad:<br>
+   <label>Id1</label>:<input type="text" name="userid1"/><br>
+    <label>Id2</label>:<input type="text" name="userid2"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url user_relation_delete as url_user_relation_delete %}
+<form action="{{ url_user_relation_delete }}" method="POST">
+   Borrar amistad:<br>
+   <label>Id1</label>:<input type="text" name="userid1"/><br>
+   <label>Id2</label>:<input type="text" name="userid2"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url group_create as url_group_create %}
+<form action="{{ url_group_create }}" method="POST">
+   Crear grupo:<br>
+   <label>Nombre grupo</label>:<input type="text" name="groupname"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+<form name="groupData" action='javascript:redirect_group(document.groupData.groupid.value);'>
+   Datos grupo:<br>
+   <label>Id</label>:<input type="text" name="groupid"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url group_delete as url_group_delete %}
+<form action="{{ url_group_delete }}" method="POST">
+   Borrar grupo:<br>
+   <label>Id grupo</label>:<input type="text" name="groupid"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url group_join as url_group_join %}
+<form action="{{ url_group_join }}" method="POST">
+   Unirse a un grupo:<br>
+   <label>Id grupo</label>:<input type="text" name="groupid"/><br>
+   <label>Id nuevo miembro</label>:<input type="text" name="userid"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url group_unjoin as url_group_unjoin %}
+<form action="{{ url_group_unjoin }}" method="POST">
+   Borrarse de un grupo:<br>
+   <label>Id grupo</label>:<input type="text" name="groupid"/><br>
+   <label>Id miembro</label>:<input type="text" name="userid"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url note_upload as url_create_note %}
+<form action="layer/19/note/upload/" method="POST">
+   Crear una nota:<br>
+    <label>Titulo</label>:<input type="text" name="title"/><br>
+   <label>Texto</label>:<br/>
+    <textarea name="text"></textarea><br/>
+    <label>Fecha expiración to (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_to"/><br>
+    <label>Fecha expiración from (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_from"/><br>
+   <label>Latitude</label>:<input type="text" name="latitude"/><br>
+    <label>Longitude</label>:<input type="text" name="longitude"/><br>
+   <input type="submit" value="Enviar" />
+</form>
+
+
+{% url photo_upload as url_photo_upload%}
+    <form action="http://192.168.2.7:10502/compareImages/social/compare/" method="POST" enctype="multipart/form-data">
+      Comparar una foto:
+        <table>
+            {{ compare_form.as_table }}
+            <tr><th><label for="id_radius">Radius</label>:</th><td><input type="text" name="radius" /></td></tr>
+            <tr><th><label for="id_lat">Latitude</label>:</th><td><input type="text" name="latitude" /></td></tr>
+            <tr><th><label for="id_long">Longitude</label>:</th><td><input type="text" name="longitude" /></td></tr>
+        </table>
+        <label>Fecha expiración to (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_to"/><br>
+        <label>Fecha expiración from (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_from"/><br>
+        <p><input type="submit" value="Enviar"></p>
+    </form>
+
+{% url photo_upload as url_photo_upload%}
+    <form action="layer/19/photo/upload/" method="POST" enctype="multipart/form-data">
+      Enviar una foto:
+        <table>
+            {{ photo_form.as_table }}
+            <tr><th><label for="id_desc">Description</label>:</th><td><textarea name="description"></textarea></td></tr>
+            <tr><th><label for="id_lat">Latitude</label>:</th><td><input type="text" name="latitude" /></td></tr>
+            <tr><th><label for="id_long">Longitude</label>:</th><td><input type="text" name="longitude" /></td></tr>
+        </table>
+        <label>Fecha expiración to (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_to"/><br>
+        <label>Fecha expiración from (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_from"/><br>
+        <p><input type="submit" value="Enviar"></p>
+    </form>
+
+{% url sound_upload as url_sound_upload%}
+    <form action="layer/19/sound/upload/" method="POST" enctype="multipart/form-data">
+      Enviar un sonido:
+        <table>
+            {{ sound_form.as_table }}
+            <tr><th><label for="id_desc">Description</label>:</th><td><textarea name="description"></textarea></td></tr>
+            <tr><th><label for="id_lat">Latitude</label>:</th><td><input type="text" name="latitude" /></td></tr>
+            <tr><th><label for="id_long">Longitude</label>:</th><td><input type="text" name="longitude" /></td></tr>
+        </table>
+        <label>Fecha expiración to (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_to"/><br>
+        <label>Fecha expiración from (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_from"/><br>
+        <p><input type="submit" value="Enviar"></p>
+    </form>
+
+
+{% url video_upload as url_video_upload%}
+    <form action="layer/19/video/upload/" method="POST" enctype="multipart/form-data">
+      Enviar un video:
+        <table>
+            {{ video_form.as_table }}
+            <tr><th><label for="id_desc">Description</label>:</th><td><textarea name="description"></textarea></td></tr>
+            <tr><th><label for="id_lat">Latitude</label>:</th><td><input type="text" name="latitude" /></td></tr>
+            <tr><th><label for="id_long">Longitude</label>:</th><td><input type="text" name="longitude" /></td></tr>
+        </table>
+        <label>Fecha expiración to (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_to"/><br>
+        <label>Fecha expiración from (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_from"/><br>
+        <p><input type="submit" value="Enviar"></p>
+    </form>
+
+
+{% url node_set_dates as url_node_set_dates%}
+    <form action="layer/19/node/119/update_avaliable_dates/" method="POST" enctype="multipart/form-data">
+      Cambiar fechas de un nodo:
+        <label>Fecha expiración to (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_to"/><br>
+        <label>Fecha expiración from (HH:MM:SS-YYYY/MM/DD TZ)</label>:<input type="text" name="avaliable_from"/><br>
+        <p><input type="submit" value="Enviar"></p>
+    </form>
+
+{% url create_layer as url_create_layer %}
+<form action="{{ url_create_layer }}" method="POST">
+   Create Layer:<br>
+    <label>Nam</label>:<input type="text" name="name"/><br>
+   <label>Description</label>:<br/>
+    <textarea name="description"></textarea><br/>
+   <label>Latitude</label>:<input type="text" name="latitude"/><br>
+    <label>Longitude</label>:<input type="text" name="longitude"/><br>
+   <input type="submit" value="Send" />
+</form>
+
+
+{% url icon_change_layer as url_icon_change_layer %}
+<form action="layer/84/change_icon/" method="POST" enctype="multipart/form-data">
+		Change icon:
+   		<table>
+            {{ icon_form.as_table }}
+            
+        </table>
+        
+        <p><input type="submit" value="Enviar"></p>
+</form>
+
+
+
+<hr/><!-- ------------------------------------------------------------------------- -->
+{% url change_privacy as url_change_privacy %}
+<form action="/social/node/65/privacy/change/" method="POST">
+   Change node permissions:<br>
+   <label>Perm</label>:<select type="text" name="perm">
+               <option value=""></option>
+               <option value="Private">Private</option>
+               <option value="Friends">Friends</option>
+               <option value="Friends_of_friends">Friends of friends</option>
+	       <option value="Public">Public</option>
+               <option value="fake">fake</option>
+               </select>
+               <br>          
+   <input type="submit" value="Enviar" />
+</form>
+
+{% url node_change_privacy as url_node_change_privacy %}
+<form action="/social/node/65/privacy/change/" method="POST">
+   Change node permissions:<br>
+   <label>Perm</label>:<select type="text" name="perm">
+               <option value=""></option>
+               <option value="Private">Private</option>
+               <option value="Friends">Friends</option>
+               <option value="Friends_of_friends">Friends of friends</option>
+	       <option value="Public">Public</option>
+               <option value="fake">fake</option>
+               </select>
+               <br>       
+    
+   <label>Field</label>:<select type="text" name="field">
+               <option value="position">position</option>
+               
+               </select>
+               <br>
+    <label>Id:</label><input type="text" name="node_id" id="node_id"/><br>    
+   <input type="submit" value="Enviar" />
+</form>
+
+<hr/><!-- ------------------------------------------------------------------------- -->
+<h2>Semantic Module</h2>
+
+{% url similarSemantic as similar_semantic %}
+<form action="{{ similar_semantic }}" method="GET">
+    How similarity are these two words:<br>
+    <label>Word1</label>:<input type="text" name="word1"/><br>
+    <label>Word2</label>:<input type="text" name="word2"/><br>
+    <input type="submit" value="Send" />
+</form>
+
+{% url socialSemanticSearch as semantic_search %}
+<form action="{{ semantic_search }}" method="GET">
+    Semantic search in different social nodes:<br>
+    <label>Search</label>:<input type="text" name="word"/><br>
+    <label>Sense</label>:<input type="text" name="sense" value="0"/><br>
+	<INPUT TYPE=CHECKBOX NAME="checkPhotos" CHECKED value="True" >Photos<BR>
+	<INPUT TYPE=CHECKBOX NAME="checkNotes"  value="True" >Notes<BR>
+    <input type="submit" value="Send" />
+</form>
+
+{% url compareNodesSemantic as compare_nodes %}
+<form action="{{ compare_nodes }}" method="GET">
+    Compare social nodes:<br>
+    <label>Distance Min</label>:<input type="text" name="min"/><br>
+    <input type="submit" value="Send" />
+</form>
+
+
+#}

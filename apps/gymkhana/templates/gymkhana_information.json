@@ -1,0 +1,10 @@
+{
+"code": "{{ code }}",
+"description": "{{ description|escape|escapejs }}",
+{% if scoreboard %}
+"num_correct_responses": {{ scoreboard.num_correct_responses|escape|escapejs }},
+"num_incorrect_responses": {{ scoreboard.num_incorrect_responses|escape|escapejs }},
+{% endif %}
+"informative_text": "{{ informative_text|escape|escapejs }}",
+"promotional_image_url": "{{ promotional_image_url|escape|escapejs }}"
+}

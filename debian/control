@@ -1,0 +1,13 @@
+Source: libregeosocial
+Section: net
+Priority: extra
+Maintainer: Juan Francisco Gato Luis <jfcogato@libresoft.es>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.7.3
+Homepage: <http://www.libregeosocial.org>
+
+Package: libregeosocial
+Architecture: all
+Depends: postgresql, postgresql-client-8.3, postgresql-client-common, postgresql-8.3-postgis, python-psycopg2, python-simplejson, python-docutils, python-json, python-django, python-imaging, apache2, libapache2-mod-python
+Description: Social network with geolocation 
+ geo-located social network with augmented reality interface

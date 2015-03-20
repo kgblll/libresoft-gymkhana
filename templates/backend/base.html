@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LibreGeoSocial Backend</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="stylesheet" href="/infomedia/css/menu-style.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/infomedia/css/table-style.css" />
+
+</head>
+<body>
+
+<div id="wrap" >
+
+	<div id="dolphincontainer">
+	  <div id="dolphinnav">
+	    <ul>
+	      <li><a href="/backend/home"><span>HOME</span></a></li>
+	      <li><a href="/backend/users/"><span>USERS</span></a></li>
+	      <li><a href="/backend/contents/"><span>CONTENT</span></a></li>
+	      <li><a href="/backend/layers/" class="current"><span>LAYERS</span></a></li>
+	    </ul>
+	  </div>
+	</div>
+
+
+    {% block content %}{% endblock %}
+    <br class="clear" />
+
+
+</div>
+
+</body>
+</html>

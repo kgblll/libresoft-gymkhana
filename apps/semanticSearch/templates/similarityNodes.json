@@ -1,0 +1,8 @@
+{% load rest_tags %}
+
+{
+"code": "{{ code }}",
+"results": {
+	{% display_search results "json" "semanticNodes" %}
+   }
+}

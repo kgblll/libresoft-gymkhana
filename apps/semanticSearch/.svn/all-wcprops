@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/apps/_semanticSearch
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/apps/_semanticSearch/urls.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/apps/_semanticSearch/views.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/apps/_semanticSearch/__init__.py
+END
+compareNodes.py
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/apps/_semanticSearch/compareNodes.py
+END
+utils.py
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/apps/_semanticSearch/utils.py
+END

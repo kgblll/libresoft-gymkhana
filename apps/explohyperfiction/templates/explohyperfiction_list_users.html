@@ -1,0 +1,29 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+		<li> <a href="/explohyperfiction/admin/users/">Users</a></li>
+		<li> <a href="/explohyperfiction/admin/groups/">Groups</a></li>
+{%endblock%}
+
+{%block main%}
+	{%for p in players%}
+		<div class="content_person">
+			<div class="person_views">
+			{{p.person.username}}<br><br>
+			<a href="/explohyperfiction/admin/user/{{p.id}}/profile/" class="button normal green"> View profile</a>
+			{%if not p.is_superuser%}
+			<a href="/explohyperfiction/admin/user/{{p.id}}/delete/" onclick="if(!confirm('Do you want to delete the user {{p.person.username}}?'))return false" class="button normal red"> Delete</a>
+				<br><br>
+				{%if p.is_manager%}
+				<a href="/explohyperfiction/admin/user/{{p.id}}/manager/quit/" class="button normal red" onclick="if(!confirm('Are you sure quit the manager view?'))return false" > Quit manager view</a>
+				{%else%}
+				<a href="/explohyperfiction/admin/user/{{p.id}}/manager/" class="button normal green" onclick="if(!confirm('Are you sure to become manager?'))return false" > Do manager </a>
+				{%endif%}
+			{%else%}
+			<br><br>
+				Superuser
+			{%endif%}
+			</div>
+		</div>
+	{%endfor%}
+{%endblock%}

@@ -1,0 +1,22 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+
+{%endblock%}
+
+{%block main%}
+	{%for p in players%}
+		<div class="content_person">
+			{{p.person.username}}<br><br>
+			{%if not p in managers%}
+				{%if p.is_manager%}
+					<a onclick="if(!confirm('Do you want to add this manager?'))return false" href="/explohyperfiction/groups/manager/{{group.id}}/add/{{p.id}}/" class="button normal green"> Add manager</a>
+				{%endif%}
+				<a onclick="if(!confirm('Do you want to delete {{p.person.username}} of this group?'))return false" href="/explohyperfiction/groups/manager/{{group.id}}/delete/{{p.id}}/" class="button normal red"> Delete of this group</a>
+			{%else%}
+			<p>This player is already manager of this group</p>	
+			{%endif%}
+			</div>
+		</div>
+	{%endfor%}
+{%endblock%}

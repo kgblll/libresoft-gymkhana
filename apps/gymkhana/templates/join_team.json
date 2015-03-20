@@ -1,0 +1,10 @@
+{
+"code": "{{ code }}",
+{% if team_id %}
+"description": "{{ description|escape|escapejs }}",
+"team_id": "{{ team_id|escape|escapejs }}",
+"first_challenge_id": "{{ first_challenge_id|escape|escapejs }}"
+{% else %}
+"description": "{{ description|escape|escapejs }}"
+{% endif %}
+}

@@ -1,0 +1,34 @@
+{
+"code": "{{ code }}",
+"description": "{{ description|escape|escapejs }}",
+{% if team %}
+"has_team": "{{ has_team|escape|escapejs }}",
+"team":
+{% for first_challenge in first_challenges %}
+{% ifequal first_challenge.team team %}
+{ "identifier": "{{ team.id }}",
+"team_name": "{{ team.group.name|escape|escapejs }}",
+"group_id": "{{ team.group.id }}",
+"id_first_challenge": "{{ first_challenge.id }}",
+"id_current_challenge": "{{ current_challenge.id }}",
+
+{% for scoreboard in scoreboards %}
+{% ifequal scoreboard.team team %}
+"num_correct_responses": "{{ scoreboard.num_correct_responses|escape|escapejs }}",
+"num_incorrect_responses": "{{ scoreboard.num_incorrect_responses|escape|escapejs }}",
+"score": "{{ scoreboard.score|escape|escapejs }}",
+{% endifequal %}
+{% endfor %}
+
+"latitude": "{{ team.group.position.y }}",
+"longitude": "{{ team.group.position.x }}",
+"altitude": "{{ team.group.altitude }}",
+"radius": "{{ team.group.radius }}",
+"since": "{{ team.group.since|escape|escapejs }}"
+}
+{% endifequal %}
+{% endfor %}
+{% else %}
+"has_team": "{{ has_team|escape|escapejs }}"
+{% endif %}
+}

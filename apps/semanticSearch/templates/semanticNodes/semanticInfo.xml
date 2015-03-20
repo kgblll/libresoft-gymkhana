@@ -1,0 +1,7 @@
+<similarityInfo>
+	{% if node.result.0 %}
+		<similarity> {{ node.result.2 }} </similarity>
+		<word1> {{ node.result.0 }} </word1>
+		<word2> {{ node.result.1 }} </word2>
+	{% endif %}		
+</similarityInfo>

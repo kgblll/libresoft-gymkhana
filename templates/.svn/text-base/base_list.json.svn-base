@@ -1,0 +1,17 @@
+{
+	"code": "{{ code }}",
+	
+	{% ifnotequal page None %}
+	"page": "{{ page }}",
+	{% endifnotequal %}
+	
+	{% ifnotequal elems None %}
+	"elems": "{{ elems }}",
+	{% endifnotequal %}
+	
+	{% ifnotequal total_pages None %}
+	"total_pages": "{{ total_pages }}",
+	{% endifnotequal %}
+	
+	{% block data %}{% endblock %}
+}

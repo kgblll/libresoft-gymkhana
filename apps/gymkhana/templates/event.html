@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gymkhana Juego</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>	
+
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<script src='jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<script src='jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+		}
+	</script>
+
+	<link rel="stylesheet" href="/gymkhana/templates/css/jquery_all.css" />
+	<link href="/gymkhana/templates/css/evento.css" rel="StyleSheet" />
+	<!--<script src="/gymkhana/templates/js/evento.js"></script>-->
+
+    {% ifequal challenge_type 2 %}
+	<style type="text/css">
+        #cnvs{ 
+		    margin: 1em auto;
+			background-color: white;
+			box-shadow: 0 0 8px 2px #555;
+			position:relative;
+		}
+        
+        
+    	</style>
+    {% endifequal %}
+
+	
+</head>
+<body>
+	
+	
+	
+	<div data-role="page" id="reto">
+	
+		<div data-role="header" id="header"  data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#reto"   class="ui-btn-active ui-state-persist">
+						<img src="/gymkhana/templates/css/images/45x45/gymkhana.png"><br>
+						Reto	
+					</a></li>
+					<li><a href="#ubicacion">
+						<img src="/gymkhana/templates/css/images/45x45/mundo.png"><br>
+						Ubicación
+					</a></li>
+					<li><a href="#mensajes">
+						<span id="smsC"><img  src="/gymkhana/templates/css/images/45x45/message.png"></span><br>
+						Mensajes
+					</a></li>
+				</ul>
+			</div>
+
+		</div>
+		
+		<div data-role="content">
+
+		<div id="reload">
+			<br><br>
+                        <p>Debe activar la seña del GPS</p>
+                        <p>Una vez que la haya reactivado vuelva a recargar la página</p>
+			<a href="/gymkhana/event/{{ event_id }}/team/{{ team.id }}/challenge/{{challenge_id}}/event_show/" data-role="button"  data-ajax="false">Recargar</a>
+		</div>
+		<div id="challenge">
+			
+                        <span hidden="hidden" id="type_challenge">{{challenge_type}}</span>
+	<!--<audio id="audiotag1" src="/gymkhana/templates/tono_morse.mp3" ></audio>-->
+
+			<p><ins>Reto  {{ number }}</ins></p>
+		
+			<p>Maxima puntuacion: {{ max_score }} puntos</p>
+
+		    {% if repeat %}
+			<p id="incorrect">Respuesta Incorrecta.</p>
+		    {% endif %}
+		
+			<p id="inBold"> {{ challenge }} </p>
+
+			<!--<input type="hidden" id="take-picture2" accept="image/*">-->
+
+		
+		    {% ifequal challenge_type 1 %}		
+	                    <form action="/gymkhana/event/{{ event_id }}/team/{{ team.id }}/challenge/{{challenge_id}}/event_show/" method="post" enctype="multipart/form-data" data-ajax="false">
+                	        <p>Escriba su respuesta</p>
+
+				<textarea name="answer" id="answer"></textarea>
+				<input type="hidden" name="latitude" id ="latitude" value="" />
+				<input type="hidden" name="longitude" id="longitude" value="" />
+
+				<span hidden="hidden" id="event_id">{{event_id}}</span>
+				<span hidden="hidden" id="team_id">{{team.id}}</span>
+
+                	        <br>
+
+                        	<input type="submit" value="¡Enviar!" />
+
+	                   </form>
+		    {% endifequal %}
+                   {% ifequal challenge_type 2 %}
+			<form action="/gymkhana/event/{{ event_id }}/team/{{ team.id }}/challenge/{{challenge_id}}/event_show/" method="post" enctype="multipart/form-data" data-ajax="false">
+
+
+				<input type="file" id="take-picture" name="photo" accept="image/*">
+			
+				<div id="photo">		
+					<canvas width="250" height="250" id="cnvs">
+						Sorry, your browser doesn't support canvas.
+					</canvas>
+				</div>
+
+                                <input type="hidden" name="latitude" id ="latitude" value="" />
+                                <input type="hidden" name="longitude" id="longitude" value="" />
+
+                                <span hidden="hidden" id="event_id">{{event_id}}</span>
+                                <span hidden="hidden" id="team_id">{{team.id}}</span>
+			
+                        	<input type="submit" value="¡Enviar!"/>
+			</form>
+		    {% endifequal %}
+
+                   {% ifequal challenge_type 3 %}
+                        <p>Debe tener el GPS activado para realizar esta prueba<p>
+
+			<p>Se encuentra a <b><span id="meters">____</span></b> metros.</p>
+
+                        <p>(Puede ayudarse del mapa que hay en la pestaña de <a href="#ubicacion">ubicación</a>)</p
+
+		     <form id="ub" action="/gymkhana/event/{{ event_id }}/team/{{ team.id }}/challenge/{{challenge_id}}/event_show/" method="post" enctype="multipart/form-data" data-ajax="false">
+
+                        <input type="hidden" name="latitude" id ="latitude" value="" />
+                        <input type="hidden" name="longitude" id="longitude" value="" />
+
+			<input type="hidden" id="dist_difference" name="distance_difference" value="0" />
+
+			<span hidden="hidden" id="Dlatitude">{{target_place.y}}</span>
+			<span hidden="hidden" id="Dlongitude">{{target_place.x}}</span>
+			<span hidden="hidden" id="distance">{{distance_to_target_place}}</span>
+                        <span hidden="hidden" id="event_id">{{event_id}}</span>
+                        <span hidden="hidden" id="team_id">{{team.id}}</span>
+		     </form>
+		   {% endifequal %}
+
+		</div>
+		</div>
+		
+
+		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar" id="principalC">
+				<ul>
+					<li><img src="/gymkhana/templates/css/images/powered_by_lgs_claro.png"></li>
+					<li><a id="opcionesC" data-role="button">Opciones</a></li>
+				</ul>
+			</div>
+			
+			<div data-role="navbar" id="settingsC">
+				<ul>
+					<li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/finish/" data-role="button" data-rel="dialog" data-inline="true" data-transition="pop" rel="external" class="one">Terminar</a></li>
+					<li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/show_list_clues/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external">Obtener<br>pista</a></li>
+					<li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/list_clues/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external">Enseñar<br>pistas</a></li>
+				</ul>
+				<ul>
+					<li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/ask_skip/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external"  class="one">Saltar</a></li>
+					<li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/skip_list/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external">Reintentar<br>reto</a></li>
+					<li><a id="exitSettingsC" data-role="button" class="one"><img  src="/gymkhana/templates/images/arrow.png" id="arrow"></a></li>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+<!-----------------------------------------------------------------------------------
+------------------------------------------------------------------------------------- -->	
+	<div data-role="page" id="ubicacion" >
+	
+		<div data-role="header">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#reto">
+						<img src="/gymkhana/templates/css/images/45x45/gymkhana.png"><br>
+						Reto
+					</a></li>
+					<li><a href="#ubicacion"  class="ui-btn-active ui-state-persist">
+						<img src="/gymkhana/templates/css/images/45x45/mundo.png"><br>
+						Ubicación
+					</a></li>
+					<li><a href="#mensajes">
+						<span id="smsU"><img src="/gymkhana/templates/css/images/45x45/message.png"></span><br>
+						Mensajes
+					</a></li>
+				</ul>
+			</div>
+
+		</div>
+		
+		<div data-role="content">
+		
+			<div id="btn1">
+				<button onclick="initLocationProcedure()" value="Mostrar mapa"></button>
+				
+			</div>
+			<div id="btn2">
+				<button onclick="initLocationProcedure()" value="Recargar mapa"></button>
+				<br>
+			</div>
+			<div id="mapholder"></div>
+			
+			<script src="http://maps.google.com/maps/api/js?sensor=true&libraries=geometry"></script>
+			<!--<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCgh2FblcJENPFCt7doA6vSs4twBxlBfCA&sensor=true"></script>-->
+			<script>
+
+
+
+	var map,
+            userMarker,
+            destinMarker,
+            mapCenter = new google.maps.LatLng(40.700683, -73.925972),
+            map;
+
+	function getMap() {
+        	map = new google.maps.Map(document.getElementById('mapholder'), {
+                   zoom: 16,
+                   center: mapCenter,
+                   mapTypeId: google.maps.MapTypeId.ROADMAP
+                 });
+
+        }
+
+	function locError(error) {
+                // the current position could not be located
+                alert("No se pudo encontrar su posición.");
+        }
+
+        function setCurrentPosition(pos) {
+		var icon = { url: '/gymkhana/templates/css/images/user_48.png'  }; 
+                currentPositionMarker = new google.maps.Marker({
+                    map: map,
+		    icon:icon,
+                    position: new google.maps.LatLng(
+                        pos.coords.latitude,
+                        pos.coords.longitude
+                    ),
+                    title: "¡Usted está aquí!"
+                });
+                
+
+		{% ifequal challenge_type 3 %}
+                        lat2= {{ target_place.y }};
+                        lon2= {{ target_place.x }};
+                	destinMarker = new google.maps.Marker({
+	                    map: map,
+        	            position: new google.maps.LatLng( lat2, lon2 ),
+	               		title: "Destino"
+	                });
+                        setDestinMarker( destinMarker, lat2, lon2);
+		{% endifequal %}
+
+                
+                map.panTo(new google.maps.LatLng(
+                        pos.coords.latitude,
+                        pos.coords.longitude
+                    ));
+                    
+		{% ifequal challenge_type 3 %}
+			lat2= {{ target_place.y }};		
+			lon2= {{ target_place.x }};
+			setDestinMarker( destinMarker, lat2, lon2, icon );
+		{% endifequal %}
+	}
+
+	function displayAndWatch(position) {
+                // set current position
+                setCurrentPosition(position);
+                // watch position
+		watchCurrentPosition();
+                //setInterval('watchCurrentPosition();', 1000);
+		$('#cnvs').show();
+        }
+
+
+        function GetDistance(Olat, Olon, Dlat, Dlon){
+
+                var x1=new google.maps.LatLng(Olat, Olon);
+                var x2=new google.maps.LatLng(Dlat,Dlon);
+                var distancia = google.maps.geometry.spherical.computeDistanceBetween(x1, x2);
+
+                return distancia;
+        }
+
+        function watchCurrentPosition() {
+
+		navigator.geolocation.watchPosition(
+			function (position){
+				setUserMarker(userMarker, position);
+
+                                var lat=position.coords.latitude;
+             			var lon=position.coords.longitude;
+                		$('#latitude').val(lat);
+                		$('#longitude').val(lon);
+				$('#latitude2').val(lat);
+		                $('#longitude2').val(lon);
+                                var type =  $('#type_challenge').text();
+				if (type == 3){
+				        var Dlat = $('#Dlatitude').text();
+				        var Dlon = $('#Dlongitude').text();
+				        var distance_ch = $('#distance').text();
+				        var distance = GetDistance(lat, lon, Dlat, Dlon);
+		                        var meters = distance.toString();
+                		        $('#meters').html(meters.slice(0,5));
+				        if (distance < distance_ch){
+				                alert("¡Ha alcanzado su destino!");
+				                $('#dist_difference').val(distance);
+				                $('form#ub').submit();
+				        }
+				}
+
+
+			}
+		);
+
+        }
+
+	function setUserMarker(marker, position) {
+                marker.setPosition(
+                    new google.maps.LatLng(
+                        position.coords.latitude,
+                        position.coords.longitude)
+                );  
+        }
+            
+        function setDestinMarker(marker, lat, lon) {
+                marker.setPosition(
+                    new google.maps.LatLng( lat, lon)
+                );  
+        }
+
+        function initLocationProcedure() {
+            	$('#btn1').hide();
+		$('#btn2').css('display', 'block');
+                getMap();
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(displayAndWatch, locError);
+                } else {
+                    alert("Your browser does not support the Geolocation API");
+                }
+	}
+
+			</script>
+
+		</div>
+
+		
+		
+		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar" id="principalU">
+				<ul>
+					<li><img src="/gymkhana/templates/css/images/powered_by_lgs_claro.png"></li>
+					<li><a id="opcionesU" data-role="button">Opciones</a></li>
+				</ul>
+			</div>
+			
+			<div data-role="navbar" id="settingsU">
+                                <ul>
+                                        <li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/finish/" data-role="button" data-rel="dialog" data-inline="true" data-transition="pop" rel="external"  class="one">Terminar</a></li>
+                                        <li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/show_list_clues/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external">Obtener<br>pista</a></li>
+                                        <li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/list_clues/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external">Enseñar<br>pistas</a></li>
+                                </ul>
+                                <ul>
+                                        <li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/ask_skip/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external"  class="one">Saltar</a></li>
+                                        <li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/skip_list/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external">Reintentar<br>reto</a></li>
+                                        <li><a id="exitSettingsU" data-role="button" class="one"><img  src="/gymkhana/templates/images/arrow.png" id="arrow"></a></li>
+                                </ul>
+
+			</div>
+		</div>
+
+	</div>
+<!-----------------------------------------------------------------------------------
+------------------------------------------------------------------------------------- -->
+	<div data-role="page" id="mensajes">
+	
+		<div data-role="header">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#reto">
+						<img src="/gymkhana/templates/css/images/45x45/gymkhana.png"><br>
+						Reto
+					</a></li>
+					<li><a href="#ubicacion">
+						<img src="/gymkhana/templates/css/images/45x45/mundo.png"><br>
+						Ubicación
+					</a></li>
+					<li><a href="#mensajes"    class="ui-btn-active ui-state-persist">
+						<span id="smsM"><img src="/gymkhana/templates/css/images/45x45/message.png"></span><br>
+						Mensajes
+					</a></li>
+				</ul>
+			</div>
+
+		</div>
+
+		<div data-role="content" id="contentM">
+			<p id="inBold">¿Qué quieres hacer?</p><br>
+			<a href="#sendMessage"  data-role="button"> Nuevo Mensaje</a><br>
+			<a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/show_messages/?option=inbox" data-ajax="false" data-role="button">Mensajes Recibidos</a><br>
+			<a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/show_messages/?option=sent" data-ajax="false" data-role="button">Mensajes Enviados</a>
+			
+		</div>
+		
+		<div data-role="footer" data-position="fixed" id="footer">
+			<div data-role="navbar" id="principalM">
+				<ul>
+					<li><img src="/gymkhana/templates/css/images/powered_by_lgs_claro.png"></li>
+					<li><a id="opcionesM" data-role="button">Opciones</a></li>
+				</ul>
+			</div>
+			
+			<div data-role="navbar" id="settingsM">
+                                <ul>
+                                        <li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/finish/" data-role="button" data-rel="dialog" data-inline="true" data-transition="pop" rel="external"  class="one">Terminar</a></li>
+                                        <li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/show_list_clues/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external">Obtener<br>pista</a></li>
+                                        <li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/list_clues/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external">Enseñar<br>pistas</a></li>
+                                </ul>
+                                <ul>
+                                        <li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/ask_skip/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external"  class="one">Saltar</a></li>
+                                        <li><a href="/gymkhana/event/{{event_id}}/team/{{team.id}}/challenge/{{challenge_id}}/skip_list/" data-role="button"  data-inline="true" data-rel="dialog" data-transition="pop" rel="external">Reintentar<br>reto</a></li>
+                                        <li><a id="exitSettingsM" data-role="button" class="one"><img  src="/gymkhana/templates/images/arrow.png" id="arrow"></a></li>
+                                </ul>
+
+			</div>
+		</div>
+
+	</div>
+<!-----------------------------------------------------------------------------------
+------------------------------------------------------------------------------------- -->	
+	<div data-role="page" id="sendMessage">
+	
+		<div data-role="header">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#reto">
+						<img src="/gymkhana/templates/css/images/45x45/gymkhana.png"><br>
+						Reto
+					</a></li>
+					<li><a href="#ubicacion">
+						<img src="/gymkhana/templates/css/images/45x45/mundo.png"><br>
+						Ubicación
+					</a></li>
+					<li><a href="#mensajes"    class="ui-btn-active ui-state-persist">
+						<span id="smsSM"><img src="/gymkhana/templates/css/images/45x45/message.png"></span><br>
+						Mensajes
+					</a></li>
+				</ul>
+			</div>
+
+		</div>
+
+		<h3>Nuevo Mensaje</h3>
+		<p><b>Del equipo:</b> {{team.group.name}}</p>
+			
+                <form action="/gymkhana/event/{{ event_id }}/team/{{ team.id }}/process_message/" method="post" enctype="multipart/form-data" data-ajax="false">
+			<p>
+ 	                <label for="team"><b>A:</b></label>
+        	        <select name="to" id="team">
+				<option value="all">Todos (Equipos y Manager)</option>
+                	        <option value="manager">Organizador - {{manager.user}}</option>
+	                  {% for team in teams %}
+        	                <option value="{{team.id}}">{{team.group.name}}</option>
+                	  {% endfor %}
+	                </select>
+        	        </p>
+
+        	        <textarea name="message" id="answer"></textarea>
+                        <input type="hidden" name="latitude2" id ="latitude2" value="" />
+                        <input type="hidden" name="longitude2" id="longitude2" value="" />
+
+                        <br><br>
+
+                        <input type="submit" value="¡Enviar!" />
+
+                </form>
+
+	
+		
+		<div data-role="footer" data-position="fixed" id="footer">
+
+			<img src="/gymkhana/templates/css/images/powered_by_lgs_claro.png">
+
+		</div>
+
+	</div>	
+
+
+<span hidden="hidden" id="event_id">{{event_id}}</span>
+<span hidden="hidden" id="team_id">{{team.id}}<span>
+<span hidden="hidden" id="length_messages">0</span>
+<span hidden="hidden" id="date">0000-00-00 00:00:00</span>
+	
+<script src="/gymkhana/templates/jq/jq_evento.js"></script>
+
+<script src="/gymkhana/templates/js/evento.js"></script>
+</body>
+</html>

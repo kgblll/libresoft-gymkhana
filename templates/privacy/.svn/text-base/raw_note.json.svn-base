@@ -1,0 +1,10 @@
+"title": {
+{% with n.title as field %}{% include "privacy/field.json" %}{% endwith %}
+}, 
+"text": {
+{% with n.text as field %}{% include "privacy/field.json" %}{% endwith %}
+},
+"uploader": {
+{% with n.uploader as field %}{% include "privacy/field.json" %}{% endwith %}
+},
+{% include "privacy/raw_node.json" %}

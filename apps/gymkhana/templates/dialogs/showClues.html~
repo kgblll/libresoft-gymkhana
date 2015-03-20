@@ -1,0 +1,51 @@
+
+<!DOCTYPE html> 
+<html>
+<head>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+	
+
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<scri"+"pt src='jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<scri"+"pt src='jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<link rel='stylesheet' href='jquery.mobile/jquery.mobile-1.3.2.min.css' />"));
+		}
+	</script>
+
+
+	<!--<script src="jquery.mobile/jquery-1.9.1.min.js"></script>-->
+	<!--<script src="jquery.mobile/jquery.mobile-1.3.2.min.js"></script>-->
+	<!--<link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.3.2.min.css" />-->
+	<link href="dialogs.css" rel="StyleSheet" />
+
+	
+</head> 
+<body> 
+
+<div data-role="dialog">
+	
+	<div data-role="header" data-theme="c">
+		<h1>Pistas</h1>
+	</div>
+
+	<div data-role="content" data-theme="d">
+		<h2>Estas son las pistas que ha adquirido.</h2>
+		<p><span id="bold">Pista 1 (10 puntos):</span> Ante todo cuenta despacio y desde abajo hasta el final.</p>
+		<p><span id="bold">Pista 2 (20 puntos):</span> ¿Seguro que estás en la biblioteca?</p>
+			 
+		<a href="dialog/index.html" data-role="button" data-rel="back" data-theme="c">Volver</a>    
+	</div>
+</div>
+
+
+</body>
+</html>

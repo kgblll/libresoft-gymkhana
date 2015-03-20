@@ -1,0 +1,58 @@
+{% extends "backend/base.html" %}
+
+
+<!-- Bloque heredado de "base.html": 
+{% block content %} 
+<div id="content">
+	<h3> Layer Content: {{ layer.name }} </h3>
+	
+	<h4>Export content layer: 
+	    <a href="/social/layer/{{layer_id}}/search/?search=&latitude=0.0&longitude=0.0&radius=0&category=0&elems=100000&format=JSON">[JSON]</a>
+	    <a href="/social/layer/{{layer_id}}/search/?search=&latitude=0.0&longitude=0.0&radius=0&category=0&elems=100000&format=XML">[XML]</a>
+	</h4>
+	
+	<table summary="layers"> 
+			
+			<thead> 
+				<tr> 
+					<th scope="col">Id</th>
+					<th scope="col">Type</th>
+					<th scope="col">Name</th> 
+					<th scope="col">Description</th> 
+					<th scope="col">Image</th> 
+					<th scope="col">Location</th>
+					<th scope="col">Actions</th>
+				</tr> 
+			</thead>	
+ 
+			<tbody> 
+		
+		
+	{% for node in list %}
+	  <tr>
+	    <td>{{node.id}}</td>
+	    <td>{{node.type}}</td>
+		<th scope="row">{% if node.type == "photo" %} {{node.name}} {% else %} {{node.title}} {% endif %} </th> 
+		<td>{{node.description}}</td> 
+		<td>
+		   {% if node.type == "photo" %}
+		   	<img width="200" src="http://0.0.0.0:9001/social/layer/{{layer_id}}/node/{{node.id}}/image/">
+		   {% endif %}
+		</td>
+		<td>
+			<a href="http://maps.google.es/maps?f=q&source=s_q&hl=es&geocode=&q={{node.position.y}},+{{node.position.x}}&sspn=0.003443,0.006968&ie=UTF8&t=h&z=17">View Map</a>
+		</td>
+		
+		<td><a href="/backend/layers/{{layer_id}}/node/{{node.id}}/delete/">Delete</a>
+	  </tr>	
+	  
+	{% endfor %}
+	
+	</tbody>		
+	</table> 
+	
+	<br />
+	<b> {{ msg }} </b>
+</div>
+
+{% endblock %}

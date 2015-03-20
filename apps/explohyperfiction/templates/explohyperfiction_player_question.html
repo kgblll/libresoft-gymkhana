@@ -1,0 +1,15 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+
+{%endblock%}
+
+{%block main%}
+	<div class="content_question">
+		<h3>{{question.text}}</h3>
+		{%for answer in answers%}
+			<a class="button normal green" href="answer/{{answer.id}}/"> {{answer.text}}</a>
+			<br><br>
+		{%endfor%}
+	</div>
+{%endblock%}

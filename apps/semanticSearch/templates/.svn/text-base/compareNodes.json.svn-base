@@ -1,0 +1,21 @@
+{% load semanticTemplateTags %}
+[
+{
+"code": "{{ code }}",
+},
+{% for node in distances %}
+{
+"distance": {
+			"node1" : {
+				"id": {{ node.node1.id}},
+				"type": "{{ node.node1.type}}"
+			},
+			"node2" : {
+				"id": {{ node.node2.id}},
+				"type": "{{ node.node2.type}}"
+			},
+			"distanceValue" : {{ node.distance }}
+			}
+},
+{% endfor %}
+]

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gymkhana Play</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<script src='jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<script src='jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<link rel='stylesheet' href='jquery.mobile/jquery.mobile-1.3.2.min.css' /"+">"));	
+		}
+	</script>
+
+	<link href="/gymkhana/templates/css/play.css" rel="StyleSheet" />
+	
+
+	
+</head>
+<body>
+	
+	<div data-role="page" id="play">
+
+		<div data-role="header"  data-position="fixed">
+			<h1>{{ event.title }}</h1>
+		</div>
+		
+		<br>
+		<p>Seleccione el equipo con el que desea jugar.</p>
+		
+		<div data-role="content">
+			<ul data-role="listview"  data-inset="true">
+
+			{%for team in teams %}
+			<li><a href="/gymkhana/event/{{ event.id }}/team/{{ team.id }}/start/"  data-ajax="false" id="teams"> {{ team.group }}</a></li>
+			{% endfor %}
+		
+			</ul>
+		</div>
+		
+		<div data-role="footer" data-position="fixed">
+			<img src="/gymkhana/templates/css/images/powered_by_lgs_claro.png">
+		</div>
+
+		
+	</div>
+
+</body>
+</html>

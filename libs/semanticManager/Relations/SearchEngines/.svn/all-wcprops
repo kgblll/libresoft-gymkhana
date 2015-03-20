@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/Relations/SearchEngines
+END
+WordnetSearchEngine.py
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/Relations/SearchEngines/WordnetSearchEngine.py
+END
+ThesaurusSearchEngine.py
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/Relations/SearchEngines/ThesaurusSearchEngine.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/Relations/SearchEngines/__init__.py
+END
+GenericSearchEngine.py
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/Relations/SearchEngines/GenericSearchEngine.py
+END

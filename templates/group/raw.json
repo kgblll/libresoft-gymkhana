@@ -1,0 +1,7 @@
+"groupname": "{{ g.groupname|escapejs }}",
+{% if g.groupifier %}
+"groupifier": "{{ g.groupifier|escapejs }}",
+{% endif %}
+{% with g as n %}
+{% include "node/raw.json" %}
+{% endwith %}

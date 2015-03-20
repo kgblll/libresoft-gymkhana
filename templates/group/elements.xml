@@ -1,0 +1,11 @@
+{% extends "base.xml" %}
+
+{% load rest_tags %}
+
+{% block type %}group_elements{% endblock %}
+{% block data %}
+<group_elements>
+         <code>{{ code }}</code>
+         {% display_search elements "xml" %}
+</group_elements>
+{% endblock %}

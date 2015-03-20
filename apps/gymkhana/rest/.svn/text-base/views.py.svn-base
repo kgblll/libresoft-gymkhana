@@ -1,0 +1,1802 @@
+#
+#  Copyright (C) 2009 GSyC/LibreSoft
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>._
+# 
+#    Author : Jorge Fernandez Gonzalez <jorge.fernandez.gonzalez __at__ gmail.com>
+#
+
+from django.contrib.gis.geos import Point
+
+from django.shortcuts import render_to_response
+from django.http import HttpResponseRedirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
+import random
+
+from social.core import api as api_lgs
+from social.rest.forms import LoginForm
+
+from apps.gymkhana.models import *
+from apps.gymkhana.core.utils import *
+
+from apps.gymkhana.core import api
+
+DEFAULT_MANAGER_USERNAME = 'manager'
+DEFAULT_MANAGER_PASSWORD = 'manager'
+
+DEFAULT_FORMAT = 'html'
+
+CORRECTION_FACTOR = 0.1
+
+def user_create(request):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if request.method == "GET":
+      return render_to_response('create_user.' + format, {'code': 200, 'description': 'ok'})
+    elif request.method == "POST":
+      if ("password" in request.POST) and ("username" in request.POST) and ("first_name" in request.POST) and ("last_name" in request.POST):
+        user = {'username': request.POST["username"].strip(), 'password': request.POST["password"],
+                'first_name': request.POST["first_name"].strip(), 'last_name': request.POST["last_name"].strip()}
+        correct, message = api_lgs.user.create_or_modify(user, modify=False)
+        if correct:
+          url = "/gymkhana/user/login"
+          return HttpResponseRedirect(url)
+        else:
+          return render_to_response('error.' + format, {'code': 500, 'description': message})
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Missing Parameters."})
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+def user_logout(request):
+    logout(request)
+    # Redirect to a success page.
+    url = "/gymkhana/user/login/"
+    return HttpResponseRedirect(url)
+
+def user_login(request):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if request.method == "GET":
+      correct, managers = api.manager.list_all()
+      if len(managers) == 0:
+        manager = {'username': DEFAULT_MANAGER_USERNAME, 'password': DEFAULT_MANAGER_PASSWORD}
+        correct, message = api_lgs.user.create_or_modify(manager, modify=False)
+        if correct:
+          user = Person.objects.get(id=message)
+          default_manager = Manager(user=user)
+          default_manager.save()
+          return render_to_response('login.' + format, {'code': 200, 'description': 'ok'})
+        else:
+          return render_to_response('error.' + format, {'description': message})
+      return render_to_response('login.' + format, {'code': 200, 'description': 'ok'})
+    elif request.method == "POST":
+      loginform = LoginForm(request.POST)
+      id = loginform.login(request)
+      if id:
+        # Redirect to a success page.
+        url = "/gymkhana/event/list/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Username and Password Do Not Match."})
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+def event_list(request):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    #if check_logged_user(request) == False:
+    #  if format == 'html':
+    #    url = "/gymkhana/user/login/"
+    #    return HttpResponseRedirect(url)
+    #  else:
+    #    return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, events = api.event.list_all()
+    isAdmin = check_session_user_type(request)
+    correct, managers = api.manager.list_all()
+    if len(events) == 0:
+      return render_to_response('list_event.' + format, {'code': 200, 'description': 'There Are No Events', 'isAdmin': isAdmin, 'managers': managers})
+    else:
+      return render_to_response('list_event.' + format, {'code': 200, 'description': 'ok', 'events': events, 'isAdmin': isAdmin, 'managers': managers})
+
+def event_create(request):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    if check_session_user_type(request) == False: # Si no es administrador, no le dejamos crear eventos:
+      return render_to_response('error.' + format, {'code': 200, 'description': "You Can't Create a New Event."})
+
+    if request.method == "GET":
+      return render_to_response('create_gymkhana.' + format, {'code': 200, 'description': 'ok'})
+    elif request.method == "POST":
+      if request.POST["title"].strip() != "" and request.POST["place"].strip() != "" and request.POST["celebration"].strip() != "" and request.POST["welcome_text"].strip() != "" and request.POST["goodbye_text"].strip() != "":
+        title = request.POST["title"].strip()
+        place = request.POST["place"].strip()
+        celebration = request.POST["celebration"].strip()
+        welcome_text = request.POST["welcome_text"].strip()
+        goodbye_text = request.POST["goodbye_text"].strip()
+        manager_id = request.session["_auth_user_id"]
+        correct, result = api.event.create(title, place, celebration, welcome_text, goodbye_text, manager_id)
+        if correct:
+          new_event = result
+          url = "/gymkhana/event/" + str(new_event.id) + "/show/"
+          return HttpResponseRedirect(url)
+        else:
+          return render_to_response('error.' + format, {'code': 400, 'description': "Internal Error. " + result})
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+def event_show(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, challenges, teams, first_challenges, manager = api.event.show(event)
+    correct, solutions = api.solution.list_all()
+    correct, all_teams = api.team.list_all()
+    isAdmin = check_session_user_type(request)
+    try:
+      #manager = Manager.objects.get(events__id=event.id)
+      return render_to_response('show_gymkhana.' + format, {'code': 200, 'description': 'ok', 'event': event, 'challenges': challenges, 'num_challenges': len(challenges), 'teams': teams, 'num_teams': len(teams), 'all_teams': all_teams, 'first_challenges': first_challenges, 'manager': manager, 'isAdmin': isAdmin})
+    except:
+      return render_to_response('show_gymkhana.' + format, {'code': 200, 'description': 'ok', 'event': event, 'challenges': challenges, 'num_challenges': len(challenges), 'teams': teams, 'num_teams': len(teams), 'all_teams': all_teams, 'first_challenges': first_challenges, 'isAdmin': isAdmin})
+
+def event_delete(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    if check_session_user_type(request) == False: # Si no es administrador, no puede eliminar:
+      return render_to_response('error.' + format, {'code': 200, 'description': "You Can't Delete an Event."})
+
+    correct, message = api.event.delete(event)
+    if correct:
+      return HttpResponseRedirect('/gymkhana/event/list/')
+    else:
+      return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + message})
+
+def event_set_status(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    if check_session_user_type(request) == False: # Si no es administrador, no puede eliminar:
+      return render_to_response('error.' + format, {'code': 200, 'description': "You Can't Delete an Event."})
+
+    correct, event = api.event.set_status(event)
+    if correct:
+      return HttpResponseRedirect('/gymkhana/event/' + event_id + '/show/')
+    else:
+      return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + message})
+
+def challenge_create(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    if check_session_user_type(request) == False: # Si no es administrador, no puede crear pruebas:
+      return render_to_response('error.' + format, {'code': 200, 'description': "You Can't Create a New Challenge."})
+
+    if request.method != "POST":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if "challenge" in request.POST and "max_score" in request.POST and "challenge_type" in request.POST:
+      pass
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Missing Parameters."})
+
+    # Compruebo que no esten vacios el reto y la maxima puntuacion de la prueba
+    if (request.POST["challenge"].strip() == ""):
+      return render_to_response('error.' + format, {'code': 400, 'description': "Challenge is Empty."})
+    else:
+      challenge = request.POST["challenge"].strip()
+
+    if (request.POST["max_score"].strip() == ""):
+      return render_to_response('error.' + format, {'code': 400, 'description': "Maximum Score is Empty."})
+    else:
+      max_score = int(request.POST["max_score"].strip())
+
+    if request.POST["can_skip"].strip().lower() == "yes":
+      can_skip = True
+    else:
+      can_skip = False
+
+    if request.POST["is_stop"].strip().lower() == "yes":
+      is_stop = True
+    else:
+      is_stop = False
+
+    challenge_type = -1
+    augmented_reality = False
+    if int(request.POST["challenge_type"].strip()) == 1:
+      challenge_type = 1
+      try:
+        if request.POST["augmented_reality"].strip().lower() == "yes":
+          augmented_reality = True
+        else:
+          augmented_reality = False
+      except:
+        augmented_reality = False
+    elif int(request.POST["challenge_type"].strip()) == 2:
+      challenge_type = 2
+      is_stop = False
+    elif int(request.POST["challenge_type"].strip()) == 3:
+      challenge_type = 3
+      is_stop = False
+
+    if challenge_type == 1: # Si es prueba textual
+      if "select_num_possible_solutions" in request.POST and "possible_solution_1" in request.POST and "select_num_clues" in request.POST:
+        pass
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Missing Parameters."})
+
+    target_place = None
+    mark_place = None
+    min_distance = -1
+    if challenge_type == 3: # Si es prueba de localizacion
+      if "target_latitude" in request.POST and "target_longitude" in request.POST and "min_distance" in request.POST and "mark_target_place" in request.POST:
+        try:
+          target_latitude = float(request.POST["target_latitude"])
+          target_longitude = float(request.POST["target_longitude"])
+          target_place = Point(target_longitude, target_latitude, srid=4326)
+          min_distance = float(request.POST["min_distance"])
+          mark_place = str(request.POST["mark_target_place"]).strip().lower()
+          if mark_place == "yes":
+            mark_place = True
+          else:
+            mark_place = False
+        except:
+          return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Value for \'target_latitude\' / \'target_longitude\' / \'min_distance\' / \'mark_target_place\' Parameter/s."})
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Missing \'target_latitude\' / \'target_longitude\' Parameter/s."})
+
+    # Compruebo que no esten vacias ni las posibles soluciones ni las pistas en caso de haberlas:
+    if challenge_type == 1: # Si es prueba textual
+      num_possible_solutions = int(request.POST["select_num_possible_solutions"].strip())
+      #if num_possible_solutions == 1:
+      #  if (request.POST["possible_solution_1"].strip() == ""):
+      #    return render_to_response('error.' + format, {'code': 400, 'description': "Solution is Empty."})
+      #else:
+      for i in range(num_possible_solutions):
+        if (request.POST["possible_solution_" + str(i+1)].strip() == ""):
+          return render_to_response('error.' + format, {'code': 400, 'description': "A Possible Solution is Empty."})
+    num_clues = int(request.POST["select_num_clues"].strip())
+    if num_clues >= 1:
+      for i in range(num_clues):
+        if (request.POST["clue_" + str(i+1)].strip() == ""):
+          return render_to_response('error.' + format, {'code': 400, 'description': "Clue number " + str(i+1) +" is Empty."})
+
+    if "position" in request.POST and request.POST["position"] != "None": # Insertar prueba en posicion dada:
+      position = int(request.POST["position"].strip())
+    else:
+      position = "None"
+
+    # Cargo la foto si es que el manager la ha enviado.
+    correct, result = read_photo(request)
+    if correct:
+      picture = result
+    else:
+      picture = None
+
+    correct, result = api.challenge.create(event, challenge, picture, max_score, can_skip, challenge_type, is_stop, position, target_place, min_distance, mark_place, augmented_reality)
+    if correct:
+      new_challenge = result
+    else:
+      return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + result})
+
+    if new_challenge.challenge_type == 1: # Es prueba textual
+      num_possible_solutions = int(request.POST["select_num_possible_solutions"].strip())
+      #if num_possible_solutions == 1:
+      #  correct, result = api.solution.create(request.POST["possible_solution"].strip(), new_proof)
+      #else:
+      for i in range(num_possible_solutions):
+        correct, result = api.solution.create(request.POST["possible_solution_" + str(i+1)].strip(), new_challenge)
+
+    num_clues = int(request.POST["select_num_clues"].strip())
+    if num_clues >= 1:
+      for i in range(num_clues):
+        correct, result = api.clue.create((i+1), request.POST["clue_" + str(i+1)].strip(), new_challenge, CORRECTION_FACTOR)
+
+    url = "/gymkhana/event/" + str(event_id) + "/show/"
+    return HttpResponseRedirect(url)
+
+def challenge_delete(request, event_id, challenge_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    if check_session_user_type(request) == False: # Si no es administrador, no puede eliminar:
+      return render_to_response('error.' + format, {'code': 200, 'description': "You Can't Delete a Challenge."})
+
+    correct, message = api.challenge.delete(event, int(challenge_id))
+    if correct:
+      url = "/gymkhana/event/" + str(event_id) + "/show/"
+      return HttpResponseRedirect(url)
+    else:
+      return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + message})
+
+def challenge_show(request, event_id, challenge_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_challenge(event, challenge_id)
+    if correct:
+      challenge = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    #print request.META.get('REMOTE_ADDR', '<none>')
+
+    #has_clues = "false"
+    num_clues = len(Clue.objects.filter(challenge=challenge))
+    #if num_clues > 0:
+    #  has_clues = "true"
+
+    description = "Challenge Correctly Sent."
+    if challenge.challenge_type == 3:
+      return render_to_response('challenge.' + format, {'code': 200, 'description': description, 'challenge': challenge.challenge, 'max_score': challenge.max_score, 'challenge_type': challenge.challenge_type, 'augmented_reality': challenge.augmented_reality, 'can_skip': challenge.can_skip, 'number': challenge.number, 'target_place': challenge.target_place, 'distance_to_target_place': challenge.distance_to_target_place, 'mark_place': challenge.mark_place, 'num_clues': num_clues, 'picture': challenge.picture})
+
+    return render_to_response('challenge.' + format, {'code': 200, 'description': description, 'challenge': challenge.challenge, 'max_score': challenge.max_score, 'challenge_type': challenge.challenge_type, 'augmented_reality': challenge.augmented_reality, 'can_skip': challenge.can_skip, 'number': challenge.number, 'num_clues': num_clues, 'picture': challenge.picture})
+
+def challenge_respond(request, event_id, challenge_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_challenge(event, challenge_id)
+    if correct:
+      challenge = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != 'POST':
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, result = get_team(event, request.POST['team_id'].strip())
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if "latitude" in request.POST and "longitude" in request.POST and "altitude" in request.POST:
+      latitude = float(request.POST['latitude'].strip())
+      longitude = float(request.POST['longitude'].strip())
+      altitude = float(request.POST['altitude'].strip())
+      position = Point(float(longitude), float(latitude), srid=4326)
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Missing \'latitude\'/\'longitude\'/\'altitude\' Parameter/s."})
+
+    response_to_challenge = None
+    distance_difference = -1
+    if challenge.challenge_type == 2:
+      correct, result = read_photo(request)
+      if correct:
+        response_to_challenge = result
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': result})
+    elif challenge.challenge_type == 1 and 'response' in request.POST:
+      response_to_challenge = request.POST['response'].strip()
+    elif challenge.challenge_type == 3:
+      if "success" in request.POST and "distance_difference" in request.POST:
+        success = request.POST['success'].strip().lower()
+        distance_difference = float(request.POST['distance_difference'].strip())
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Missing \'success\'/\'distance_difference\' Parameter/s."})
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Missing \'response\' or \'photo\' Parameter."})
+
+    correct, response, message = api.challenge.respond(event, team, challenge, response_to_challenge, CORRECTION_FACTOR, position, altitude, distance_difference)
+
+    is_last_challenge, next_challenge_id = search_following_challenge(event, challenge, team, message)
+    description = "Response Proccessed Succesfully."
+    return render_to_response('solution.' + format, {'code': 200, 'description': description, 'solution': response, 'message': message, 'next_challenge_id': next_challenge_id, 'is_last_challenge': is_last_challenge})
+
+def team_subscribe(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "POST":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if "team_to_subscribe_id" in request.POST:
+      team_id = int(request.POST["team_to_subscribe_id"].strip())
+      correct, result = get_team_by_id(team_id)
+      if correct:
+        team = result
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+      if "first_challenge_team_id" in request.POST:
+        first_challenge_team_id = request.POST["first_challenge_team_id"]
+
+      correct, result = api.team.subscribe_to_event(event, team, first_challenge_team_id)
+      if correct:
+        url = "/gymkhana/event/" + str(event_id) + "/show/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': result})
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Missing Parameters."})
+
+def monitoring(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    if check_session_user_type(request) == False: # Solo el administrador puede monitorizar el evento:
+      return render_to_response('error.' + format, {'code': 200, 'description': "You Can't Delete a Challenge."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if format != "html":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Format."})
+
+    return render_to_response('monitoring.' + format, {'code': 200, 'description': 'ok', 'event': event})
+
+def team_join(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.html', {'code': 400, 'description': result})
+
+    if "teamname" in request.GET:
+      correct, result = get_team_by_name(event, request.GET["teamname"].strip())
+      if correct:
+        team = result
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+      try:
+        objetos = Finished.objects.all()
+        finished = Finished.objects.get(event=event, team=team)
+        if finished.is_finished: # Si el team ha acabado la gymkhana y quiere volverla a hacer
+          finished.delete()
+          team_members = TeamMember.objects.filter(event=event, team=team)
+          for team_member in team_members:
+            team_member.delete()
+          teams = event.team_set.all()
+          for team_1 in teams:
+            if team_1 == team:
+              #team_1.unjoin()
+              correct, message = api.team.unjoin(event, team)
+              team.responses.delete()
+          correct, message, first_challenge = api.team.join_to_event(event, team)
+          finished = Finished(event=event, team=team, is_finished=False)
+          finished.save()
+        else:
+          correct, message = api.team_member.create_by_user_id(event, team, request.user.id)
+          correct, message, current_challenge = get_current_challenge(event, team)
+          return render_to_response('join_team.' + format, {'code': 200, 'description': "ok", 'first_challenge_id': current_challenge.id, 'team_id': team.id})
+      except:
+        finished = Finished(event=event, team=team, is_finished=False)
+        finished.save()
+        correct, message, first_challenge = api.team.join_to_event(event, team)
+      correct, message = api.team_member.create_by_user_id(event, team, request.user.id)
+      return render_to_response('join_team.' + format, {'code': 200, 'description': "ok", 'first_challenge_id': first_challenge.first_challenge.id, 'team_id': team.id})
+    else:
+      return render_to_response('join_team.' + format, {'code': 400, 'description': "Missing \'teamname\' Parameter."})
+
+def team_list(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+    
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    #try:
+    #  if "order_by" in request.GET:
+    #    order = request.GET['order_by'].strip()
+    #  else:
+    #    order = "None"
+    #except:
+    #  order = "None"
+
+    #correct, message, teams, first_proofs, scoreboards, success = api.team.list(event, order)
+    correct, message, teams, first_challenges, scoreboards, success = api.team.list(event)
+    if not correct:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Internal Error. " + message})
+
+    if format == 'html':
+      isAdmin = check_session_user_type(request) # Hacer este html!
+      return render_to_response('list_team.html', {'code': 200, 'description': 'ok', 'event': event, 'teams': teams, 'first_challenges': first_challenges, 'scoreboards': scoreboards, 'isAdmin': isAdmin})
+
+    if len(teams) == 0 or success == 0:
+      return render_to_response('list_team.' + format, {'code': 200, 'description': 'There Are No Teams Ready To Play.'})
+    else:
+      return render_to_response('list_team.' + format, {'code': 200, 'description': 'ok', 'event': event, 'teams': teams, 'first_challenges': first_challenges, 'scoreboards': scoreboards})
+
+def team_create(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    if check_session_user_type(request) == False: # Si no es administrador, no puede crear equipos:
+      error_message = "You Can't Create a New Team."
+      return render_to_response('error.' + format, {'code': 200, 'description': error_message})
+
+    if request.method != "POST":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if ("teamname" in request.POST):
+      if (request.POST["teamname"].strip() == ""):
+        return render_to_response('error.' + format, {'code': 400, 'description': "Team Name is Empty."})
+      teamname = request.POST["teamname"].strip().replace(' ', '_')
+      num_first_challenge_id = -1
+      if "first_challenge_team_id" in request.POST and request.POST["first_challenge_team_id"] != "None":
+        num_first_challenge_id = int(request.POST["first_challenge_team_id"].strip())
+      correct, result = api.team.create(event, teamname, num_first_challenge_id)
+      if correct:
+        url = "/gymkhana/event/" + str(event_id) + "/show/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 500, 'description': result})
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Missing \'teamname\' Parameter."})
+
+def team_edit(request, event_id, team_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if "first_challenge_team_id" in request.GET:
+      try:
+        challenge_id = int(request.GET["first_challenge_team_id"].strip())
+      except:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Challenge."})
+      correct, result = get_challenge(event, challenge_id)
+      if correct:
+        challenge = result
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+      correct, result = api.team.edit_first_challenge(event, team, challenge)
+      if correct:
+        url = "/gymkhana/event/" + str(event_id) + "/show/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Internal Error. " + result})
+    elif "latitude" in request.GET and "longitude" in request.GET:
+      correct, result = api.team.edit_position(team, float(request.GET["longitude"].strip()), float(request.GET["latitude"].strip()))
+      if correct:
+        return render_to_response('edit_team.' + format, {'code': 200, 'description': "ok"})
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Internal Error. " + result})
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Missing Parameters."})
+
+def team_show(request, event_id, team_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+    
+    isAdmin = check_session_user_type(request)
+    correct, message, team_members, first_challenge, scoreboard = api.team.show(event, team)
+
+    if correct:
+      if first_challenge != None:
+        return render_to_response('show_team.' + format, {'code': 200, 'description': 'ok', 'event': event, 'team': team, 'team_members': team_members, 'num_team_members': len(team_members), 'first_challenge': first_challenge, 'scoreboard': scoreboard, 'isAdmin': isAdmin})
+      elif first_challenge == None:
+        return render_to_response('show_team.' + format, {'code': 200, 'description': 'ok', 'event': event, 'team': team, 'team_members': team_members, 'num_team_members': len(team_members), 'scoreboard': scoreboard, 'isAdmin': isAdmin})
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Internal Error. " + message})
+
+def team_delete(request, event_id, team_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    if check_session_user_type(request) == False: # Si no es administrador, no puede eliminar equipos:
+      return render_to_response('error.' + format, {'code': 200, 'description': "You Can't Delete a Team."})
+
+    correct, message = api.team.delete(team)
+    if correct:
+      url = "/gymkhana/event/" + str(event_id) + "/show/"
+      return HttpResponseRedirect(url)
+    else:
+      return render_to_response('error.' + format, {'code': 200, 'description': "Internal Error. " + message})
+
+def team_get_information_gymkhana(request, event_id, team_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': 'The User is not Authenticated.'})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if "information" in request.GET:
+      information_type = request.GET["information"].lower().strip()
+      if information_type != "start_gymkhana" and information_type != "finish_gymkhana":
+        error_message = "Incorrect Parameter \'information\' Value."
+        return render_to_response('gymkhana_information.' + format, {'code': 400, 'description': error_message})
+      else:
+        if information_type == "finish_gymkhana":
+          finished_objects = Finished.objects.filter(event=event, team=team)
+          for finished_object in finished_objects:
+            finished_object.delete()
+          finished = Finished(event=event, team=team, is_finished=True)
+          finished.save()
+        correct, message, text, scoreboard = get_information_gymkhana(event, team, information_type)
+        if correct:
+          description = "Information Sent Successfully."
+          return render_to_response('gymkhana_information.' + format, {'code': 200, 'description': description, 'informative_text': text, 'scoreboard': scoreboard})
+    else:
+      error_message = "Missing \'information\' Parameter."
+      return render_to_response('gymkhana_information.' + format, {'code': 400, 'description': error_message})
+
+def team_member_has_team(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_team_member_by_user_id(event, request.user.id)
+    if correct:
+      team_member = result
+    else:
+      team_member = None
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if team_member != None:
+      team = team_member.team
+      try:
+        finished = Finished.objects.get(event=event,team=team)
+        if finished.is_finished:
+          team_members = TeamMember.objects.filter(event=event, team=team)
+          for team_member in team_members:
+            team_member.delete()
+          return render_to_response('team_member_has_team.' + format, {'code': 200, 'description': "ok", "has_team": "false"})
+        else:
+          correct, message, current_challenge = get_current_challenge(event, team_member.team)
+          correct, message, teams, first_challenges, scoreboards, success = api.team.list(event)
+          return render_to_response('team_member_has_team.' + format, {'code': 200, 'description': message, 'team': team, 'current_challenge': current_challenge, 'first_challenges': first_challenges, 'has_team': 'true', 'scoreboards': scoreboards})
+      except:
+        correct, message, current_challenge = get_current_challenge(event, team_member.team)
+        correct, message, teams, first_challenges, scoreboards, success = api.team.list(event)
+        return render_to_response('team_member_has_team.' + format, {'code': 200, 'description': message, 'team': team, 'current_challenge': current_challenge, 'first_challenges': first_challenges, 'has_team': 'true', 'scoreboards': scoreboards})
+    else:
+      return render_to_response('team_member_has_team.' + format, {'code': 200, 'description': 'ok', "has_team": "false"})
+
+def team_member_create(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    if request.method != "POST":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if "team_id" in request.POST and request.POST["team_id"] != 'None':
+      correct, result = get_team(event, request.POST["team_id"].strip())
+      if correct:
+        team = result
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': result})
+    else:
+      error_message = "The participant group has not been indicated."
+      return render_to_response('error.' + format, {'code': 400, 'description': error_message})
+
+    if request.POST["action"].strip().lower() == "add": # el Add lo hace el administrador.
+      #action = "add"
+      try:
+        first_name = request.POST["first_name"].strip()
+        last_name = request.POST["last_name"].strip()
+      except:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Missing Parameters"})
+      correct, result = api.team_member.create(team, first_name, last_name)
+      url = "/gymkhana/event/" + str(event_id) + "/show/"
+      return HttpResponseRedirect(url)
+    elif request.POST["action"].strip().lower() == "join": # el Join lo hace el propio usuario
+      #action = "join"
+      session_user_id = request.session["_auth_user_id"]
+      team_id = int(request.POST["team_id"].strip())
+      correct, result = api.team_member.join(team_id, session_user_id)
+      if correct:
+        url = "/gymkhana/event/" + str(event_id) + "/team/" + str(team.id) + "/show/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': result})
+    else:
+      error_message = "Invalid Parameter \'action\' Value."
+      return render_to_response('error.' + format, {'code': 400, 'description': error_message})
+
+def team_member_delete(request, event_id, team_id, team_member_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    if check_session_user_type(request) == False: # Si no es administrador, no puede eliminar jugadores:
+      return render_to_response('error.' + format, {'code': 200, 'description': "You Can't Delete a Team Member."})
+
+    correct, result = get_team_member(team, team_member_id)
+    if correct:
+      team_member = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+    
+    correct, result = api.team_member.delete(team_member)
+    if correct:
+      url = "/gymkhana/event/" + str(event_id) + "/team/" + str(team_id) + "/show/"
+      return HttpResponseRedirect(url)
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Internal Error. " + result})
+
+def response_edit(request, event_id, response_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    if request.method != "GET": # REALMENTE DEBERIA SER UN POST!!!!!!!
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    try:
+      team_id = request.GET["team_id"].strip()
+    except:
+      error_message = "Missing \'team_id\' Parameter."
+      return render_to_response('error.' + format, {'code': 400, 'description': error_message})
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    try:
+      response = team.responses.get(id=response_id)
+    except:
+      error_message = "Invalid Response Identifier."
+      return render_to_response('error.' + format, {'code': 400, 'description': error_message})
+
+    if "change_status" in request.GET:
+      correct, message = api.response.edit(response, event, team, CORRECTION_FACTOR)
+    else:
+      error_message = "Missing \'change_status\' Parameter."
+      return render_to_response('error.' + format, {'code': 400, 'description': error_message})
+
+    response.save()
+    #url = "/gymkhana/event/" + str(event_id) + "/response/list/"
+    url = "/gymkhana/event/" + str(event_id) + "/monitoring/"
+    return HttpResponseRedirect(url)
+
+def response_list(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, result = api.team.list_order_by_id(event)
+    if correct:
+      return render_to_response('list_response.' + format, {'code': 200, 'description': 'ok', 'event': event, 'teams': result})
+    else:
+      return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + result})
+
+def response_delete(request, event_id, response_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    try:
+      team_id = request.GET["team_id"].strip()
+    except:
+      error_message = "Missing \'team_id\' Parameter."
+      return render_to_response('error.' + format, {'code': 400, 'description': error_message})
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    try:
+      response = team.responses.get(id=response_id)
+    except:
+      error_message = "Invalid Response Identifier."
+      return render_to_response('error.' + format, {'code': 400, 'description': error_message})
+
+    correct, message = api.response.delete(response, event, team, CORRECTION_FACTOR)
+    if correct:
+      #url = "/gymkhana/event/" + str(event_id) + "/response/list/"
+      url = "/gymkhana/event/" + str(event_id) + "/monitoring/"
+      return HttpResponseRedirect(url)
+    else:
+      return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + message})
+
+def clue_buy(request, event_id, challenge_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    correct, result = get_challenge(event, challenge_id)
+    if correct:
+      challenge = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != 'GET':
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+    
+    correct, result = get_team(event, request.GET['team_id'].strip())
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = api.clue.buy(event, team, challenge)
+    if correct == True:
+      return render_to_response('show_clue.' + format, {'code': 200, 'description': "ok", 'clue': result})
+    else:
+      return render_to_response('show_clue.' + format, {'code': 200, 'description': result}) #"No More Clues For This Team And Challenge."
+
+def clue_show(request, event_id, challenge_id): # Muestra las pistas que ha comprado el equipo para una determinada prueba
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    correct, result = get_challenge(event, challenge_id)
+    if correct:
+      challenge = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != 'GET':
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+    
+    correct, result = get_team(event, request.GET['team_id'].strip())
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = api.clue.show(team, challenge)
+    if correct:
+      return render_to_response('show_clues.' + format, {'code': 200, 'description': "ok", 'acquired_clues': result, 'challenge': challenge})
+    else: # Este equipo no ha comprado pistas para esta prueba (de este evento)
+      return render_to_response('show_clues.' + format, {'code': 200, 'description': result}) # "You Have Not Got A Clue."
+
+def challenge_skip(request, event_id, challenge_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})      
+
+    correct, result = get_challenge(event, challenge_id)
+    if correct:
+      challenge = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_team(event, request.GET['team_id'].strip())
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if challenge.can_skip == False:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Challenge Can\'t Be Skipped"})
+
+    correct, result = api.challenge.skip(team, challenge)
+    if correct:
+      skipped_challenge = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Internal Error. " + result})
+
+    is_last_challenge, next_challenge_id = search_following_challenge(event, challenge, team, "Continue")
+
+    description = "ok"
+    message = "Correct Skip."
+    return render_to_response('solution.' + format, {'code': 200, 'description': description, 'message': message, 'next_challenge_id': next_challenge_id, 'is_last_challenge': is_last_challenge})
+
+def skipped_challenge_list(request, event_id, team_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    if format == "html":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Format."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+    
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, result = api.challenge.skipped_list(team)
+    if correct:
+      return render_to_response('list_skipped_challenge.' + format, {'code': 200, 'description': 'ok', 'skipped_challenges': result, 'event': event})
+    else:
+      return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + result})
+
+def message_create(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method == "GET":
+      if format != "html":
+        return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Format For a GET Method Request."})
+
+      if not request.user.is_authenticated():
+        if format == 'html':
+          url = "/gymkhana/user/login/"
+          return HttpResponseRedirect(url)
+        else:
+          return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+      if check_session_user_type(request) == False: # Si no es administrador, no le dejamos mandar mensajes desde interfaz web:
+        return render_to_response('error.' + format, {'code': 200, 'description': "You Can't Sent a New Message."})
+      
+      correct, message, teams, first_challenges, scoreboards, success = api.team.list(event)
+      if not correct:
+        return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + message})
+      correct, manager = api.manager.show(event)
+      if not correct:
+        return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + message})
+      return render_to_response('create_message.' + format, {'code': 200, 'description': "ok", 'event': event, 'teams': teams, 'manager': manager})
+
+    elif request.method != "POST":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if ("from_team_id" in request.POST or "from_manager_id" in request.POST) and ("to" in request.POST or "to_team_id" in request.POST) and "text" in request.POST:
+
+      if "latitude" in request.POST and "longitude" in request.POST and "altitude" in request.POST:
+        latitude = float(request.POST['latitude'].strip())
+        longitude = float(request.POST['longitude'].strip())
+        altitude = float(request.POST['altitude'].strip())
+        position = Point(float(longitude), float(latitude), srid=4326)
+      else:
+        position = None
+        altitude = None
+
+      from_team_id = -1
+      from_manager_id = -1
+      to = -1
+      to_team_id = -1
+      to_manager_id = -1
+      to_team = None
+      manager = None
+      correct, manager = api.manager.show(event)
+
+      if "from_team_id" in request.POST:
+        if request.POST["from_team_id"].strip() != "":
+          from_team_id = int(request.POST["from_team_id"].strip())
+      if "from_manager_id" in request.POST:
+        if request.POST["from_manager_id"].strip() != "":
+          from_manager_id = int(request.POST["from_manager_id"].strip())
+      if (from_team_id == -1 and from_manager_id == -1) or (from_team_id != -1 and from_manager_id != -1):
+        return render_to_response('error.' + format, {'code': 400, 'description': "Incorrect from_manager/team_id Parameters Values."})
+
+      if "to" in request.POST:
+        to = request.POST["to"].strip().lower()
+        if to == "" or (to != "all" and to != "manager"):
+          return render_to_response('error.' + format, {'code': 400, 'description': "Incorrect \'to\' Parameter Value."})
+      if "to_team_id" in request.POST:
+        to_team_id = int(request.POST["to_team_id"].strip())
+        correct, result = get_team(event, to_team_id)
+        if correct:
+          to_team = result
+        else:
+          return render_to_response('error.' + format, {'code': 400, 'description': result})
+      #if "to_manager_id" in request.POST:
+      #  to_manager_id = int(request.POST["to_manager_id"].strip())
+      #  correct, result = get_manager_by_id(event, to_manager_id)
+      #  if correct:
+      #    to_manager = result
+      #  else:
+      #    return render_to_response('error.' + format, {'code': 400, 'description': result})
+      if to_team != None and (to != "" and (to == "all" or to == "manager")):
+        return render_to_response('error.' + format, {'code': 400, 'description': "Incorrect to/to_team_id Parameters Values."})
+
+      if request.POST["text"].strip() != "":
+        text = request.POST["text"].strip()
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Text Value Can\'t Be Empty."})
+
+      correct, result = api.message.create(event, text, from_team_id, from_manager_id, to, to_team_id, to_manager_id, to_team, manager, position, altitude)
+      if not correct:
+        return render_to_response('error.' + format, {'code': 500, 'description': result})
+      else:
+        if format == "html":
+          url = "/gymkhana/event/" + str(event.id) + "/monitoring/"
+          return HttpResponseRedirect(url)
+        else:
+          return render_to_response('create_message.' + format, {'code': 200, 'description': "ok", 'event': event})
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': "Missing Parameters."})
+
+def message_list(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    if request.method == "html":
+      return render_to_response('error.' + format, {'code': 400, 'description': 'Invalid Format.'})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+    
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, result = api.message.list(event)
+    if correct:
+      messages = result
+    else:
+      return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + result})
+
+    return render_to_response('list_message.' + format, {'code': 200, 'description': 'ok', 'messages': messages})
+
+def message_delete(request, event_id, message_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if format != "html":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Format."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_message(event, message_id)
+    if correct:
+      message = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    isAdmin = check_session_user_type(request)
+    if isAdmin == True:
+      correct, result = api.message.delete(message)
+      if not correct:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Internal Error. " + result})
+
+      # De momento solo permito eliminar al manager y via html:
+      url = "/gymkhana/event/" + str(event.id) + "/monitoring/"
+      return HttpResponseRedirect(url)
+    else:
+      return render_to_response('error.' + format, {'code': 200, 'description': 'You Can\'t Delete A Message.'})
+
+def message_list_delete(request, event_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if format != "html":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Format."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    isAdmin = check_session_user_type(request)
+    if isAdmin == True:
+      correct, result = api.message.delete_all(event)
+      if not correct:
+        return render_to_response('error.' + format, {'code': 400, 'description': "Internal Error. " + result})
+      #event.message_set.all().delete()
+
+      # De momento solo permito eliminar al manager y via html:
+      url = "/gymkhana/event/" + str(event.id) + "/monitoring/"
+      return HttpResponseRedirect(url)
+    else:
+      return render_to_response('error.' + format, {'code': 200, 'description': 'You Can\'t Delete All Messages.'})
+
+def number_team_sent_messages(request, event_id, team_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    if format == "html":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Format."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, result = api.message.list_by_team(event, team, "sent")
+    if not correct:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+    return render_to_response('num_messages.' + format, {'code': 200, 'description': 'ok', 'num_messages': len(result)})
+
+def number_team_inbox_messages(request, event_id, team_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    if format == "html":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Format."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, result = api.message.list_by_team(event, team, "inbox")
+    if not correct:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+    return render_to_response('num_messages.' + format, {'code': 200, 'description': 'ok', 'num_messages': len(result)})
+
+def team_show_sent_messages(request, event_id, team_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    if format == "html":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Format."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, result = api.message.list_by_team(event, team, "sent")
+    if not correct:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+    return render_to_response('list_message.' + format, {'code': 200, 'description': 'ok', 'messages': result})
+
+def team_show_inbox_messages(request, event_id, team_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    if format == "html":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Format."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_team(event, team_id)
+    if correct:
+      team = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, result = api.message.list_by_team(event, team, "inbox")
+    if not correct:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+    return render_to_response('list_message.' + format, {'code': 200, 'description': 'ok', 'messages': result})
+
+def message_reply(request, event_id, message_id):
+    correct, result = check_format(request, DEFAULT_FORMAT)
+    if correct:
+      format = result
+    else:
+      return render_to_response('error.' + DEFAULT_FORMAT, {'code': 400, 'description': result})
+
+    if not request.user.is_authenticated():
+      if format == 'html':
+        url = "/gymkhana/user/login/"
+        return HttpResponseRedirect(url)
+      else:
+        return render_to_response('error.' + format, {'code': 400, 'description': "The User is not Authenticated."})
+
+    correct, result = get_event(event_id)
+    if correct:
+      event = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    correct, result = get_message(event, message_id)
+    if correct:
+      message = result
+    else:
+      return render_to_response('error.' + format, {'code': 400, 'description': result})
+
+    if format == 'html' and check_logged_user(request) == False:
+      url = "/gymkhana/user/login/"
+      return HttpResponseRedirect(url)
+
+    isAdmin = check_session_user_type(request)
+    if isAdmin != True:
+      return render_to_response('error.' + format, {'code': 200, 'description': 'You Can\'t Reply To A Message.'})
+
+    if request.method != "GET":
+      return render_to_response('error.' + format, {'code': 400, 'description': "Invalid Method Request."})
+
+    correct, message, to_manager, team_to_reply, from_manager, to_teams, text_to_reply = api.message.reply(message)
+    if not correct:
+      return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + message})
+
+    correct, message, teams, first_challenges, scoreboards, success = api.team.list(event)
+    if not correct:
+      return render_to_response('error.' + format, {'code': 500, 'description': "Internal Error. " + message})
+
+    return render_to_response('create_message.' + format, {'code': 200, 'description': "ok", 'event': event, 'teams': teams, 'to_manager': to_manager, 'team_to_reply': team_to_reply, 'from_manager': from_manager, 'to_teams': to_teams, 'text_to_reply': text_to_reply})

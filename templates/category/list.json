@@ -1,0 +1,12 @@
+{
+	"code": "{{ code }}",
+	"results": [
+			{% for category in results%}{
+				{% with category as c  %}
+		      		{% include "category/raw.json" %}
+		      	{% endwith %}					
+		      			
+	      	}, {% endfor %}
+		   ]
+		   
+}

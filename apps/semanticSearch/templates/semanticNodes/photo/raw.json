@@ -1,0 +1,7 @@
+ {% with p.data as p%}
+	 {% include "photo/raw.json" %}
+ {% endwith %}
+ 
+ {% with p as node%}
+ 	{% include "semanticNodes/semanticInfo.json" %}
+ {% endwith %}

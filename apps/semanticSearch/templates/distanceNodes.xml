@@ -1,0 +1,9 @@
+{% extends "base.xml" %}
+
+{% block type %}compare_nodes{% endblock %}
+{% block data %}
+<compare_nodes>
+   <code> {{ code }} </code>
+   <distance> {{ distance }} </distance>
+</compare_nodes>
+{% endblock %}

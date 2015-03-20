@@ -1,0 +1,138 @@
+{% extends "gymkhana.html" %}
+
+{% block content %}
+
+{% if teams %}
+<div>
+	<fieldset>
+		<legend>Listing Challenges-Responses</legend>
+
+        {% for team in teams %}
+	{% for response in team.responses.all %}
+		<p><b>Team: <a href="/gymkhana/event/{{ event.id }}/team/{{ team.id }}/show/" data-ajax="false">{{ team.group.name }} (identifier: {{ team.id }})</a></b></p>
+		<p><b>- Challenge {{ response.proof.number }}</b> (identifier: {{ response.proof.id }})</p>
+		<p><b>- Challenge:</b> {{ response.proof.challenge }}</p>
+		<p><b>- Possible Solutions:</b></p>
+		<ul>
+			{% for solution in response.proof.solution_set.all %}
+			<li>{{ solution.possible_solution }}</li>
+			{% endfor %}
+		</ul>
+
+		<p><b>- Response must be Correct to Continue:</b> {{ response.proof.is_stop }}</p>
+		<p><b>- Response: {{ response.response }}</b></p>
+		<p><b>- Is Correct: {{ response.is_correct }}</b></p>
+		<div>
+			<form action="/gymkhana/event/{{ event.id }}/response/{{ response.id }}/edit/" method="get" data-ajax="false">
+				<input type="hidden" name="team_id" value="{{ team.id }}">
+				<input type="submit" name="change_status" value="Change to Correct/Incorrect"></input>
+			</form>
+			<form action="/gymkhana/event/{{ event.id }}/response/{{ response.id }}/delete/" method="get" data-ajax="false">
+				<input type="hidden" name="team_id" value="{{ team.id }}">
+				<input type="submit" name="delete" value="Delete Response"></input>
+			</form>
+		</div>
+		<br></br>
+	{% endfor %}
+	{% endfor %}
+	</fieldset>
+</div>
+{% endif %} <!-- if teams -->
+
+{% endblock %}
+
+
+{% block contentM %}
+
+{% if teams %}
+<div>
+        <fieldset>
+                <legend>Listing Challenges-Responses</legend>
+
+        {% for team in teams %}
+        {% for response in team.responses.all %}
+                <p><b>Team: <a href="/gymkhana/event/{{ event.id }}/team/{{ team.id }}/show/" data-ajax="false">{{ team.group.name }} (identifier: {{ team.id }})</a></b></p>
+                <p><b>- Challenge {{ response.proof.number }}</b> (identifier: {{ response.proof.id }})</p>
+                <p><b>- Challenge:</b> {{ response.proof.challenge }}</p>
+                <p><b>- Possible Solutions:</b></p>
+                <ul>
+                        {% for solution in response.proof.solution_set.all %}
+                        <li>{{ solution.possible_solution }}</li>
+                        {% endfor %}
+                </ul>
+
+                <p><b>- Response must be Correct to Continue:</b> {{ response.proof.is_stop }}</p>
+                <p><b>- Response: {{ response.response }}</b></p>
+                <p><b>- Is Correct: {{ response.is_correct }}</b></p>
+                <div>
+                        <form action="/gymkhana/event/{{ event.id }}/response/{{ response.id }}/edit/" method="get" data-ajax="false">
+                                <input type="hidden" name="team_id" value="{{ team.id }}">
+                                <input type="submit" name="change_status" value="Change to Correct/Incorrect"></input>
+                        </form>
+                        <form action="/gymkhana/event/{{ event.id }}/response/{{ response.id }}/delete/" method="get" data-ajax="false">
+                                <input type="hidden" name="team_id" value="{{ team.id }}">
+                                <input type="submit" name="delete" value="Delete Response"></input>
+                        </form>
+                </div>
+                <br></br>
+        {% endfor %}
+        {% endfor %}
+        </fieldset>
+</div>
+{% endif %} <!-- if teams -->
+
+{% endblock %}
+
+
+{% block java_script %}
+<script type="text/javascript">
+	//<![CDATA[
+	
+	function configurate(){
+		// Al cargar la pagina configuramos al cliente para que
+		// cada X segundos recargue la web por si hubiera nuevas respuestas 
+                // de los equipos.
+		// setTimeOut se ejecutaria una unica vez pasado el tiempo indicado:
+		setInterval('reloadPage();',10000);
+	}
+	
+	function createXMLHttpRequest() {
+		// Obtencion del objeto XMLHttpRequest que nos permitira ejecutar
+		// peticiones HTTP asincronamente desde JavaScript:
+	  	var http_request = false;
+ 		if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+	 	  	http_request = new XMLHttpRequest();
+		}else if (window.ActiveXObject) { // IE
+		  	http_request = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		return http_request;
+	}
+	
+	function reloadPage(){
+		http_request = createXMLHttpRequest();
+		http_request.open("GET", "/gymkhana/event/{{ event.id }}/response/list/",true);
+		http_request.onreadystatechange = function() {
+			if (http_request.readyState == 4) {
+				if (http_request.status == 200) {
+					//alert(http_request.responseText);
+					var html_text = http_request.responseText;
+					//var page = document.getElementById('html');
+					document.getElementById('html').innerHTML = http_request.responseText;
+					//insertar antes del primer elemento de pagina
+					//parent.page.document.write(html_text)
+					//var my_fragment = window.frames.page;
+					//var doc = my_fragment.document;
+				}
+			}
+		}
+		http_request.send(null)
+		// setTimeOut se ejecutaria una unica vez pasado el tiempo indicado:
+		// setTimeout('loadMessages();',5000);
+		// Pero ya esta puesto en el configurate() el setInterval() que se ejecuta
+		// siempre cada periodo de tiempo, no solo una vez, por lo que no es
+		// necesario escribir aqui esta instruccion
+	}
+	//]]>
+</script>
+
+{% endblock %}

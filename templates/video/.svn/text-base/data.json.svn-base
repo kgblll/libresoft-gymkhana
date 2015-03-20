@@ -1,0 +1,8 @@
+{
+"code": "{{ code }}",
+"video": {
+   {% with video as v %}{% include "video/raw.json" %}{% endwith %}
+   }
+
+}
+

@@ -1,0 +1,65 @@
+{% extends "backend/base.html" %}
+
+
+<!-- Bloque heredado de "base.html": 
+{% block content %} 
+<div id="content">
+	<h3> Layers </h3>
+	
+	<table summary="layers"> 
+			
+			<thead> 
+				<tr> 
+					<th scope="col">Name</th> 
+					<th scope="col">Description</th> 
+					<th scope="col"></th> 
+					<th scope="col">Icon</th> 
+				</tr> 
+			</thead>	
+ 
+			<tbody> 
+			
+	{% for node in list %}
+	  <tr>
+		<td>{{node.title}}</td> 
+		<td>{{node.description}}</td> 
+	  </tr>	
+	{% endfor %}
+	
+	{% for layer in results %}
+
+	  <tr > 
+	     
+		 <th scope="row"><a href="/backend/layers/{{layer.id}}/">{{layer.name}}</a></th> 
+		 <td>{{layer.description}}</td> 
+		 <td> <form action="/backend/layers/delete/" method="POST"> 
+		         <input type="submit" value="Delete"/>
+		         <input type="hidden" name="id" value={{layer.id}}>
+		      </form>
+		 </td>
+		 <td><img height="40px" src="/social/layer/{{layer.id}}/icon/"/></td>
+		 
+	  </tr> 
+		
+	{% endfor %}
+	
+	</tbody>		
+	</table> 
+	
+	<br />
+	<h3> Create Layer </h3>
+	
+	<form action="{{ url_create_layer }}" method="POST">
+    	<label>Name</label>:<input type="text" name="name"/><br>
+   		<label>Description</label>:<br/>
+    	<textarea name="description" cols="40"></textarea><br/>
+   		<label>Latitude</label>:<input type="text" name="latitude"/><br>
+    	<label>Longitude</label>:<input type="text" name="longitude"/><br>
+   		<input type="submit" value="Send" />
+   		<input type="hidden" name="format" value="JSON">
+	</form>
+	
+	<b> {{ msg }} </b>
+</div>
+
+{% endblock %}

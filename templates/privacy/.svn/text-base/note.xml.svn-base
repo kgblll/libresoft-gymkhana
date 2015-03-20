@@ -1,0 +1,12 @@
+{% extends "base.xml" %}
+
+{% block type %}note_privacy{% endblock %}
+{% block data %}
+       <note_privacy>
+         <code>{{ code }}</code>
+         {% with note_privacy as n %}
+         {% include "privacy/raw_note.xml" %}
+         {% endwith %}
+       </note_privacy>
+{% endblock %}
+

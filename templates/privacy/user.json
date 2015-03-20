@@ -1,0 +1,7 @@
+{
+"code": "{{ code }}",
+"user": {
+{% with user_privacy as u %}{% include "privacy/raw_user.json" %}{% endwith %}
+   }
+}
+

@@ -1,0 +1,13 @@
+{% extends "base.xml" %}
+{% load rest_tags %}
+{% block type %}photo{% endblock %}
+{% block data %}
+       <photo>
+         <code>{{ code }}</code>
+         {% with photo as p %}
+         {% include "photo/raw.xml" %}
+         {% endwith %}
+       </photo>
+       {% comments photo.id "xml" %}
+{% endblock %}
+

@@ -1,0 +1,9 @@
+[
+{%for challenge in challenges%}
+{
+"name":"{{challenge.user.person.username}}",
+"latitude":{{challenge.user.person.position.x}},
+"longitude":{{challenge.user.person.position.y}}
+},
+{%endfor%}
+]

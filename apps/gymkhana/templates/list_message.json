@@ -1,0 +1,58 @@
+{
+"code": "{{ code }}",
+{% if messages %}
+"description": "{{ description|escape|escapejs }}",
+"messages": [
+	{% for message in messages %}
+		{ "identifier": "{{ message.id }}",
+		"date": "{{ message.date|escape|escapejs }}",
+		"text": "{{ message.text|escape|escapejs }}",
+		"latitude": "{{ message.position.y }}",
+		"longitude": "{{ message.position.x }}",
+		"altitude": "{{ message.altitude }}",
+
+		{% ifnotequal message.from_manager None %}
+		"from_manager": [
+			{ "manager_name": "{{ message.from_manager.user.username|escape|escapejs }}",
+			"manager_identifier": "{{ message.from_manager.id }}"
+			},
+		],
+		{% endifnotequal %}
+
+		{% ifnotequal message.from_team None %}
+		"from_team": [
+			{ "from_team_identifier": "{{ message.from_team.id }}",
+			"from_team_name": "{{ message.from_team.group.name|escape|escapejs }}"
+			},
+		],
+		{% endifnotequal %}
+
+		{% ifnotequal message.to_manager None %}
+		"to_manager": [
+			{ "manager_name": "{{ message.to_manager.user.username|escape|escapejs }}",
+			"manager_identifier": "{{ message.to_manager.id }}"
+			},
+		{% if message.to_team.all %}
+		],
+		{% else %}
+		]
+		{% endif %}
+		{% endifnotequal %}
+
+		{% if message.to_team.all %}
+		"to_teams": [
+			{% for team in message.to_team.all %}
+			{ "to_team_identifier": "{{ team.id }}",
+			"to_team_name": "{{ team.group.name|escape|escapejs }}"
+			},
+			{% endfor %}
+		]
+		{% endif %}
+
+		},
+	{% endfor %}
+]
+{% else %}
+"description": "{{ description|escape|escapejs }}"
+{% endif %}
+}

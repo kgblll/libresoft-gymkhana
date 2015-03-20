@@ -1,0 +1,13 @@
+{% extends "base_list.json" %}
+
+{% block data %}
+"results":{
+	"sound": [
+	      {% for s in sounds %}{
+	      {% include "sound/raw.json" %}
+	      }, {% endfor %}
+	]
+}
+{% endblock %}
+
+

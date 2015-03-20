@@ -1,0 +1,18 @@
+{
+"code": "{{ code }}",
+{% if overall_standings %}
+"description": "{{ description|escape|escapejs }}",
+"users": [
+	{% for user in overall_standings %}
+	{
+	"username": "{{ user.0 }}",
+	"points": "{{ user.1 }}",
+	"num_events": "{{ user.2 }}",
+        "level": "{{ user.3 }}"
+	},
+	{% endfor %}
+]
+{% else %}
+"description": "{{ description|escape|escapejs }}"
+{% endif %}
+}

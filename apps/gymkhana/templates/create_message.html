@@ -1,0 +1,163 @@
+{% extends "gymkhana.html" %}
+
+{% block content %}
+<h1>Create Message</h1>
+
+<fieldset>
+	<legend>Message Details</legend>
+	<br>
+	<form name="form" action="/gymkhana/event/{{ event.id }}/message/create/" method="post" enctype="multipart/form-data" data-ajax="false">
+		<input type="hidden" name="from_manager_id" value="{% if from_manager %}{{ from_manager.id }}{% else %}{{ manager.id }}{% endif %}">
+		<div id="message">
+			<label for="title" class="required">To:</label>
+			{% if team_to_reply %}
+			<fieldset class="ui-grid-a" id="simple">
+	                	<div class="ui-block-a">
+					<label for="receiver">
+					<input type="radio" name="receiver" value="all" onclick="editTo()">All Teams</input></label>
+				</div>
+				<div class="ui-block-b">
+					<label for="receiver">
+					<input type="radio" name="receiver" value="a_team" checked onclick="editTo()">Only A Team</input></label>
+				
+					<div name="select_team" id="select_team">
+						<select name="to_team_id">
+							<option value="{{ team_to_reply.id }}">{{ team_to_reply.group.name }}</option>
+							{% for team in teams %}
+							{% ifnotequal team_to_reply team %}
+								<option value="{{ team.id }}">{{ team.group.name }}</option>
+							{% endifnotequal %}
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+			</fieldset>
+			{% if to_manager %}
+				<input type="hidden" name="to_manager_id" value="{{ to_manager.id }}">
+			{% endif %}
+			{% else %}
+			<fieldset class="ui-grid-a" id="simple">
+        	        	<div class="ui-block-a">
+					<label for="receiver">
+					<input type="radio" name="receiver" value="all" checked onclick="editTo()">All Teams</input></label>
+				</div>
+				<div class="ui-block-b">
+					<label for="receiver">
+					<input type="radio" name="receiver" value="a_team" onclick="editTo()">Only A Team</input></label>
+				</div>
+			</fieldset>
+			<div name="select_team" id="select_team">
+				<input type="hidden" name="to" value="all">
+			</div>
+			{% endif %}
+		</div>
+		<br></br>
+		<div>
+			<label for="text" class="required">Text:</label>
+			{% if text_to_reply %}
+			<textarea id="text" name="text" rows="10" cols="55">{{ text_to_reply }}</textarea>
+			{% else %}
+			<textarea id="text" name="text" rows="10" cols="55">My Message...</textarea>
+			{% endif %}
+		</div>
+		<br>
+		<div>
+			<input type="submit" value="Send Message"></input>
+		</div>
+		<br>
+	<form>
+</fieldset>
+
+
+{% endblock %}
+
+
+{% block contentM %}
+<h1>Create Message</h1>
+
+<fieldset>
+	<legend>Message Details</legend>
+	<br>
+	<form name="form" action="/gymkhana/event/{{ event.id }}/message/create/" method="post" enctype="multipart/form-data" data-ajax="false">
+		<input type="hidden" name="from_manager_id" value="{% if from_manager %}{{ from_manager.id }}{% else %}{{ manager.id }}{% endif %}">
+		<div id="message">
+			<label for="title" class="required">To:</label>
+			{% if team_to_reply %}
+			<fieldset class="ui-grid-a" id="simple">
+	                	<div class="ui-block-a">
+					<label for="receiver">
+					<input type="radio" name="receiver" value="all" onclick="editTo()">All Teams</input></label>
+				</div>
+				<div class="ui-block-b">
+					<label for="receiver">
+					<input type="radio" name="receiver" value="a_team" checked onclick="editTo()">Only A Team</input></label>
+				
+					<div name="select_team" id="select_team">
+						<select name="to_team_id">
+							<option value="{{ team_to_reply.id }}">{{ team_to_reply.group.name }}</option>
+							{% for team in teams %}
+							{% ifnotequal team_to_reply team %}
+								<option value="{{ team.id }}">{{ team.group.name }}</option>
+							{% endifnotequal %}
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+			</fieldset>
+			{% if to_manager %}
+				<input type="hidden" name="to_manager_id" value="{{ to_manager.id }}">
+			{% endif %}
+			{% else %}
+			<fieldset class="ui-grid-a" id="simple">
+        	        	<div class="ui-block-a">
+					<label for="receiver">
+					<input type="radio" name="receiver" value="all" checked onclick="editTo()">All Teams</input></label>
+				</div>
+				<div class="ui-block-b">
+					<label for="receiver">
+					<input type="radio" name="receiver" value="a_team" onclick="editTo()">Only A Team</input></label>
+				</div>
+			</fieldset>
+			<div name="select_team" id="select_team">
+				<input type="hidden" name="to" value="all">
+			</div>
+			{% endif %}
+		</div>
+		<br></br>
+		<div>
+			<label for="text" class="required">Text:</label>
+			{% if text_to_reply %}
+			<textarea id="text" name="text" rows="10" cols="55">{{ text_to_reply }}</textarea>
+			{% else %}
+			<textarea id="text" name="text" rows="10" cols="55">My Message...</textarea>
+			{% endif %}
+		</div>
+		<br>
+		<div>
+			<input type="submit" value="Send Message"></input>
+		</div>
+		<br>
+	<form>
+</fieldset>
+
+
+{% endblock %}
+
+
+
+{% block java_script %}
+<script type="text/javascript">
+	//<![CDATA[
+
+	function editTo(){
+		var value = $("input[name='receiver']:checked").val();
+		if (value == "a_team"){
+			$('#select_team').show();
+		}else{
+			$('#select_team').hide();
+		}
+	}
+
+	//]]>
+</script>
+{% endblock %}

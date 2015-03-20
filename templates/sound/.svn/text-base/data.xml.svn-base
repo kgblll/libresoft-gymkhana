@@ -1,0 +1,13 @@
+{% extends "base.xml" %}
+{% load rest_tags %}
+{% block type %}sound{% endblock %}
+{% block data %}
+       <sound>
+         <code>{{ code }}</code>
+         {% with sound as s %}
+         {% include "sound/raw.xml" %}
+         {% endwith %}
+       </sound>
+       {% comments sound.id "xml" %}
+{% endblock %}
+

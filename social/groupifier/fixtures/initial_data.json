@@ -1,0 +1,28 @@
+[
+{"pk": 1,
+ "model": "groupifier.groupifier",
+ "fields": {"name": "label",
+            "algorithm": "csocial.groupifier.algorithms.kmeans\nKmeansAlgorithm\np0\n.",
+            "min_dist": 2,
+            "data_set_model":"csocial.core.models\nSocial_node\np0\n.",
+            "data_set_query":"ccopy_reg\n_reconstructor\np0\n(cdjango.contrib.gis.db.models.sql.query\nGeoQuery\np1\nc__builtin__\nobject\np2\nNtp3\nRp4\n(dp5\nS'join_map'\np6\n(dp7\n(NS'core_social_node'\np8\nNNtp9\n(g8\ntp10\nssS'related_select_fields'\np11\n(lp12\nsS'extra_tables'\np13\n(tsS'select'\np14\n(lp15\nsS'quote_cache'\np16\n(dp17\nsS'rev_join_map'\np18\n(dp19\ng8\ng9\nssS'used_aliases'\np20\nc__builtin__\nset\np21\n((lp22\ng8\natp23\nRp24\nsS'order_by'\np25\n(lp26\nsS'distinct'\np27\nI00\nsS'dupe_avoidance'\np28\n(dp29\nsS'group_by'\np30\n(lp31\nsS'extra_select'\np32\ng0\n(cdjango.utils.datastructures\nSortedDict\np33\nc__builtin__\ndict\np34\n(dp35\ntp36\nRp37\n(dp38\nS'keyOrder'\np39\n(lp40\nsbsS'select_related'\np41\nI00\nsS'select_fields'\np42\n(lp43\nsS'alias_map'\np44\n(dp45\ng8\n(g8\ng8\nNNNNI00\ntp46\nssS'max_depth'\np47\nI5\nsS'standard_ordering'\np48\nI01\nsS'extra_order_by'\np49\n(tsS'default_ordering'\np50\nI01\nsS'tables'\np51\n(lp52\ng8\nasS'where_class'\np53\ncdjango.contrib.gis.db.models.sql.where\nGeoWhereNode\np54\nsS'extra_where'\np55\n(tsS'extra_select_fields'\np56\n(dp57\nsS'filter_is_sticky'\np58\nI00\nsS'aggregate'\np59\nI00\nsS'low_mark'\np60\nI0\nsS'transformed_srid'\np61\nNsS'alias_refcount'\np62\n(dp63\ng8\nI1\nssS'related_select_cols'\np64\n(lp65\nsS'start_meta'\np66\nNsS'default_cols'\np67\nI01\nsS'ordering_aliases'\np68\n(lp69\nsS'having'\np70\n(lp71\nsS'custom_select'\np72\n(dp73\nsS'table_map'\np74\n(dp75\ng8\n(lp76\ng8\nassS'extra_params'\np77\n(tsS'model'\np78\ncsocial.core.models\nSocial_node\np79\nsS'where'\np80\ng0\n(g54\ng2\nNtp81\nRp82\n(dp83\nS'connector'\np84\nS'AND'\np85\nsS'negated'\np86\nI00\nsS'children'\np87\n(lp88\ng0\n(g54\ng2\nNtp89\nRp90\n(dp91\ng84\ng85\nsg86\nI00\nsg87\n(lp92\ng0\n(g54\ng2\nNtp93\nRp94\n(dp95\ng84\ng85\nsg86\nI01\nsg87\n(lp96\n(g8\nS'type'\np97\nS'varchar(50)'\np98\nS'in'\np99\nI01\n(lp100\nS'group'\np101\naS'dyngroup'\np102\natp103\nasS'subtree_parents'\np104\n(lp105\nsbasg104\n(lp106\nsbasg104\n(lp107\nsbsS'high_mark'\np108\nNsb.",
+            "functions": "csocial.groupifier.functions.label\nLabel\np0\n.",
+            "extra_params": "(dp0\n.",
+            "min_members": 2
+           }
+            
+},
+{"pk": 2,
+ "model": "groupifier.groupifier",
+ "fields": {"name": "geo",
+            "algorithm": "csocial.groupifier.algorithms.kmeans\nKmeansAlgorithm\np0\n.",
+            "min_dist": 0.6,
+            "data_set_model":"csocial.core.models\nSocial_node\np0\n.",
+            "data_set_query":"ccopy_reg\n_reconstructor\np0\n(cdjango.contrib.gis.db.models.sql.query\nGeoQuery\np1\nc__builtin__\nobject\np2\nNtp3\nRp4\n(dp5\nS'join_map'\np6\n(dp7\n(NS'core_social_node'\np8\nNNtp9\n(g8\ntp10\nssS'related_select_fields'\np11\n(lp12\nsS'extra_tables'\np13\n(tsS'select'\np14\n(lp15\nsS'quote_cache'\np16\n(dp17\nsS'rev_join_map'\np18\n(dp19\ng8\ng9\nssS'used_aliases'\np20\nc__builtin__\nset\np21\n((lp22\ng8\natp23\nRp24\nsS'order_by'\np25\n(lp26\nsS'distinct'\np27\nI00\nsS'dupe_avoidance'\np28\n(dp29\nsS'group_by'\np30\n(lp31\nsS'extra_select'\np32\ng0\n(cdjango.utils.datastructures\nSortedDict\np33\nc__builtin__\ndict\np34\n(dp35\ntp36\nRp37\n(dp38\nS'keyOrder'\np39\n(lp40\nsbsS'select_related'\np41\nI00\nsS'select_fields'\np42\n(lp43\nsS'alias_map'\np44\n(dp45\ng8\n(g8\ng8\nNNNNI00\ntp46\nssS'max_depth'\np47\nI5\nsS'standard_ordering'\np48\nI01\nsS'extra_order_by'\np49\n(tsS'default_ordering'\np50\nI01\nsS'tables'\np51\n(lp52\ng8\nasS'where_class'\np53\ncdjango.contrib.gis.db.models.sql.where\nGeoWhereNode\np54\nsS'extra_where'\np55\n(tsS'extra_select_fields'\np56\n(dp57\nsS'filter_is_sticky'\np58\nI00\nsS'aggregate'\np59\nI00\nsS'low_mark'\np60\nI0\nsS'transformed_srid'\np61\nNsS'alias_refcount'\np62\n(dp63\ng8\nI1\nssS'related_select_cols'\np64\n(lp65\nsS'start_meta'\np66\nNsS'default_cols'\np67\nI01\nsS'ordering_aliases'\np68\n(lp69\nsS'having'\np70\n(lp71\nsS'custom_select'\np72\n(dp73\nsS'table_map'\np74\n(dp75\ng8\n(lp76\ng8\nassS'extra_params'\np77\n(tsS'model'\np78\ncsocial.core.models\nSocial_node\np79\nsS'where'\np80\ng0\n(g54\ng2\nNtp81\nRp82\n(dp83\nS'connector'\np84\nS'AND'\np85\nsS'negated'\np86\nI00\nsS'children'\np87\n(lp88\ng0\n(g54\ng2\nNtp89\nRp90\n(dp91\ng84\ng85\nsg86\nI00\nsg87\n(lp92\ng0\n(g54\ng2\nNtp93\nRp94\n(dp95\ng84\ng85\nsg86\nI01\nsg87\n(lp96\n(g8\nS'type'\np97\nS'varchar(50)'\np98\nS'in'\np99\nI01\n(lp100\nS'group'\np101\naS'dyngroup'\np102\natp103\nasS'subtree_parents'\np104\n(lp105\nsbasg104\n(lp106\nsbasg104\n(lp107\nsbsS'high_mark'\np108\nNsb.",
+            "functions": "csocial.groupifier.functions.geo\nGeo\np0\n.",
+            "extra_params": "(dp0\n.",
+            "min_members": 2
+           }
+            
+}
+]

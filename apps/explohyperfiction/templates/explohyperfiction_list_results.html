@@ -1,0 +1,30 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+	<ul>
+	{%for event in events%}
+		<li> <a href="{{event.id}}/">{{event.name}}</a></li>
+	{%endfor%}
+	</ul>
+{%endblock%}
+
+{%block main%}
+	{%if events%}
+		<h1> Select a event</h1>
+	{%else%}
+	{%if challenges%}
+	{%for challenge in challenges%}
+	<div class="content_question">
+		<h1> {{challenge.event.name}}</h1>
+		{%if player.active_manager%}
+			<p> Player: {{challenge.user.person.username}}</p>
+		{%endif%}		
+		<p> Finished at: {{challenge.date_finish}}</p>
+		<a class="button normal green" href="/explohyperfiction/results/player/{{challenge.id}}"> View </a>
+	</div>
+	{%endfor%}
+	{%else%}
+		<h1> The are not results to show</h1>
+	{%endif%}
+	{%endif%}
+{%endblock%}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mensajes Recibidos</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+	
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<script src='jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<script src='jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<link rel='stylesheet' href='jquery.mobile/jquery.mobile-1.3.2.min.css' /"+">"));	
+		}
+	</script>
+
+	<link href="/gymkhana/templates/css/play.css" rel="StyleSheet" />
+	<script src="/gymkhana/templates/jq/jq_received.js"></script>
+	
+
+	
+</head>
+<body>
+	
+	<div data-role="page">
+
+		<div data-role="header"  data-position="fixed">
+		    {% ifequal option "inbox" %}
+			<h1>Mensajes Recibidos</h1>
+		    {% else %}
+			<h1>Mensajes Enviados</h1>
+		    {% endifequal %}
+		</div>
+		
+		<br>
+		<div data-role="content" class="listSMS">
+			<ul  data-inset="true">
+			  {% for sms in messages %}
+                                <div data-role="collapsible" id="sms">
+
+					<h3>Mensaje {{forloop.counter}}<span class="ui-li-aside">{{sms.date|time:"H:i"}}</span></h3>
+
+				    {% if sms.from_manager != None %}
+                                        <p><strong>De: </strong>{{ sms.from_manager.user.username }}</p>
+				    {% elif sms.from_team != None %}
+                                        <p><strong>De: </strong>{{ sms.from_team.group.name }}</p>
+				    {% endif %}
+				    {% if sms.to_manager != None %}
+                                        <p><strong>Al manager:</strong> {{ sms.to_manager.user }}</p>
+				    {% endif %}
+				    {% if sms.to_team != None %}
+					<p><strong>Para:</strong> 
+				      {% for team in sms.to_team.all %}
+					{{ team.group.name }},
+				      {% endfor %}
+					</p>
+
+				    {% endif %}
+                                        <p><i>{{ sms.text|linebreaks }}</i></p>
+                                </div>
+			  {% endfor %}
+				
+			</ul>
+			<a href="/gymkhana/event/{{event_id}}/team/{{team_id}}/challenge/{{challenge.id}}/event_show/" data-ajax="false" data-role="button">Volver</a>
+		</div>
+		
+		<div data-role="footer" data-position="fixed">
+			<img src="/gymkhana/templates/css/images/powered_by_lgs_claro.png">
+		</div>
+
+		
+	</div>
+
+</body>
+</html>

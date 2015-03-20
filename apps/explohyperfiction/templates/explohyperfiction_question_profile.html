@@ -1,0 +1,32 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+<ul>
+	<li><a href="/explohyperfiction/events/manager/profile/{{question.event.id}}/"> Event profile</a></li>
+	<li><a href="/explohyperfiction/events/manager/{{question.event.id}}/questions/"> All questions</a></li>
+	{%if question.qr%}
+	<li><a href="/explohyperfiction/questions/manager/print/{{question.id}}/">Print QR codes</a></li>
+	{%endif%}
+	<li><a href="/explohyperfiction/questions/manager/edit/{{question.id}}/"> Edit</a></li>
+	<li><a href="/explohyperfiction/questions/manager/delete/{{question.id}}/"> Delete</a></li>
+</ul>
+{%endblock%}
+
+{%block main%}
+	<div class="content_question">
+		<h3> Id: {{question.id}}</h3>
+		<h3> {{question.text}}</h3>
+		{%if question.qr%}
+		<p>This is a QR question</p>
+		{%endif%}
+		<h4>Answers</h4>
+		{%for answer in answers%}
+			<div class="content_answer">
+				<h2> Id: {{answer.id}}</h2>
+				<h2> {{answer.text}}</h2>
+				<h4> Feedback</h4>
+				<p> {{answer.message}}</p>
+			</div>
+		{%endfor%}
+	</div>
+{%endblock%}

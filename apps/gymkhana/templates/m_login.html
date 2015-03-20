@@ -1,0 +1,60 @@
+<a!DOCTYPE html>
+<html>
+<head>
+	<title>Gymkhana Login</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	
+	
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+	
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<script src='jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<script src='jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<link rel='stylesheet' href='jquery.mobile/jquery.mobile-1.3.2.min.css' /"+">"));	
+		}
+	</script>
+
+	<link rel="stylesheet" href="/gymkhana/templates/css/login.css"/>
+
+	
+</head>
+<body>
+
+
+	<div data-role="page">
+	
+		<div data-role="content" id="content">
+		    <form action="/gymkhana/mobile/login/" method="post" enctype="multipart/form-data" data-ajax="false">
+			<label id="label">Login</label>
+			<input type="text" id="username" name="username" autofocus required="required"/>
+			<br>
+			<label id="label">Password</label>
+			<input type="password" id="password" name="password" required="required"/>
+
+			<br><br>
+			<input id="enter" type="submit" value="¡Comenzar!" />
+		
+			<br>
+			<!--<input id="registrar" type="button" value="Regístrate" />-->
+			<a href="/gymkhana/new_user/" data-role="button" rel="external">Resgístrate</a>
+			<br>
+		   </form>
+
+		</div>
+		
+		
+		<div data-role="footer" data-position="fixed">
+			<img src="/gymkhana/templates/css/images/powered_by_lgs_claro.png">
+		</div>
+		
+
+	</div>
+<script src="/gymkhana/templates/jq/jq_login.js"></script>
+</body>
+</html>
+

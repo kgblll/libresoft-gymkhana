@@ -1,0 +1,10 @@
+{
+"code": "{{ code }}",
+"description": "{{ description|escape|escapejs }}",
+{% if solution %}
+"solution": "{{ solution|escape|escapejs }}",
+{% endif %}
+"message": "{{ message|escape|escapejs }}",
+"next_challenge_id": "{{ next_challenge_id }}",
+"is_last_challenge": "{{ is_last_challenge|escape|escapejs }}"
+}

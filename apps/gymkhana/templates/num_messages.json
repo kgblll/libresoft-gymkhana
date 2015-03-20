@@ -1,0 +1,5 @@
+{
+"code": "{{ code }}",
+"description": "{{ description|escape|escapejs }}",
+"num_messages": "{{ num_messages|escape|escapejs }}"
+}

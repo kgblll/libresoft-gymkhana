@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gymkhana Rankings</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+	
+	<script type="text/javascript">
+		if(typeof jQuery=='undefined'){
+			document.write(unescape("<script src='jquery.mobile/jquery-1.9.1.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<script src='jquery.mobile/jquery.mobile-1.3.2.min.js' type='text/javascript'></scri"+"pt>"));
+			document.write(unescape("<link rel='stylesheet' href='jquery.mobile/jquery.mobile-1.3.2.min.css' /"+">"));	
+		}
+	</script>
+
+	<link href="/gymkhana/templates/css/play.css" rel="StyleSheet" />
+        <link href="/gymkhana/templates/css/rankings.css" rel="StyleSheet" />
+	
+	
+</head>
+<body>
+	
+	<div data-role="page" id="rankings">
+	
+		<div data-role="header"  data-position="fixed">
+			<h1>Rankings</h1>
+		</div>
+
+		<div data-role="content">
+		
+			<h3>Tu Ranking</h3>
+			<section id="myRanking">
+   			  {% if user_standings.3 == "Beginner" %}
+				<p><img src="/gymkhana/templates/images/Beginner.png"> {{user_standings.3}}</p>
+			  {% elif user_standings.3 == "Amateur" %}
+			        <p><img src="/gymkhana/templates/images/Amateur.png"> {{user_standings.3}}</p>
+			  {% elif user_standings.3 == "Advanced" %}
+			        <p><img src="/gymkhana/templates/images/Advanced.png"> {{user_standings.3}}</p>
+			  {% elif user_standings.3 == "Professional" %}
+			        <p><img src="/gymkhana/templates/images/Professional.png"> {{user_standings.3}}</p>
+			  {% elif user_standings.3 == "Boss" %}
+			        <p><img src="/gymkhana/templates/images/Boss.png"> {{user_standings.3}}</p>
+			  {% elif user_standings.3 == "Major" %}
+			        <p><img src="/gymkhana/templates/images/Major.png"> {{user_standings.3}}</p>
+			  {% elif user_standings.3 == "Master" %}
+			        <p><img src="/gymkhana/templates/images/Master.png"> {{user_standings.3}}</p>
+		 	  {% endif %}
+			</section>
+
+			<p>{{ user_standings.0 }} - Posición {{ position }}</p>
+			<p>{{ user_standings.1 }} points - {{ user_standings.2 }} gymkhanas</p>
+		
+			<h3>Condecoraciones:</h3>
+			<section id="condecoraciones">
+				<p><img src="/gymkhana/templates/images/Beginner.png" id="beginner"> Beginner</p>
+                                <p><img src="/gymkhana/templates/images/Amateur.png" id="amateur"> Amateur</p>
+                                <p><img src="/gymkhana/templates/images/Advanced.png" id="advanced"> Advanced</p>
+                                <p><img src="/gymkhana/templates/images/Professional.png" id="professional"> Professional</p>
+                                <p><img src="/gymkhana/templates/images/Boss.png" id="boss"> Boss </p>
+                                <p><img src="/gymkhana/templates/images/Major.png" id="major"> Major</p>
+                                <p><img src="/gymkhana/templates/images/Master.png" id="master"> Master</p>
+			</section>
+
+			<h3>Top 10:</h3>
+			<section id="top10">
+			   {% for user in overall_standings %}
+				<img src="/gymkhana/templates/images/Beginner.png" id="star">  {{ user.0 }}<br>
+				<p>{{ user.1 }} puntos</p>
+			   {% endfor %}
+			</section>
+
+		
+		</div>
+		
+		<div data-role="footer" data-position="fixed">
+			<img src="/gymkhana/templates/css/images/powered_by_lgs_claro.png">
+		</div>
+		
+	</div>
+
+</body>
+</html>

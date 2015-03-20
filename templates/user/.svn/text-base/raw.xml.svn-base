@@ -1,0 +1,37 @@
+         {% if u.name %}
+         <name>{{ u.name }}</name>
+         {% endif %}
+         {% if u.first_name %}
+         <first_name>{{ u.first_name }}</first_name>
+         {% endif %}
+         {% if u.last_name %}
+         <last_name>{{ u.last_name }}</last_name>
+         {% endif %}
+         {% if u.username %}
+         <username>{{ u.username }}</username>
+         {% endif %}
+         {% if u.birthday %}
+         <birthday>{{ u.birthday }}</birthday>
+         {% endif %}
+         {% if u.status %}
+         <status>
+            {% if u.status.message %}
+            <message>{{ u.status.message }}</message>
+            {% endif %}
+            {% if u.status.since %}
+            <since>{{ u.status.since }}</since>
+            {% endif %}
+         </status>
+         {% endif %}
+         {% if u.email %}
+         <email>{{ u.email }}</email>
+         {% endif %}
+         {% ifnotequal u.avatar None %}
+         <avatar>
+            <photo_id>{{ u.avatar.id }}</photo_id>
+            <photo_url>{{ u.avatar.url }}</photo_url>
+         </avatar>
+         {% endifnotequal %}
+         {% with u as n %}
+         {% include "node/raw.xml" %}
+         {% endwith %}

@@ -1,0 +1,35 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+<li><a href="/explohyperfiction/events/manager/profile/{{event.id}}/"> Event profile</a></li>
+{%if event.qr%}
+	<li><a href="/explohyperfiction/events/manager/print/{{event.id}}/"> Print QR codes </a></li>
+{%endif%}
+<li><a href="/explohyperfiction/events/manager/{{event.id}}/questions/add/"> Add question</a></li>
+<li><a href="/explohyperfiction/events/manager/{{event.id}}/map/"> View map</a></li>
+{%endblock%}
+
+{%block main%}
+	{%if questions%}
+		{%for question in questions%}
+		<div class="content_question">
+			<h3> Id: {{question.id}}</h3>
+			<h3> {{question.text}}</h3>
+			{%if question.qr%}
+			<p> This one is a QR code question</p>
+			{%endif%}
+			<h4> Answers </h4>
+			{%for answer in answers%}
+				{%ifequal answer.question.id question.id%}
+					<p>{{answer.text}}</p>
+				{%endifequal%}
+			{%endfor%}
+			<a class="button normal green" href="/explohyperfiction/questions/manager/view/{{question.id}}/"> View</a>
+			<a class="button normal green" href="/explohyperfiction/questions/manager/edit/{{question.id}}/"> Edit</a><br><br>
+			<a class="button normal red" href="/explohyperfiction/questions/manager/delete/{{question.id}}/"> Delete</a>
+		</div>
+		{%endfor%}
+	{%else%}
+		<h1> There are not questions</h1>
+	{%endif%}
+{%endblock%}

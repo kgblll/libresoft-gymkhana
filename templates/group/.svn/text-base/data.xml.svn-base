@@ -1,0 +1,13 @@
+{% extends "base.xml" %}
+{% load rest_tags %}
+{% block type %}group{% endblock %}
+{% block data %}
+       <group>
+         <code>{{ code }}</code>
+         {% with group as g %}
+         {% include "group/raw.xml" %}
+         {% endwith %}
+       </group>
+       {% comments group.id "xml" %}
+{% endblock %}
+

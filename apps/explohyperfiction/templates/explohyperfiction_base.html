@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-tracsitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
+	<head>
+		<Title> Explohyperfiction</Title>
+		{%block scripts%}
+
+		{%endblock%}
+		<link href="/explohyperfiction/css/Styles.css" rel="stylesheet" type="text/css" />
+		<meta name="author" content="Guillermo Méndez de Vigo">
+		<meta name="keywords" content="game, LibreGeoSocial, Explorehyperfiction">
+	</head>
+	
+	<body onload="initialize()">
+		<div class="content">
+			<div class="login">
+				{%if login%}
+					You are loged in LibreGeoSocial as {{player.person.username}} (<a href="/explohyperfiction/user/logout">Logout</a>).
+				{%else%}
+					You are not authenticated in  LibreGeoSocial (<a href="/explohyperfiction/user/login/">Login</a>).
+				{%endif%}
+			</div>
+			
+			
+			
+			<div class="header">
+				<a href="/explohyperfiction/home/" class="header"> ExploHyperfiction </a>
+			</div>
+			{%if login%}
+				<div class="selectView">
+					{%if player%}
+					<input type="hidden" name="view"/>
+						<form method="post" action="/explohyperfiction/user/view/"> {%csrf_token%}
+							Change view: 
+							<select id="view" name="view" onChange="this.form.submit()">
+								{%if player.is_superuser%}
+								<option value="superuser"
+								{%if player.active_superuser%}
+								selected
+								{%endif%}> Superuser view</option>
+								{%endif%}
+								{%if player.is_manager%}
+								<option value="manager"{%if player.active_manager%}
+								selected
+								{%endif%}> Manager view</option>
+								{%endif%}
+								{%if player.is_player%}
+								<option value="player"{%if player.active_player%}
+								selected
+								{%endif%}> Player view</option>
+								{%endif%}
+							</select>
+							</style>
+						</form>
+					{%else%}
+						You are not user of ExploHyperfiction (<a href="/explohyperfiction/user/enroll/">enroll</a>).
+					{%endif%}
+				</div>
+			{%endif%}
+
+    
+				<ul class="mi-menu">
+					<li> <a href="/explohyperfiction/home/"> Home </a></li>
+					{%if login%}
+					{%if not player%}
+						<li> <a href="/explohyperfiction/user/enroll/">Enroll</a></li>
+					{%endif%}
+						<li> <a href="/explohyperfiction/profile/"> Profile </a></li>
+					{%endif%}
+					{%if player.active_player%}
+						<li> 
+							<a>Groups</a> 
+							<ul>
+								<li> <a href="/explohyperfiction/groups/user/view/">My groups</a></li>
+								<li> <a href="/explohyperfiction/groups/user/all/"> All groups</a></li>
+							</ul>
+						</li>
+						
+						<li>
+							<a> Events</a>
+							<ul>
+								<li> <a href="/explohyperfiction/events/user/view/"> My events</a></li>
+								<li> <a href="/explohyperfiction/events/user/groups/"> Events by group</a></li>
+								<li> <a href="/explohyperfiction/events/user/continue"> Continue event</a></li>
+							</ul>
+						</li>
+						<li> <a href="/explohyperfiction/results/player/"> Results </a></li>
+					{%endif%}
+					{%if player.active_manager%}
+
+						<li> 
+							<a>Groups</a> 
+							<ul>
+								<li> <a href="/explohyperfiction/groups/manager/create/">Create</a></li>
+								<li> <a href="/explohyperfiction/groups/manager/view/"> My groups</a></li>
+							</ul>
+						</li>
+						<li>
+							<a> Events</a>
+							<ul>
+								<li> <a href="/explohyperfiction/events/manager/create/"> New event</a></li>
+								<li> <a href="/explohyperfiction/events/manager/view/"> My events</a></li>
+							</ul>
+						</li>
+						<li>
+							<a> Results</a>
+							<ul>
+								<li> <a href="/explohyperfiction/results/manager/all/"> All results</a></li>
+								<li> <a href="/explohyperfiction/results/manager/events/"> Results by events</a></li>
+							</ul>
+						</li>
+						<li><a href="/explohyperfiction/monitoring/"> Monitoring </a></li>
+							
+					{%endif%}
+					{%if player.active_player or player.active_manager%}
+						<li> <a href="/explohyperfiction/notices/"> Notices ({{number_of_notices}})</a></li>
+					{%endif%}
+					{%if player.active_superuser%}
+						<li>
+							<a>Admin</a>
+							<ul>
+								<li> <a href="/explohyperfiction/admin/users/">Users</a></li>
+								<li> <a href="/explohyperfiction/admin/groups/">Groups</a></li>
+							</ul>
+						</li>
+						<li> <a href="/explohyperfiction/petitions/"> Petitions ({{number_of_petitions}})</a></li>
+					{%endif%}
+					
+				</ul>
+
+			<div class="center">
+				<div class="verticalMenu">
+					{%block left%}
+					<ul>
+						{%if not login%}
+						<li><a href="/explohyperfiction/user/login/"> Login</a></li>
+						<li><a href="/explohyperfiction/user/register/"> Register in LGS</a></li>
+						{%else%}
+							{%if player%}
+								{%if superuser%}
+								<li> <a href="/explohyperfiction/user/superuser/" onclick="if(!confirm('Are you sure to become superuser'))return false">Become superuser</a></li>
+								{%endif%}  
+							{%else%}
+								<li> <a href="/explohyperfiction/user/enroll/"> Enroll ExploHyperfiction</a></li>
+							{%endif%}
+						<li><a href="/explohyperfiction/user/logout/">Logout</a></li>
+						{%endif%}
+						
+						
+					</ul>
+				{%endblock%}
+				</div>
+				
+				<div class="main_content">
+					{%block main%}
+						<h1>Welcome to ExploHyperfiction.</h1>
+					{%endblock%}
+				</div>
+			</div>
+		
+			<div class="footer">
+				Explohyperfiction: Crea tu propia aventura. <br>
+				Guillermo Méndez de Vigo
+			</div>
+		</div>	
+	</body>
+</html>

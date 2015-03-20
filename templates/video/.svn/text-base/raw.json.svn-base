@@ -1,0 +1,38 @@
+{% ifnotequal v.name None %}
+"name": "{{ v.name|escapejs }}",
+{% endifnotequal %}
+{% ifnotequal v.description None%}
+"description": "{{ v.description|escapejs }}",
+{% endifnotequal %}
+{% ifnotequal v.uploader None %}
+"uploader" : {
+   {% with v.uploader as u %}{% include "user/raw.json" %}{% endwith %}
+},
+{% endifnotequal %}
+{% ifnotequal v.photo_url None %}
+	"photo_url": "{{ v.photo_url|escapejs}}",
+{% endifnotequal %}
+
+{% ifequal v.id None %}
+	"external_info": {
+{% else %}
+	"extra_info": {
+{% endifequal %}
+	
+	   {% ifnotequal v.info_url None %}
+	   	"info_url": "{{ v.info_url }}",
+	   {% endifnotequal %}
+	   
+	   {% ifnotequal v.video_url None %}
+	   	"video_url": "{{ v.video_url }}",
+	   {% endifnotequal %}
+	   
+	   {% ifnotequal v.video_thumb_url None %}
+	   	"video_thumb_url": "{{ v.video_thumb_url }}"
+	   {% endifnotequal %}
+		
+		
+	},
+
+
+{% with v as n%}{% include "node/raw.json" %}{% endwith %}

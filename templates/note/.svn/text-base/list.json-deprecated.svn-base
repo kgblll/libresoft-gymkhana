@@ -1,0 +1,12 @@
+{% extends "base_list.json" %}
+
+{% block data %}
+"results":{
+	"note": [
+	      {% for n in notes%}{
+	      {% include "note/raw.json" %}
+	      }, {% endfor %}
+	   ]
+}
+{% endblock %}
+

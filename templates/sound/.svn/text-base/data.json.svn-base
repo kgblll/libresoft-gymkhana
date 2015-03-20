@@ -1,0 +1,9 @@
+{% load rest_tags %}
+{
+"code": "{{ code }}",
+"sound": {
+   {% with sound as s %}{% include "sound/raw.json" %}{% endwith %}
+   },
+{% comments sound.id "json" %}
+}
+

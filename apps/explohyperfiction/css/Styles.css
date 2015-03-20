@@ -1,0 +1,525 @@
+@charset "UTF-8";
+/* CSS document */
+
+body {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size:1em;
+	font-style:normal;
+	line-height: 20px;
+	color: #000000;
+	background-color: #E6E6E6;
+	margin:0px;
+	padding:0px;
+}
+
+#map{
+	padding-top:50px;
+}
+.content {
+	background-color: #F5ECCE;
+	height: 100%;
+	width: 900px;
+	margin-left:auto;
+	margin-right:auto;	
+}
+
+.login{
+	background-color:#FFFFE0;
+	height:20px;
+	width:890px;
+	padding-right:10px;
+	text-align: right;
+	font-size:0.8em;
+	color: #000000;
+	font-style: italic;
+}
+
+.login a{
+	font: bold;
+    text-decoration:none;
+    color: #33CCFF;
+}
+.login a:visited{
+	color: #33CCFF;
+}
+
+.selectView{
+	background-color:#FFFFE0;
+	height:30px;
+	width:890px;
+	padding-right:10px;
+	text-align: right;
+	font-size:0.8em;
+	color: #000000;
+	font-style: italic;
+}
+
+.header{
+	background-color: #D8F6CE;
+	height:120px;
+	font-size:2.5em;
+	color:#DC143C;
+	line-height: 120px;
+}
+.header a{
+	font: bold;
+    text-decoration:none;
+    color:#DC143C;
+}
+.header a:hover{
+	color:#DC143C;
+}
+.header a:visited{
+	color:#DC143C;
+}
+
+.center{
+	margin:0px;
+	padding:0px;
+	background-color: #F5ECCE;
+	width:900px;
+	height:100%;	
+}
+
+.verticalMenu{
+	float: left;
+	width: 190px;
+	margin: 0px;
+	padding: 10px;
+	background-color:#F5ECCE;
+	height:100%;
+}
+
+/** Menu vertical de la izquierda **/
+.verticalMenu ul {
+	list-style:none;
+	padding: 10px;
+	margin: 0px;
+}
+
+.verticalMenu li,.verticalMenu a:link, .verticalMenu a:visited, .verticalMenua:hover {
+	display: block;
+	font: bold 0.9em Verdana, Arial, Helvetica, sans-serif;
+	color: #9A1212;
+	text-decoration: none;
+	text-align: left;
+	width: 170px;
+	height: 3em;
+}
+
+.verticalMenu a:hover{
+	background:#F5ECCE;
+	color:#dc4d1b;
+}
+
+ /* el menú en si mismo */
+  .mi-menu  {
+    border-radius: 5px;
+    list-style-type: none;
+    margin: 0 auto; /* si queremos centrarlo */
+    padding: 0;
+    /* la altura y su ancho dependerán de los textos */
+    height:40px; 
+    width: 900px;
+    /* el color de fondo */
+    background: #555;
+    background: -moz-linear-gradient(#555,#222);
+    background: -webkit-linear-gradient(#555,#222);
+    background: -o-linear-gradient(#555,#222);
+    background: -ms-linear-gradient(#555,#222);
+    background: linear-gradient(#555,#222);
+  }
+
+  /* si es necesario, evitamos que Blogger de problemas con los saltos de línea cuando escribimos el HTML */
+  .mi-menu  br { display:none; }
+
+  /* cada item del menu */
+  .mi-menu  li {
+    display: block;
+    float: left; /* la lista se ve horizontal */
+    height: 40px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  .mi-menu li a {
+    border-left: 1px solid #000;
+    border-right: 1px solid #666;
+    color: #EEE;
+    display: block;
+    font-family: Tahoma;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 28px;
+    padding: 0 14px;
+    margin: 6px 0;
+    text-decoration: none;
+    /* animamos el cambio de color de los textos */
+    -webkit-transition: color .2s ease-in-out;
+    -moz-transition: color .2s ease-in-out;
+    -o-transition: color .2s ease-in-out;
+    -ms-transition: color .2s ease-in-out;
+    transition: color .2s ease-in-out;
+  }
+  /* eliminamos los bordes del primer y el último */
+  .mi-menu li:first-child a { border-left: none; }
+  .mi-menu li:last-child a{ border-right: none; }
+  /* efecto hover cambia el color */
+  .mi-menu li:hover > a { color: Crimson; }
+
+  /* los submenús */
+  .mi-menu ul {
+    border-radius: 0 0 5px 5px;
+    left: 0;
+    margin: 0;
+    opacity: 0; /* no son visibles */
+    position: absolute;
+    top: 40px; /* se ubican debajo del enlace principal */
+    /* el color de fondo */
+    background: #222;
+    background: -moz-linear-gradient(#222,#555);
+    background: -webkit-linear-gradient(#22,#555);
+    background: -o-linear-gradient(#222,#555);
+    background: -ms-linear-gradient(#222,#555);
+    background: linear-gradient(#222,#555);
+    /* animamos su visibildiad */
+    -moz-transition: opacity .25s ease .1s;
+    -webkit-transition: opacity .25s ease .1s;
+    -o-transition: opacity .25s ease .1s;
+    -ms-transition: opacity .25s ease .1s;
+    transition: opacity .25s ease .1s;
+  }
+  /* son visibes al poner el cursor encima */
+  .mi-menu li:hover > ul { opacity: 1; }
+
+   /* cada un ode los items de los submenús */
+  .mi-menu ul li {
+    height: 0; /* no son visibles */
+    overflow: hidden;
+    padding: 0;
+    width:150px;
+    margin:0;
+    list-style:none;
+    /* animamos su visibildiad */
+    -moz-transition: height .25s ease .1s;
+    -webkit-transition: height .25s ease .1s;
+    -o-transition: height .25s ease .1s;
+    -ms-transition: height .25s ease .1s;
+    transition: height .25s ease .1s;
+  }
+  .mi-menu li:hover > ul li {
+    height: auto; /* los mostramos */
+    overflow: visible;
+    padding: 0;
+  }
+  .mi-menu ul li a {
+  	text-align:left;
+  	border: none;
+    border-bottom: 1px solid #111;
+    margin: 0;
+    /* el ancho dependerá de los textos a utilizar */
+    padding: 5px;
+    width: auto;
+  }
+  /* el último n otiene un borde */
+  .mi-menu ul li:last-child a { border: none; }
+
+
+
+
+.main_content{
+	margin-left:220px;
+	min-height:600px;
+	padding:15px;
+	width: 650px;
+	background-color: #FFFFE0;
+	margin-right: 0px;
+	overflow: hidden;	
+}
+
+.error{
+	text-align: center;
+	color: red;
+	font-size:3em;
+	line-height: 3.5em;
+}
+
+
+.footer{
+	clear: both;
+	margin: 0px;
+	padding:5px;
+	height:50px;
+	text-align: center;
+	font-size:1em;
+	font-style:italic; 
+	background-color: #D8F6CE;	
+}
+
+
+.button, .button:visited { /* botones genéricos */
+padding: 5px;
+color: #FFFFFF;
+text-decoration: none;
+-moz-border-radius: 6px;
+-webkit-border-radius: 6px;
+-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+border-top: 0px;
+border-left: 0px;
+border-right: 0px;
+border-bottom: 1px solid rgba(0,0,0,0.25);
+cursor:pointer;
+}
+
+
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+border: none;
+}
+
+.normal.button, .normal.button:visited{
+	font-size:1em;
+	text-align:center;
+}
+.big.button, .big.button:visited{
+	font-size:4em;
+	text-align:center;	
+}
+
+.red.button, .red.button:visited { background-color: #E62727; }
+.red.button:hover{ background-color: #CF2525; }
+
+.green.button, .green.button:visited { background-color: #91BD09; }
+.green.button:hover{ background-color: #749A02; }
+
+
+/** Formularios con fieldset **/
+fieldset {
+	background: #F5F5F5; /*whitesmoke;*/
+	margin-right: 50px;
+	margin-left: 50px;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	font-size: 14px;
+}
+
+legend {
+	color: black;
+	background: silver;
+	font-family: sans-serif;
+	padding: 0.2em 1em;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: sans-serif;
+	padding: 0.2em 1em;
+}
+
+label {
+	width: 10em;
+	float: left;
+	text-align: left;
+	padding-top: 0.2em;
+	margin-right: 10px;
+	display: block;
+	font-size: 14px;
+}
+
+
+select, textarea, input, submit {
+	margin-left: 0.5em;
+}
+
+label {
+	margin-left: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+input {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	font-size: 14px;
+}
+form p{
+	color: red;
+	text-align: center
+}
+
+#fieldset_content {
+	margin-right: 10px;
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 14px;
+}
+
+#fieldset_content ul {
+	margin-right: 10px;
+	margin-left: -20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 14px;
+}
+
+#fieldset_content li {
+	margin-top: 10px;
+}
+
+#fieldset_content ol {
+	margin-right: 10px;
+	margin-left: -20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 14px;
+}
+
+.content_person{
+	margin:10px;
+	padding:15px;
+	background-color: #CEF6F5;
+	width:600px;		
+}
+
+.person_name{
+	padding:20px;
+	width:auto;
+	font-size: 2em;
+	height:auto;
+	text-align: center;
+}
+
+.person_data{
+	padding:20px;
+	width:auto;
+	font-size: 1em;
+	height:auto;
+	font-style: italic;
+	text-align: left;
+}
+.person_views{
+	padding:20px;
+	width:auto;
+	font-size: 1em;
+	height:auto;
+	font-style: italic;
+	text-align: center;
+}
+
+.content_petition{
+	margin:25px;
+	padding:25px;
+	background-color: #CEF6F5;
+	width:550px;
+	font-size: 1em;
+	height:auto;
+	color: black;
+	font-style: italic;
+	text-align: center;
+	border:3px solid black;
+}
+
+.date{
+	padding-right:10px;
+	text-align: right;
+	font-size:0.8em;
+	font-style: italic;
+}
+
+.content_group{
+	margin:10px;
+	padding:15px;
+	background-color: #CEF6F5;
+	width:600px;
+	text-align:center;		
+}
+.content_group h3{
+	font-size:2em;
+	font-style: bold;
+	text-align:center;
+}
+.content_group h4{
+	font-size: 0.9em;
+	text-decoration: underline;
+	text-align:left;
+}
+.content_group p{
+	font-size:0.9em;
+	font-style: italic;
+	text-align: left;
+	padding-left: 10px;
+}
+.content_group h2{
+	padding:20px;
+	width:auto;
+	font-size: 2em;
+	height:auto;
+	text-align: center;
+}
+
+.content_question{
+	margin:10px;
+	padding:15px;
+	background-color: #CEF6F5;
+	width:600px;
+	text-align:center;		
+}
+.content_question h3{
+	font-size:1.5em;
+	text-align:center;
+	font-style:italic
+}
+.content_question h4{
+	font-size: 1.2em;
+	text-decoration: underline;
+	text-align:center;
+	font-style:bold;
+}
+.content_question p{
+	font-size:1em;
+	font-style: italic;
+	text-align: left;
+	padding-left: 10px;
+}
+
+.content_answer {
+	margin:10px;
+	padding:15px;
+	background-color: #F3F781;
+	width:550px;
+	text-align:center;		
+}
+
+.content_answer h2 {
+	font-size: 1.2em;
+	text-align:center;
+	font-style:italic;
+}
+.content_answer h3 {
+	font-size: 1.1em;
+	text-decoration: underline;
+	text-align:center;
+	font-style:bold;
+}
+.content_asnwer h4 {
+	font-size: 1em;
+	text-decoration: underline;
+	text-align:left;
+	font-style:bold;
+}
+.content_answer h5 {
+	font-size: 1em;
+	text-align:left;
+	font-style:bold;	
+}
+.content_answer p{
+	font-size:1em;
+	font-style: italic;
+	text-align: left;
+	padding-left: 10px;
+}

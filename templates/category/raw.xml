@@ -1,0 +1,12 @@
+
+{% ifnotequal c.id None %}
+	<id>{{ c.id }}</id>
+{% endifnotequal %}
+
+{% ifnotequal c.name None %}
+	<name>{{ c.name }}</name>
+{% endifnotequal %}
+
+{% ifnotequal c.desc None %}
+	<description>{{ c.desc }}</description>
+{% endifnotequal %}

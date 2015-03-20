@@ -1,0 +1,12 @@
+{% extends "base.xml" %}
+
+{% block type %}sound_privacy{% endblock %}
+{% block data %}
+       <sound_privacy>
+         <code>{{ code }}</code>
+         {% with sound_privacy as s %}
+         {% include "privacy/raw_sound.xml" %}
+         {% endwith %}
+       </sound_privacy>
+{% endblock %}
+

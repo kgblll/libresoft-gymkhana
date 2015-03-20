@@ -1,0 +1,33 @@
+{% extends "base.xml" %}
+
+{% block type %}{{ privacy.type }}_privacy{% endblock %}
+{% block data %}
+       <{{ privacy.type }}_privacy>
+         <code>{{ code }}</code>
+         {% ifequal privacy.type "person" %}
+         	{% with privacy as u %}
+         	{% include "privacy/raw_user.xml" %}
+         	{% endwith %}
+         {% endifequal %}
+         {% ifequal privacy.type "photo" %}
+         	{% with privacy as p %}
+         	{% include "privacy/raw_photo.xml" %}
+         	{% endwith %}
+         {% endifequal %}
+         {% ifequal privacy.type "note" %}
+         	{% with privacy as n %}
+         	{% include "privacy/raw_note.xml" %}
+         	{% endwith %}
+         {% endifequal %}
+         {% ifequal privacy.type "sound" %}
+         	{% with privacy as s %}
+         	{% include "privacy/raw_sound.xml" %}
+         	{% endwith %}
+         {% endifequal %}
+         {% ifequal privacy.type "layer" %}
+         	{% with privacy as l %}
+         	{% include "privacy/raw_layer.xml" %}
+         	{% endwith %}
+         {% endifequal %}
+       </{{ privacy.type}}_privacy>
+{% endblock %}

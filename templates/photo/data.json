@@ -1,0 +1,9 @@
+{% load rest_tags %}
+{
+"code": "{{ code }}",
+"photo": {
+   {% with photo as p %}{% include "photo/raw.json" %}{% endwith %}
+   },
+{% comments photo.id "json" %}
+}
+

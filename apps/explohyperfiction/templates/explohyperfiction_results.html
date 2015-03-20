@@ -1,0 +1,33 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+
+{%endblock%}
+
+{%block main%}
+	<div class="content_question">
+		<h3> {{challenge.event.name}}</h3>
+		<p> Started at: {{challenge.date}}</p>
+		{%if challenge.finish%}
+		<p> Challenge finished</p>
+		{%else%}
+		<p> Challenge in course</p>
+		{%endif%}
+		{%for response in responses%}
+			<div class="content_answer"> 
+				<div class="date">
+					{{response.date}}
+				</div>	
+				<h2> {{response.question.text}}</h2>
+				<h5> Your answer was: {{response.answer.text}}</h5>
+				<p> {{response.answer.message}}</p>
+			</div>
+		{%endfor%}
+		{%if challenge.finish%}
+		<p> Finished at: {{challenge.date_finish}}</p>
+		{%endif%}
+		{%ifequal player.id challenge.event.manager.id%}
+			<a class="button normal red" href="delete/" onclick="if(!confirm('Are you sure to delete this result?'))return false">Delete</a>
+		{%endifequal%}
+	</div>
+{%endblock%}

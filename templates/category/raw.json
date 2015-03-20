@@ -1,0 +1,11 @@
+{% ifnotequal c.id None %}
+"id": "{{ c.id }}",
+{% endifnotequal %}
+
+{% ifnotequal c.name None %}
+"name": "{{ c.name }}",
+{% endifnotequal %}
+
+{% ifnotequal c.desc None %}
+"description": "{{ c.desc}}",
+{% endifnotequal %}

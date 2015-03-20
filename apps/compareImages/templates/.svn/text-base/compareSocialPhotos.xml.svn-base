@@ -1,0 +1,11 @@
+{% extends "base.xml" %}
+
+{% block type %}compare_social_nodes{% endblock %}
+{% block data %}
+<compare_nodes>
+   <layer_id> {{ layer_id }} </layer_id>
+   <photo_id> {{ photo_id }} </photo_id>
+   <matched> {{ matched }} </matched>
+   <goodness> {{ goodness }} </goodness>
+</compare_nodes>
+{% endblock %}

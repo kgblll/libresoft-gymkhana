@@ -1,0 +1,12 @@
+{% ifnotequal n.title None %}
+"title": "{{ n.title|escapejs }}",
+{% endifnotequal %}
+{% ifnotequal n.text None %}
+"text": "{{ n.text|escapejs }}",
+{% endifnotequal %}
+{% if n.uploader %}
+"uploader" :{
+{% with n.uploader as u %}{% include "user/raw.json" %}{% endwith %}
+},
+{% endif %}
+{% include "node/raw.json" %}

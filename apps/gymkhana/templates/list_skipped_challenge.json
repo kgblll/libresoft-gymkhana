@@ -1,0 +1,18 @@
+{
+"code": "{{ code }}",
+{% if skipped_challenges %}
+"description": "{{ description|escape|escapejs }}",
+"skipped_challenges": [
+{% for skipped_challenge in skipped_challenges %}
+{% ifequal skipped_challenge.challenge.event event %}
+{ "challenge_id": "{{ skipped_challenge.challenge.id }}",
+"max_score": "{{ skipped_challenge.challenge.max_score|escape|escapejs }}",
+"number": "{{ skipped_challenge.challenge.number|escape|escapejs }}"
+},
+{% endifequal %}
+{% endfor %}
+]
+{% else %}
+"description": "{{ description|escape|escapejs }}"
+{% endif %}
+}

@@ -1,0 +1,18 @@
+{
+"code": "{{ code }}",
+"description": "{{ description|escape|escapejs }}",
+"challenge": "{{ challenge|escape|escapejs }}",
+"max_score": "{{ max_score|escape|escapejs }}",
+"challenge_type": "{{ challenge_type|escape|escapejs }}",
+"augmented_reality": "{{ augmented_reality|escape|escapejs }}",
+"can_skip": "{{ can_skip|escape|escapejs }}",
+"number": "{{ number|escape|escapejs }}",
+"num_clues": "{{ num_clues|escape|escapejs }}",
+{% ifequal challenge_type 3 %}
+"target_latitude": "{{ target_place.y }}",
+"target_longitude": "{{ target_place.x }}",
+"distance_to_target_place": "{{ distance_to_target_place|escape|escapejs }}",
+"mark_place": "{{ mark_place|escape|escapejs }}",
+{% endifequal %}
+"picture": "{{ picture|escape|escapejs }}"
+}

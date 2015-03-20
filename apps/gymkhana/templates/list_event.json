@@ -1,0 +1,38 @@
+{
+"code": "{{ code }}",
+{% if events %}
+"description": "{{ description|escape|escapejs }}",
+"events": [
+	{% for event in events %}
+	{% if not event.is_closed %}
+	{ "identifier": "{{ event.id }}",
+	"title": "{{ event.title|escape|escapejs }}",
+	"celebration": "{{ event.celebration|escape|escapejs }}",
+	"place": "{{ event.place|escape|escapejs }}",
+	"language": "{{ event.language|escape|escapejs }}",
+	"difficulty": "{{ event.difficulty|escape|escapejs }}",
+	"score": "{{ event.score|escape|escapejs }}",
+	"configurate_teams": "{{ event.configurate_teams|escape|escapejs }}",
+	"welcome_text": "{{ event.welcome_text|escape|escapejs }}",
+	"goodbye_text": "{{ event.goodbye_text|escape|escapejs }}",
+	"is_closed": "{{ event.is_closed|escape|escapejs }}",
+
+	"num_challenges": "{{ event.challenge_set.all|length }}",
+
+	{% for manager in managers %}
+	{% for aux_event in manager.events.all %}
+	{% ifequal event aux_event %}
+	"manager_id": "{{ manager.id }}",
+	"manager_name": "{{ manager.user.username|escape|escapejs }}"
+	{% endifequal %}
+	{% endfor %}
+	{% endfor %}
+
+	},
+	{% endif %}
+	{% endfor %}
+]
+{% else %}
+"description": "{{ description|escape|escapejs }}"
+{% endif %}
+}

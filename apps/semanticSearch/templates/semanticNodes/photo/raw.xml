@@ -1,0 +1,8 @@
+
+ {% with p.data as p%}
+     {% include "photo/raw.xml" %}
+ {% endwith %}
+ 
+ {% with p as node%}
+ 	{% include "semanticNodes/semanticInfo.xml" %}
+ {% endwith %}

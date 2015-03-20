@@ -1,0 +1,55 @@
+{
+"code": "{{ code }}",
+{% if teams %}
+"description": "{{ description|escape|escapejs }}",
+"responses": [
+{% for team in teams %}
+{% for response in team.responses.all %}
+{% ifequal response.challenge.event event %}
+{ "event_id": "{{ event.id }}",
+"event_title": "{{ event.title|escape|escapejs }}",
+"team_id": "{{ team.id }}",
+"team_name": "{{ team.group.name|escape|escapejs }}",
+"challenge_number": "{{ response.challenge.number|escape|escapejs }}",
+"challenge_id": "{{ response.challenge.id }}",
+"challenge_challenge": "{{ response.challenge.challenge|escape|escapejs }}",
+"challenge_is_stop": "{{ response.challenge.is_stop|escape|escapejs }}",
+"challenge_type": "{{ response.challenge.challenge_type|escape|escapejs }}",
+"challenge_learning_objectives": [
+{% for learnobjective in response.challenge.objectives.all %}
+{
+"learning_objective": "{{ learnobjective.objective|escape|escapejs }}"
+},
+{% endfor %}
+],
+"latitude": "{{ response.position.y }}",
+"longitude": "{{ response.position.x }}",
+"altitude": "{{ response.altitude }}",
+"date": "{{ response.date|escape|escapejs }}",
+"team_response_id": "{{ response.id }}",
+{% ifequal response.challenge.challenge_type 2 %}
+"team_photo_response": "{{ response.photo|escape|escapejs }}",
+{% else %}
+"team_response": "{{ response.response_text|escape|escapejs }}",
+{% endifequal %}
+{% ifequal response.challenge.challenge_type 3 %}
+"distance_difference": "{{ response.distance_difference|escape|escapejs }}",
+{% endifequal %}
+"team_response_is_correct": "{{ response.is_correct|escape|escapejs }}",
+"possible_solutions": [
+{% for solution in response.challenge.solution_set.all|dictsort:"id" %}
+{
+"possible_solution": "{{ solution.possible_solution|escape|escapejs }}"
+},
+{% endfor %}
+],
+},
+{% endifequal %}
+{% endfor %}
+{% endfor %}
+]
+{% else %}
+"description": "{{ description|escape|escapejs }}"
+{% endif %}
+}
+

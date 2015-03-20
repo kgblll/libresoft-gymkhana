@@ -1,0 +1,64 @@
+{% extends "gymkhana.html" %}
+
+{% block content %}
+  <h1>User Data</h1>
+  <fieldset>
+	<legend>User Data</legend>
+		<ul>
+			<li>User identifier: {{ user.id }}</li>
+			<li>First Name: {{ user.first_name }}</li>
+			<li>Last Name: {{ user.last_name }}</li>
+			<li>Username: {{ user.username }}</li>
+			<li>Email: {{ user.email }}</li>
+			<li>Is Manager: {{ isAdmin }}</li>
+		</ul>
+		<div>
+			{% if logged_user_is_admin %}
+			<a href="/gymkhana/user/{{ user.id }}/delete/" data-ajax="false">Delete</a> |
+			{% if isAdmin %}
+			<a href="/gymkhana/user/{{ user.id }}/edit/" data-ajax="false">Remove Manager Privileges</a>
+			{% else %}
+			<a href="/gymkhana/user/{{ user.id }}/edit/" data-ajax="false">Give Manager Privileges</a>
+			{% endif %}
+			{% endif %}
+		</div>
+	</legend>
+  </fieldset>
+  <br></br>
+  <br></br>
+  <div id="users"></div>
+  <br></br>
+  <br></br>
+{% endblock %}
+
+{% block contentM %}
+  <h1>User Data</h1>
+  <fieldset>
+	<legend>User Data</legend>
+		<ul>
+			<li>User identifier: {{ user.id }}</li>
+			<li>First Name: {{ user.first_name }}</li>
+			<li>Last Name: {{ user.last_name }}</li>
+			<li>Username: {{ user.username }}</li>
+			<li>Email: {{ user.email }}</li>
+			<li>Is Manager: {{ isAdmin }}</li>
+		</ul>
+		<div>
+			{% if logged_user_is_admin %}
+			<a href="/gymkhana/user/{{ user.id }}/delete/" data-ajax="false">Delete</a> |
+			{% if isAdmin %}
+			<a href="/gymkhana/user/{{ user.id }}/edit/" data-ajax="false">Remove Manager Privileges</a>
+			{% else %}
+			<a href="/gymkhana/user/{{ user.id }}/edit/" data-ajax="false">Give Manager Privileges</a>
+			{% endif %}
+			{% endif %}
+		</div>
+	</legend>
+  </fieldset>
+  <br></br>
+  <br></br>
+  <div id="users"></div>
+  <br></br>
+  <br></br>
+{% endblock %}
+

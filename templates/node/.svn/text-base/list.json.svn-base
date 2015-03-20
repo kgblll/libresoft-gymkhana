@@ -1,0 +1,62 @@
+{% extends "base_list.json" %}
+
+
+{% block data %}
+
+ 
+"results": [
+			{% for node in results%}{		
+					{% ifequal node.type "person" %}
+						{% with node as u  %}
+		      				{% include "user/raw.json" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "user.person" %}
+						{% with node as u  %}
+		      				{% include "user/raw.json" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "group" %}
+						{% with node as n  %}
+		      				{% include "group/raw.json" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "note" %}
+						{% with node as n  %}
+		      				{% include "note/raw.json" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "photo" %}
+						{% with node as p  %}
+		      				{% include "photo/raw.json" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "sound" %}
+						{% with node as s  %}
+		      				{% include "sound/raw.json" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "video" %}
+						{% with node as v  %}
+		      				{% include "video/raw.json" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      		{% ifequal node.type "layer" %}
+						{% with node as l  %}
+		      				{% include "layer/raw.json" %}
+		      			{% endwith %}
+		      		{% endifequal %}
+		      		
+		      			
+	      	}, {% endfor %}
+		   ]
+
+{% endblock %}
+

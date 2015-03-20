@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian
+END
+changelog
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian/changelog
+END
+copyright
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian/copyright
+END
+docs
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian/docs
+END
+rules
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian/rules
+END
+README.Debian
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian/README.Debian
+END
+control
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian/control
+END
+dirs
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian/dirs
+END
+files
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian/files
+END
+compat
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian/compat
+END
+postinst
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/debian/postinst
+END

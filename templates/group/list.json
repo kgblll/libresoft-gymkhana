@@ -1,0 +1,9 @@
+{
+"code": "{{ code }}",
+"groups" : [
+   {% for g in groups%} {
+   {% include "group/raw.json" %}
+   }, {% endfor %}
+]
+}
+

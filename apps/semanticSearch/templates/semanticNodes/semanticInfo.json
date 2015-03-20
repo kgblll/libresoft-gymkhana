@@ -1,0 +1,9 @@
+	{% if node.result.0 %}
+	"similarity":
+		{
+			"value": {{ node.result.2 }},
+			"word1": "{{ node.result.0 }}",
+			"word2": "{{ node.result.1 }}" 
+			
+		}
+	{% endif %}		

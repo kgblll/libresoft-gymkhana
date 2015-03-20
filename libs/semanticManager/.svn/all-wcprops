@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager
+END
+StringSemanticTokenizer.py
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/StringSemanticTokenizer.py
+END
+TimeDebug.py
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/TimeDebug.py
+END
+downloadNLTKModules.py
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/downloadNLTKModules.py
+END
+SemanticManager.py
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/SemanticManager.py
+END
+TestSemanticManager.py
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/TestSemanticManager.py
+END
+SemanticManagerSettings.py
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/SemanticManagerSettings.py
+END
+SemanticManagerUtils.py
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/SemanticManagerUtils.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/libs/semanticManager/__init__.py
+END

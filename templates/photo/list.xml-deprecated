@@ -1,0 +1,13 @@
+{% extends "base_list.xml" %}
+
+{% block list %}
+         <photos>
+            {% for p in photos%}
+            <photo>
+            {% include "photo/raw.xml" %}
+            </photo>
+            {% endfor %}
+         </photos>
+{% endblock %}
+
+

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/apps/_compareImages/templatetags
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/apps/_compareImages/templatetags/__init__.py
+END
+compareTemplateTags.py
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/libregeosocial/!svn/ver/1529/LibreGeoSocial/tags/LibreGeoSocial-1.2.1/apps/_compareImages/templatetags/compareTemplateTags.py
+END

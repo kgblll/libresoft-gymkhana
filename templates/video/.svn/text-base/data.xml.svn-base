@@ -1,0 +1,13 @@
+{% extends "base.xml" %}
+{% load rest_tags %}
+{% block type %}video{% endblock %}
+{% block data %}
+       <video>
+         <code>{{ code }}</code>
+         {% with video as v %}
+         {% include "video/raw.xml" %}
+         {% endwith %}
+       </video>
+       {% comments video.id "xml" %}
+{% endblock %}
+

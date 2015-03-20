@@ -1,0 +1,37 @@
+{%extends 'explohyperfiction_base.html'%}
+
+{%block left%}
+	{%ifnotequal group.name "Free Group"%}
+	<ul>
+		<li><a href="/explohyperfiction/groups/manager/delete/{{group.id}}/"  onclick="if(!confirm('Do you want to delete the group {{g.name}}?'))return false">Delete</a> </li>
+		<li><a href="/explohyperfiction/groups/manager/{{group.id}}/members/" > Admin members</a></li>
+		<li><a href="/explohyperfiction/groups/manager/{{group.id}}/"> Petitions</a></li>
+	</ul>
+	{%endifnotequal%}
+{%endblock%}
+
+{%block main%}
+	<div class="content_group">
+		<h3> {{group.name}}</h3>
+		<h4>Description</h4>
+		<p> {{group.description}}</p>
+		<h4> Manager</h4>
+		{%if managers%}
+		{%for m in managers%}
+			<p> {{m.person.username}}</p>
+		{%endfor%}
+		{%else%}
+			<p> The are not manager in this group </p>
+		{%endif%}
+		<h4> Members</h4>
+		{%if players%}
+		{%for p in players%}
+			<p> {{p.person.username}}</p>
+		{%endfor%}
+		{%else%}
+			<p> The are not members in this group</p>
+		{%endif%}
+	</div>
+	<br>
+	<a class="button super green" href="/explohyperfiction/groups/manager/view/"> Go to my groups</a>
+{%endblock%}

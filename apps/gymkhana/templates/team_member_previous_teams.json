@@ -1,0 +1,26 @@
+{
+"code": "{{ code }}",
+{% if team_members %}
+"description": "{{ description|escape|escapejs }}",
+"teams": [
+{% for team_member in team_members %}
+{% ifequal team_member.user.id user_id %}
+{ "team_member_name": "{{ team_member.user.username|escape|escapejs }}",
+"event_id": "{{ team_member.event.id }}",
+"identifier": "{{ team_member.team.id }}",
+"team_name": "{{ team_member.team.group.name|escape|escapejs }}",
+"group_id": "{{ team_member.team.group.id }}",
+"latitude": "{{ team_member.team.group.position.y }}",
+"longitude": "{{ team_member.team.group.position.x }}",
+"altitude": "{{ team_member.team.group.altitude }}",
+"radius": "{{ team_member.team.group.radius }}",
+"since": "{{ team_member.team.group.since|escape|escapejs }}",
+"num_first_challenge_id": "{{ num_first_challenge_id }}"
+},
+{% endifequal %}
+{% endfor %}
+]
+{% else %}
+"description": "{{ description|escape|escapejs }}",
+{% endif %}
+}
